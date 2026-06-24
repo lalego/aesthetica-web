@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/d/aesthetica/workspace/**)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:claude.ai)",
+      "Bash(git -C \"D:/aesthetica/workspace/aesthetica-web\" branch)",
+      "Bash(git -C \"D:/aesthetica/workspace/aesthetica-web\" status --short)"
+    ]
+  }
+}

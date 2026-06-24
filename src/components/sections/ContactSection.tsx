@@ -61,7 +61,7 @@ export const ContactSection = () => {
               <Clock className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Horarios</h3>
-                {CLINIC.hours.map(({ days, time }) => (
+                {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
                   <p key={days} className="text-neutral-600 text-sm">
                     <span className="font-medium">{days}:</span> {time}
                   </p>
