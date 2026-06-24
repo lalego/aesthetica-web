@@ -93,9 +93,26 @@ export const Navbar = () => {
         <div className="md:hidden w-10 h-10" aria-hidden="true" />
       </nav>
 
-      {/* Mobile menu */}
+      {/* Botones fijos bajo el logo — móvil, siempre visibles */}
+      <div className="md:hidden flex gap-2 px-4 pb-3 justify-center">
+        <a
+          href={CLINIC.contact.phone_href}
+          className="inline-flex items-center gap-2 border border-gold-300 text-gold-500 text-sm px-4 py-2 rounded-full hover:bg-gold-50 transition-colors"
+        >
+          <Phone className="w-4 h-4" />
+          {CLINIC.contact.phone.replace('+34 ', '')}
+        </a>
+        <button
+          onClick={() => handleNavClick(BOOKING_HREF)}
+          className="bg-gold-400 text-white text-sm px-4 py-2 rounded-full hover:bg-gold-500 transition-colors"
+        >
+          Agendar cita
+        </button>
+      </div>
+
+      {/* Mobile menu — solo links de navegación */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-6 flex flex-col gap-1">
+        <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-4 flex flex-col gap-1">
           {NAV_LINKS.map(({ label, href }) => (
             <button
               key={href}
@@ -105,21 +122,6 @@ export const Navbar = () => {
               {label}
             </button>
           ))}
-          <div className="mt-4 flex flex-col gap-2">
-            <a
-              href={CLINIC.contact.phone_href}
-              className="inline-flex items-center justify-center gap-2 border border-gold-300 text-gold-500 text-base px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              {CLINIC.contact.phone.replace('+34 ', '')}
-            </a>
-            <button
-              onClick={() => handleNavClick(BOOKING_HREF)}
-              className="bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors"
-            >
-              Agendar cita
-            </button>
-          </div>
         </div>
       )}
     </header>
