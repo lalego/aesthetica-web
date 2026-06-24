@@ -15,7 +15,7 @@ export const Footer = () => {
         <div className="grid md:grid-cols-3 gap-10 mb-10">
           {/* Marca */}
           <div className="space-y-3">
-            <p className="font-serif text-white text-lg">{CLINIC.name}</p>
+            <img src="/aesthetica.png" alt="AestheticA" className="h-10 w-auto brightness-0 invert opacity-90" />
             <p className="text-sm leading-relaxed">
               Clínica de medicina estética en {CLINIC.address.city}. Tratamientos
               personalizados con tecnología de vanguardia y un equipo médico especializado.

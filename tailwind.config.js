@@ -11,12 +11,16 @@ export default {
         serif: ['Playfair Display', 'serif'],
       },
       colors: {
-        rose: {
-          50: '#fff1f2',
-          100: '#ffe4e6',
-          400: '#fb7185',
-          500: '#f43f5e',
-        }
+        gold: {
+          50:  '#fdfbf2',
+          100: '#faf4dc',
+          200: '#f2e4a8',
+          300: '#e8cf6e',
+          400: '#c9a84c',
+          500: '#a8861e',
+          600: '#7d6214',
+          900: '#2e2006',
+        },
       }
     },
   },

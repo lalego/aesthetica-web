@@ -39,9 +39,13 @@ export const Navbar = () => {
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-          className="font-serif text-xl text-neutral-900 tracking-wide"
+          className="flex items-center"
         >
-          Aesthetica
+          <img
+            src="/aesthetica.png"
+            alt="Clínica AestheticA"
+            className="h-10 w-auto mix-blend-multiply"
+          />
         </a>
 
         {/* Desktop links */}
@@ -50,7 +54,7 @@ export const Navbar = () => {
             <li key={href}>
               <button
                 onClick={() => handleNavClick(href)}
-                className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+                className="text-sm text-neutral-600 hover:text-gold-500 transition-colors"
               >
                 {label}
               </button>
@@ -61,7 +65,7 @@ export const Navbar = () => {
         {/* Desktop CTA */}
         <button
           onClick={() => handleNavClick(BOOKING_HREF)}
-          className="hidden md:inline-flex items-center bg-neutral-900 text-white text-sm px-5 py-2.5 rounded-full hover:bg-neutral-700 transition-colors"
+          className="hidden md:inline-flex items-center bg-gold-400 text-white text-sm px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors"
         >
           Agendar cita
         </button>
@@ -83,14 +87,14 @@ export const Navbar = () => {
             <button
               key={href}
               onClick={() => handleNavClick(href)}
-              className="text-left text-sm text-neutral-700 hover:text-neutral-900 py-1"
+              className="text-left text-sm text-neutral-700 hover:text-gold-500 py-1"
             >
               {label}
             </button>
           ))}
           <button
             onClick={() => handleNavClick(BOOKING_HREF)}
-            className="mt-2 bg-neutral-900 text-white text-sm px-5 py-2.5 rounded-full hover:bg-neutral-700 transition-colors w-full"
+            className="mt-2 bg-gold-400 text-white text-sm px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors w-full"
           >
             Agendar cita
           </button>

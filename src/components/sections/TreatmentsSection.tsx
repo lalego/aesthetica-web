@@ -16,11 +16,11 @@ const FILTERS: { label: string; value: FilterOption }[] = [
 ]
 
 const CATEGORY_COLORS: Record<TreatmentCategory, string> = {
-  facial:    'bg-rose-100 text-rose-600',
-  corporal:  'bg-neutral-100 text-neutral-600',
+  facial:    'bg-gold-100 text-gold-600',
+  corporal:  'bg-stone-100 text-stone-600',
   laser:     'bg-violet-50 text-violet-600',
   capilar:   'bg-teal-50 text-teal-600',
-  bienestar: 'bg-amber-50 text-amber-600',
+  bienestar: 'bg-amber-50 text-amber-700',
 }
 
 export const TreatmentsSection = () => {
@@ -37,7 +37,7 @@ export const TreatmentsSection = () => {
         {/* Encabezado */}
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            Nuestros <span className="font-serif italic text-rose-500">tratamientos</span>
+            Nuestros <span className="font-serif italic text-gold-400">tratamientos</span>
           </h2>
           <p className="text-neutral-600 max-w-xl mx-auto">
             Protocolos personalizados diseñados por nuestro equipo médico para resultados
@@ -54,8 +54,8 @@ export const TreatmentsSection = () => {
               className={cn(
                 'px-5 py-2 rounded-full text-sm transition-all duration-200',
                 active === value
-                  ? 'bg-neutral-900 text-white'
-                  : 'bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-400'
+                  ? 'bg-gold-400 text-white shadow-sm'
+                  : 'bg-white text-neutral-600 border border-neutral-200 hover:border-gold-300 hover:text-gold-500'
               )}
             >
               {label}
@@ -127,7 +127,7 @@ export const TreatmentsSection = () => {
                     )}
                     <button
                       onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="text-rose-400 hover:text-rose-600 transition-colors"
+                      className="text-gold-400 hover:text-gold-600 transition-colors"
                       aria-label={`Agendar ${treatment.name}`}
                     >
                       <ChevronRight className="w-5 h-5" />

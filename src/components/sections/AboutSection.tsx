@@ -55,7 +55,7 @@ export const AboutSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h2 className="text-3xl lg:text-4xl font-light text-neutral-800">
-              <span className="font-serif italic text-rose-500">Quiénes</span> somos
+              <span className="font-serif italic text-gold-400">Quiénes</span> somos
             </h2>
             {ABOUT.intro.map((p, i) => (
               <p key={i} className="text-neutral-600 leading-relaxed">
@@ -65,7 +65,7 @@ export const AboutSection = () => {
           </div>
 
           {/* Imagen placeholder — reemplaza src cuando tengas foto */}
-          <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-rose-50 to-neutral-100 overflow-hidden flex items-center justify-center">
+          <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-gold-50 to-neutral-100 overflow-hidden flex items-center justify-center">
             <p className="text-neutral-300 text-sm">Foto de clínica / equipo</p>
             {/* <img src="/about-clinic.webp" alt="Clínica AestheticA" className="w-full h-full object-cover" /> */}
           </div>
@@ -89,8 +89,8 @@ export const AboutSection = () => {
           <div className="grid sm:grid-cols-3 gap-8">
             {ABOUT.values.map(({ icon: Icon, title, description }) => (
               <div key={title} className="space-y-3">
-                <div className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-rose-400" />
+                <div className="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-gold-400" />
                 </div>
                 <h4 className="font-medium text-neutral-800">{title}</h4>
                 <p className="text-sm text-neutral-500 leading-relaxed">{description}</p>
@@ -112,13 +112,13 @@ export const AboutSection = () => {
                   className="flex flex-col items-center text-center max-w-xs space-y-4"
                 >
                   {/* Avatar placeholder */}
-                  <div className="w-28 h-28 rounded-full bg-gradient-to-br from-rose-100 to-neutral-100 flex items-center justify-center text-neutral-300 text-xs">
+                  <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gold-100 to-neutral-100 flex items-center justify-center text-neutral-300 text-xs">
                     Foto
                     {/* <img src={avatar} alt={name} className="w-full h-full object-cover rounded-full" /> */}
                   </div>
                   <div>
                     <p className="font-medium text-neutral-800">{name}</p>
-                    <p className="text-xs text-rose-400 mt-0.5">{role}</p>
+                    <p className="text-xs text-gold-400 mt-0.5">{role}</p>
                   </div>
                   <p className="text-sm text-neutral-500 leading-relaxed">{bio}</p>
                 </div>
