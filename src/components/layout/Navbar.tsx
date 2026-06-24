@@ -95,19 +95,19 @@ export const Navbar = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden bg-white border-t border-neutral-100 px-8 py-8 flex flex-col gap-2">
           {NAV_LINKS.map(({ label, href }) => (
             <button
               key={href}
               onClick={() => handleNavClick(href)}
-              className="text-left text-sm text-neutral-700 hover:text-gold-500 py-1"
+              className="text-left text-xl text-neutral-700 hover:text-gold-500 py-3 border-b border-neutral-100 transition-colors"
             >
               {label}
             </button>
           ))}
           <button
             onClick={() => handleNavClick(BOOKING_HREF)}
-            className="mt-2 bg-gold-400 text-white text-sm px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors w-full"
+            className="mt-6 bg-gold-400 text-white text-lg px-6 py-4 rounded-full hover:bg-gold-500 transition-colors w-full"
           >
             Agendar cita
           </button>
