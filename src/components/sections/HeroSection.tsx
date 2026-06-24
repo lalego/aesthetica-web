@@ -34,7 +34,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
               onClick={onBookingClick}
               className="bg-gold-400 text-white px-8 py-3.5 rounded-full hover:bg-gold-500 transition-all duration-300 flex items-center gap-2 group shadow-md shadow-gold-200"
             >
-              Agendar consulta
+              Agendar cita
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
