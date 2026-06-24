@@ -1,10 +1,11 @@
 import { Instagram, Facebook } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { CLINIC } from '@/config/clinic'
 
 const LEGAL_LINKS = [
-  { label: 'Aviso legal', href: '#aviso-legal' },
-  { label: 'Política de privacidad', href: '#privacidad' },
-  { label: 'Política de cookies', href: '#cookies' },
+  { label: 'Aviso legal', to: '/aviso-legal' },
+  { label: 'Política de privacidad', to: '/privacidad' },
+  { label: 'Política de cookies', to: '/politica-cookies' },
 ]
 
 export const Footer = () => {
@@ -82,11 +83,11 @@ export const Footer = () => {
             © {year} Clínica AestheticA. Todos los derechos reservados.
           </p>
           <ul className="flex flex-wrap gap-4">
-            {LEGAL_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <a href={href} className="text-xs hover:text-white transition-colors">
+            {LEGAL_LINKS.map(({ label, to }) => (
+              <li key={to}>
+                <Link to={to} className="text-xs hover:text-white transition-colors">
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -16,7 +16,7 @@ export const CLINIC = {
   contact: {
     phone: '+34 613 61 51 42',
     phone_href: 'tel:+34613615142',
-    email: '',
+    email: 'alenamadame@gmail.com',
     instagram: 'martseniuk_aesthetica',
     instagram_href: 'https://www.instagram.com/martseniuk_aesthetica/',
     facebook_href: 'https://www.facebook.com/profile.php?id=61579180712391',
