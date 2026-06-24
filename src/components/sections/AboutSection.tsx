@@ -1,4 +1,4 @@
-import { Microscope, Heart, ShieldCheck } from 'lucide-react'
+import { Sparkles, UserCheck, BadgeCheck } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────
 //  EDITA AQUÍ — todo el contenido de la sección en un solo lugar
@@ -16,22 +16,22 @@ const ABOUT = {
   ],
   values: [
     {
-      icon: Microscope,
-      title: 'Rigor médico',
+      icon: Sparkles,
+      title: 'Tecnología de vanguardia',
       description:
-        'Todos nuestros tratamientos están respaldados por evidencia científica y aplicados por profesionales sanitarios cualificados.',
+        'Equipos de última generación y protocolos actualizados para ofrecerte resultados reales y duraderos.',
     },
     {
-      icon: Heart,
-      title: 'Trato cercano',
+      icon: UserCheck,
+      title: 'Atención completamente personalizada',
       description:
-        'Cada cliente es único. Dedicamos el tiempo necesario para entender tus objetivos y diseñar un protocolo a tu medida.',
+        'Tu piel, tu historia, tus objetivos. Cada visita comienza con una valoración para adaptar cada paso a ti.',
     },
     {
-      icon: ShieldCheck,
-      title: 'Seguridad ante todo',
+      icon: BadgeCheck,
+      title: 'Productos y equipos de referencia profesional',
       description:
-        'Trabajamos exclusivamente con productos certificados y seguimos los más altos estándares de higiene y seguridad clínica.',
+        'Solo trabajamos con marcas y dispositivos certificados, garantizando tu seguridad y la eficacia de cada sesión.',
     },
   ],
   team: [
