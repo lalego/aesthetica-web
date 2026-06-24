@@ -64,16 +64,21 @@ export const Footer = () => {
             </address>
           </div>
 
-          {/* RGPD */}
+          {/* Navegación */}
           <div className="space-y-3">
-            <p className="text-white text-sm font-medium uppercase tracking-wide">Información legal</p>
-            <p className="text-sm leading-relaxed">
-              De conformidad con el{' '}
-              <abbr title="Reglamento General de Protección de Datos">RGPD</abbr> (UE)
-              2016/679 y la LOPDGDD, tus datos son tratados por Clínica AestheticA
-              únicamente para gestionar tu cita y enviarte información sobre nuestros
-              servicios, con tu consentimiento expreso.
-            </p>
+            <p className="text-white text-sm font-medium uppercase tracking-wide">Navegación</p>
+            <ul className="text-sm space-y-2">
+              {[
+                { label: 'Tratamientos', href: '/#tratamientos' },
+                { label: 'Quiénes somos', href: '/#nosotros' },
+                { label: 'Agendar cita', href: '/#agendar' },
+                { label: 'Contacto', href: '/#contacto' },
+              ].map(({ label, href }) => (
+                <li key={href}>
+                  <a href={href} className="hover:text-white transition-colors">{label}</a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
