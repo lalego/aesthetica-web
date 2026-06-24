@@ -183,7 +183,7 @@ export const BookingSection = () => {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-neutral-900 text-white py-3 rounded-full hover:bg-neutral-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full bg-gold-400 text-white py-3 rounded-full hover:bg-gold-500 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-md shadow-gold-200"
             >
               {status === 'loading' ? (
                 <>
