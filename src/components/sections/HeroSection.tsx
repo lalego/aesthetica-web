@@ -46,7 +46,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           {/* Sellos de confianza */}
           <div className="flex items-center gap-6 pt-4 border-t border-neutral-200">
             <div className="text-center">
-              <p className="text-2xl font-light text-neutral-800">+5</p>
+              <p className="text-2xl font-light text-neutral-800">+25</p>
               <p className="text-xs text-neutral-400 mt-0.5">Años de experiencia</p>
             </div>
             <div className="w-px h-8 bg-neutral-200" />

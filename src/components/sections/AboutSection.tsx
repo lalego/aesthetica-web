@@ -10,7 +10,7 @@ const ABOUT = {
     'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada paciente en su proceso, desde la primera consulta hasta el resultado final.',
   ],
   stats: [
-    { value: '+5', label: 'Años de experiencia' },
+    { value: '+25', label: 'Años de experiencia' },
     { value: '+800', label: 'Pacientes satisfechos' },
     { value: '15+', label: 'Tratamientos disponibles' },
   ],
