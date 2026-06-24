@@ -23,8 +23,8 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           </h1>
 
           <p className="text-lg text-neutral-500 leading-relaxed max-w-md">
-            Tratamientos personalizados con tecnología de vanguardia y un equipo
-            comprometido con tu bienestar y resultados naturales.
+            Tratamientos personalizados con tecnología de vanguardia y una especialista
+            dedicada a tu bienestar y resultados naturales.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
