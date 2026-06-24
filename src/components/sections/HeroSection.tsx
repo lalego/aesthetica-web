@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+﻿import { ArrowRight } from 'lucide-react'
 
 interface HeroSectionProps {
   onBookingClick?: () => void
@@ -13,7 +13,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
       <div className="relative max-w-6xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <span className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-full">
-            Centro de Estética Avanzada · Ruzafa, València
+            Centro de EstÃ©tica Avanzada Â· Ruzafa, ValÃ¨ncia
           </span>
 
           <h1 className="text-4xl lg:text-6xl font-light text-neutral-800 leading-tight">
@@ -23,7 +23,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           </h1>
 
           <p className="text-lg text-neutral-500 leading-relaxed max-w-md">
-            Tratamientos personalizados con tecnología de vanguardia y una especialista
+            Tratamientos personalizados con tecnologÃ­a de vanguardia y una especialista
             dedicada a tu bienestar y resultados naturales.
           </p>
 
@@ -47,7 +47,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           <div className="flex items-center gap-6 pt-4 border-t border-neutral-200">
             <div className="text-center">
               <p className="text-2xl font-light text-neutral-800">+25</p>
-              <p className="text-xs text-neutral-400 mt-0.5">Años de experiencia</p>
+              <p className="text-xs text-neutral-400 mt-0.5">AÃ±os de experiencia</p>
             </div>
             <div className="w-px h-8 bg-neutral-200" />
             <div className="text-center">
@@ -67,7 +67,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
             <img
               src="/hero-clinic.jpeg"
-              alt="Clínica AestheticA — C/ dels Centelles, Ruzafa, València"
+              alt="ClÃ­nica AestheticA â€” C/ dels Centelles, Ruzafa, ValÃ¨ncia"
               className="w-full h-full object-cover"
             />
             {/* Overlay dorado sutil */}
@@ -76,14 +76,15 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
 
           {/* Badge flotante */}
           <div className="absolute -bottom-5 -left-5 bg-white px-6 py-4 rounded-2xl shadow-xl border border-neutral-100">
-            <p className="text-xs text-neutral-400 mb-0.5">Próxima disponibilidad</p>
-            <p className="text-sm font-medium text-neutral-800">Esta semana · Ruzafa</p>
+            <p className="text-xs text-neutral-400 mb-0.5">PrÃ³xima disponibilidad</p>
+            <p className="text-sm font-medium text-neutral-800">Esta semana Â· Ruzafa</p>
           </div>
 
-          {/* Decoración circular */}
+          {/* DecoraciÃ³n circular */}
           <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-gold-100 opacity-60 blur-xl pointer-events-none" />
         </div>
       </div>
     </section>
   )
 }
+

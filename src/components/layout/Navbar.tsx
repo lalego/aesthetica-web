@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CLINIC } from '@/config/clinic'
 
 const NAV_LINKS = [
   { label: 'Tratamientos', href: '#tratamientos' },
-  { label: 'Quiénes somos', href: '#nosotros' },
+  { label: 'QuiÃ©nes somos', href: '#nosotros' },
   { label: 'Contacto', href: '#contacto' },
 ]
 
@@ -44,7 +44,7 @@ export const Navbar = () => {
         >
           <img
             src="/aesthetica.png"
-            alt="Clínica AestheticA"
+            alt="ClÃ­nica AestheticA"
             className="h-24 w-auto mix-blend-multiply"
           />
         </a>
@@ -84,7 +84,7 @@ export const Navbar = () => {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           className="md:hidden p-2 text-neutral-700"
-          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={menuOpen ? 'Cerrar menÃº' : 'Abrir menÃº'}
         >
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -113,3 +113,4 @@ export const Navbar = () => {
     </header>
   )
 }
+

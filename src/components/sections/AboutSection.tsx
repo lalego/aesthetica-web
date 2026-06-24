@@ -6,7 +6,7 @@ import { Microscope, Heart, ShieldCheck } from 'lucide-react'
 const ABOUT = {
   headline: 'Medicina estética con propósito',
   intro: [
-    'AestheticA nació de la pasión y la visión de Alena Martseniuk, su fundadora. Una clínica con alma propia, donde cada tratamiento se diseña de forma personalizada para potenciar tu belleza natural con seguridad y rigor.',
+    'AestheticA nació de la pasión y la visión de Alena Martseniuk, su fundadora. Un centro con alma propia, donde cada tratamiento se diseña de forma personalizada para potenciar tu belleza natural con seguridad y rigor.',
     'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada paciente en su proceso, desde la primera consulta hasta el resultado final.',
   ],
   stats: [
@@ -38,7 +38,7 @@ const ABOUT = {
     {
       name: 'Alena Martseniuk',
       role: 'Fundadora · Especialista en Estética Avanzada',
-      bio: 'Alena es la fundadora y alma de Clínica AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
+      bio: 'Alena es la fundadora y alma de Centro AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
       avatar: '/alena_bio.jpeg',
       languages: [
         { code: 'es', label: 'Español' },
@@ -71,7 +71,7 @@ export const AboutSection = () => {
           </div>
 
           <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
-            <img src="/alena_laser.jpeg" alt="Alena Martseniuk — Clínica AestheticA" className="w-full h-full object-cover object-top" />
+            <img src="/alena_laser.jpeg" alt="Alena Martseniuk — Centro AestheticA" className="w-full h-full object-cover object-top" />
           </div>
         </div>
 
