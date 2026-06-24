@@ -5,7 +5,12 @@
 
 @layer base {
   html {
-    font-size: 18px;
+    font-size: 16px;
+  }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
   }
   body {
     @apply bg-neutral-50 text-neutral-900 antialiased;
