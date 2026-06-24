@@ -101,7 +101,7 @@ export const AboutSection = () => {
         {ABOUT.team.length > 0 && (
           <div className="space-y-8">
             <h3 className="text-2xl font-light text-neutral-800 text-center">
-              Nuestro equipo
+              Tu especialista
             </h3>
             <div className="flex flex-wrap justify-center gap-8">
               {ABOUT.team.map(({ name, role, bio }) => (
