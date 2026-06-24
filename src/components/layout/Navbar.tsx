@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { CLINIC } from '@/config/clinic'
 
 const NAV_LINKS = [
   { label: 'Tratamientos', href: '#tratamientos' },
@@ -62,13 +63,22 @@ export const Navbar = () => {
           ))}
         </ul>
 
-        {/* Desktop CTA */}
-        <button
-          onClick={() => handleNavClick(BOOKING_HREF)}
-          className="hidden md:inline-flex items-center bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
-        >
-          Agendar cita
-        </button>
+        {/* Desktop CTAs */}
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href={CLINIC.contact.phone_href}
+            className="inline-flex items-center gap-2 border border-gold-300 text-gold-500 text-lg px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
+          >
+            <Phone className="w-4 h-4" />
+            {CLINIC.contact.phone}
+          </a>
+          <button
+            onClick={() => handleNavClick(BOOKING_HREF)}
+            className="inline-flex items-center bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
+          >
+            Agendar cita
+          </button>
+        </div>
 
         {/* Mobile hamburger */}
         <button
