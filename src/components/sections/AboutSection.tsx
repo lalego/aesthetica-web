@@ -40,7 +40,13 @@ const ABOUT = {
       role: 'Fundadora · Especialista en Estética Avanzada',
       bio: 'Alena es la fundadora y alma de Clínica AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
       avatar: '/alena_bio.jpeg',
-      languages: ['🇪🇸 Español', '🇬🇧 English', '🇮🇹 Italiano', '🇺🇦 Українська', '🇷🇺 Русский'],
+      languages: [
+        { code: 'es', label: 'Español' },
+        { code: 'gb', label: 'English' },
+        { code: 'it', label: 'Italiano' },
+        { code: 'ua', label: 'Українська' },
+        { code: 'ru', label: 'Русский' },
+      ],
     },
   ],
 }
@@ -119,9 +125,14 @@ export const AboutSection = () => {
                   <p className="text-sm text-neutral-500 leading-relaxed">{bio}</p>
                   {languages && (
                     <div className="flex flex-wrap justify-center gap-1.5 pt-1">
-                      {languages.map((lang) => (
-                        <span key={lang} className="text-xs bg-neutral-50 border border-neutral-100 text-neutral-500 px-2.5 py-1 rounded-full">
-                          {lang}
+                      {languages.map(({ code, label }) => (
+                        <span key={code} className="inline-flex items-center gap-1.5 text-xs bg-neutral-50 border border-neutral-100 text-neutral-500 px-2.5 py-1 rounded-full">
+                          <img
+                            src={`https://flagcdn.com/20x15/${code}.png`}
+                            alt={label}
+                            className="w-4 h-auto rounded-sm"
+                          />
+                          {label}
                         </span>
                       ))}
                     </div>
