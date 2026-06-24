@@ -1,13 +1,7 @@
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { MapPin, Phone, Instagram, Clock } from 'lucide-react'
+import { CLINIC } from '@/config/clinic'
 
 export const ContactSection = () => {
-  const clinicInfo = {
-    direccion: "Av. Providencia 1234, Oficina 501, Providencia, Santiago",
-    telefono: "+56 9 8765 4321",
-    email: "hola@aesthetica.cl",
-    horarios: "Lun - Vie: 9:00 a 19:00 | Sáb: 9:00 a 14:00"
-  }
-
   return (
     <section id="contacto" className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-6">
@@ -16,7 +10,7 @@ export const ContactSection = () => {
             Visítanos
           </h2>
           <p className="text-neutral-600 max-w-xl mx-auto">
-            Estamos en el corazón de Providencia. Agenda tu evaluación sin costo.
+            Estamos en L'Eixample de València. Agenda tu evaluación sin compromiso.
           </p>
         </div>
 
@@ -26,7 +20,10 @@ export const ContactSection = () => {
               <MapPin className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Dirección</h3>
-                <p className="text-neutral-600">{clinicInfo.direccion}</p>
+                <p className="text-neutral-600">
+                  {CLINIC.address.street}<br />
+                  {CLINIC.address.district}, {CLINIC.address.zip} {CLINIC.address.city}
+                </p>
               </div>
             </div>
 
@@ -34,36 +31,54 @@ export const ContactSection = () => {
               <Phone className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Teléfono</h3>
-                <p className="text-neutral-600">{clinicInfo.telefono}</p>
+                <a
+                  href={CLINIC.contact.phone_href}
+                  className="text-neutral-600 hover:text-neutral-900 transition-colors"
+                >
+                  {CLINIC.contact.phone}
+                </a>
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <Mail className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="font-medium text-neutral-800 mb-1">Email</h3>
-                <p className="text-neutral-600">{clinicInfo.email}</p>
+            {CLINIC.contact.instagram && (
+              <div className="flex gap-4">
+                <Instagram className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-medium text-neutral-800 mb-1">Instagram</h3>
+                  <a
+                    href={CLINIC.contact.instagram_href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-600 hover:text-neutral-900 transition-colors"
+                  >
+                    @{CLINIC.contact.instagram}
+                  </a>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="flex gap-4">
               <Clock className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Horarios</h3>
-                <p className="text-neutral-600">{clinicInfo.horarios}</p>
+                {CLINIC.hours.map(({ days, time }) => (
+                  <p key={days} className="text-neutral-600 text-sm">
+                    <span className="font-medium">{days}:</span> {time}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden h- bg-neutral-100">
+          <div className="rounded-2xl overflow-hidden h-80 lg:h-full bg-neutral-100">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.345!2d-70.609!3d-33.425!2m3!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDI1JzMwLjAiUyA3MMKwMzYnMzIuNCJX!5e0!3m2!1ses!2scl!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3081.5!2d-0.3698608!3d39.4604317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd60498e46207ae1%3A0xc9ea27b0cef8f594!2sAestheticA!5e0!3m2!1ses!2ses!4v1"
               width="100%"
               height="100%"
               style={{ border: 0 }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Ubicación Clínica Aesthetica"
+              title={`Ubicación ${CLINIC.name} ${CLINIC.address.city}`}
             />
           </div>
         </div>
