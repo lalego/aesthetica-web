@@ -61,32 +61,32 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Contacto */}
-          <div className="space-y-5">
+          {/* Contacto — centrado */}
+          <div className="space-y-5 md:text-center">
             <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Contacto</p>
             <address className="not-italic text-base space-y-3">
-              <div className="flex items-start gap-3">
+              <div className="flex items-start justify-center gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
-                <a href={CLINIC.maps.href} target="_blank" rel="noopener noreferrer" className="hover:text-stone-100 transition-colors leading-relaxed">
+                <a href={CLINIC.maps.href} target="_blank" rel="noopener noreferrer" className="hover:text-stone-100 transition-colors leading-relaxed text-left">
                   {CLINIC.address.street}<br />
                   {CLINIC.address.district}, {CLINIC.address.zip} {CLINIC.address.city}
                 </a>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3">
                 <Phone className="w-4 h-4 text-gold-400 shrink-0" />
                 <a href={CLINIC.contact.phone_href} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.phone}
                 </a>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3">
                 <Mail className="w-4 h-4 text-gold-400 shrink-0" />
                 <a href={`mailto:${CLINIC.contact.email}`} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.email}
                 </a>
               </div>
-              <div className="flex items-start gap-3">
+              <div className="flex items-start justify-center gap-3">
                 <Clock className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 text-left">
                   {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
                     <p key={days}>
                       <span className="text-stone-300">{days}:</span> {time}
@@ -97,15 +97,15 @@ export const Footer = () => {
             </address>
           </div>
 
-          {/* Navegación */}
-          <div className="space-y-5">
+          {/* Navegación — alineada a la derecha */}
+          <div className="space-y-5 md:text-right md:flex md:flex-col md:items-end">
             <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Navegación</p>
             <ul className="text-base space-y-2.5">
               {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
-                  <a href={href} className="flex items-center gap-2 group hover:text-gold-400 transition-colors">
-                    <span className="w-3 h-px bg-stone-600 group-hover:w-5 group-hover:bg-gold-400 transition-all duration-200" />
+                  <a href={href} className="flex items-center gap-2 group hover:text-gold-400 transition-colors justify-end">
                     {label}
+                    <span className="w-3 h-px bg-stone-600 group-hover:w-5 group-hover:bg-gold-400 transition-all duration-200" />
                   </a>
                 </li>
               ))}
