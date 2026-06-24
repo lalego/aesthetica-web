@@ -95,27 +95,27 @@ export const Navbar = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-neutral-100 px-8 py-8 flex flex-col gap-2">
+        <div className="md:hidden bg-white border-t border-neutral-100 px-4 py-6 flex flex-col gap-2 overflow-hidden">
           {NAV_LINKS.map(({ label, href }) => (
             <button
               key={href}
               onClick={() => handleNavClick(href)}
-              className="text-left text-xl text-neutral-700 hover:text-gold-500 py-3 border-b border-neutral-100 transition-colors"
+              className="bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors text-center"
             >
               {label}
             </button>
           ))}
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-4 flex flex-col gap-2">
             <a
               href={CLINIC.contact.phone_href}
-              className="inline-flex items-center justify-center gap-2 bg-gold-400 text-white text-base px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors"
             >
               <Phone className="w-4 h-4" />
               {CLINIC.contact.phone.replace('+34 ', '')}
             </a>
             <button
               onClick={() => handleNavClick(BOOKING_HREF)}
-              className="bg-gold-400 text-white text-base px-6 py-3 rounded-full hover:bg-gold-500 transition-colors w-full"
+              className="bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors"
             >
               Agendar cita
             </button>
