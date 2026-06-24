@@ -70,7 +70,7 @@ export const Navbar = () => {
             className="inline-flex items-center gap-2 border border-gold-300 text-gold-500 text-lg px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
           >
             <Phone className="w-4 h-4" />
-            {CLINIC.contact.phone}
+            {CLINIC.contact.phone.replace('+34 ', '')}
           </a>
           <button
             onClick={() => handleNavClick(BOOKING_HREF)}
