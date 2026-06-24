@@ -69,9 +69,9 @@ export const Footer = () => {
             <p className="text-sm leading-relaxed">
               De conformidad con el{' '}
               <abbr title="Reglamento General de Protección de Datos">RGPD</abbr> (UE)
-              2016/679 y la LOPDGDD, tus datos son tratados por {CLINIC.legal_name}{' '}
-              ({CLINIC.cif}) únicamente para gestionar tu cita y enviarte información
-              sobre nuestros servicios, con tu consentimiento expreso.
+              2016/679 y la LOPDGDD, tus datos son tratados por Clínica AestheticA
+              únicamente para gestionar tu cita y enviarte información sobre nuestros
+              servicios, con tu consentimiento expreso.
             </p>
           </div>
         </div>
@@ -79,7 +79,7 @@ export const Footer = () => {
         {/* Línea inferior */}
         <div className="border-t border-neutral-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs">
-            © {year} {CLINIC.legal_name}. Todos los derechos reservados.
+            © {year} Clínica AestheticA. Todos los derechos reservados.
           </p>
           <ul className="flex flex-wrap gap-4">
             {LEGAL_LINKS.map(({ label, href }) => (
