@@ -106,27 +106,27 @@ export const AboutSection = () => {
         {/* Equipo */}
         {ABOUT.team.length > 0 && (
           <div className="space-y-8">
-            <h3 className="text-2xl font-light text-neutral-800 text-center">
+            <h3 className="text-3xl font-light text-neutral-800 text-center">
               Tu especialista
             </h3>
             <div className="flex flex-wrap justify-center gap-8">
               {ABOUT.team.map(({ name, role, bio, avatar, languages }) => (
                 <div
                   key={name}
-                  className="flex flex-col items-center text-center max-w-sm space-y-4"
+                  className="flex flex-col items-center text-center max-w-lg space-y-5"
                 >
-                  <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-gold-100 shadow-lg">
+                  <div className="w-48 h-48 rounded-full overflow-hidden ring-4 ring-gold-100 shadow-lg">
                     <img src={avatar} alt={name} className="w-full h-full object-cover object-top" />
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-neutral-800">{name}</p>
-                    <p className="text-sm text-gold-400 mt-0.5">{role}</p>
+                    <p className="text-2xl font-medium text-neutral-800">{name}</p>
+                    <p className="text-base text-gold-400 mt-1">{role}</p>
                   </div>
-                  <p className="text-sm text-neutral-500 leading-relaxed">{bio}</p>
+                  <p className="text-base text-neutral-500 leading-relaxed">{bio}</p>
                   {languages && (
-                    <div className="flex flex-wrap justify-center gap-1.5 pt-1">
+                    <div className="flex flex-wrap justify-center gap-2 pt-1">
                       {languages.map(({ code, label }) => (
-                        <span key={code} className="inline-flex items-center gap-1.5 text-xs bg-neutral-50 border border-neutral-100 text-neutral-500 px-2.5 py-1 rounded-full">
+                        <span key={code} className="inline-flex items-center gap-1.5 text-sm bg-neutral-50 border border-neutral-100 text-neutral-500 px-3 py-1.5 rounded-full">
                           <img
                             src={`https://flagcdn.com/20x15/${code}.png`}
                             alt={label}
