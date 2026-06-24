@@ -10,7 +10,7 @@ export const ContactSection = () => {
             Visítanos
           </h2>
           <p className="text-neutral-600 max-w-xl mx-auto">
-            Estamos en L'Eixample de València. Agenda tu evaluación sin compromiso.
+            Estamos en Ruzafa, València. Agenda tu evaluación sin compromiso.
           </p>
         </div>
 

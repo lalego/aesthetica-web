@@ -10,7 +10,7 @@ export const CLINIC = {
     city: 'València',
     province: 'Valencia',
     country: 'España',
-    full: "C/ dels Centelles, 1, L'Eixample, 46006 València, España",
+    full: "C/ dels Centelles, 1, Ruzafa, 46006 València, España",
   },
 
   contact: {

@@ -15,7 +15,7 @@ No test runner is configured.
 
 ## Project context
 
-Single-page React + TypeScript + Vite app for **Clínica AestheticA** — a cosmetic clinic located in **València, España** (L'Eixample). Marketing landing site with no client-side routing yet. Deployed on **Cloudflare Pages** (`aesthetica-web.pages.dev`).
+Single-page React + TypeScript + Vite app for **Clínica AestheticA** — a cosmetic clinic located in **València, España** (Ruzafa). Marketing landing site with no client-side routing yet. Deployed on **Cloudflare Pages** (`aesthetica-web.pages.dev`).
 
 **RGPD compliance required** — all forms must include explicit consent checkbox referencing RGPD (UE) 2016/679 and LOPDGDD.
 
