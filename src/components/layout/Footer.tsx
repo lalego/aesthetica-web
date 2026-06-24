@@ -27,7 +27,7 @@ export const Footer = () => {
           {/* Marca */}
           <div className="space-y-5">
             <img src="/aesthetica.png" alt="AestheticA" className="h-20 w-auto brightness-0 invert opacity-80" />
-            <p className="text-sm leading-relaxed">
+            <p className="text-base leading-relaxed">
               Centro de estética avanzada en {CLINIC.address.district}, {CLINIC.address.city}.
               Tratamientos personalizados con tecnología de vanguardia.
             </p>
@@ -63,8 +63,8 @@ export const Footer = () => {
 
           {/* Contacto */}
           <div className="space-y-5">
-            <p className="text-stone-100 text-sm font-medium uppercase tracking-widest">Contacto</p>
-            <address className="not-italic text-sm space-y-3">
+            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Contacto</p>
+            <address className="not-italic text-base space-y-3">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
                 <a href={CLINIC.maps.href} target="_blank" rel="noopener noreferrer" className="hover:text-stone-100 transition-colors leading-relaxed">
@@ -99,8 +99,8 @@ export const Footer = () => {
 
           {/* Navegación */}
           <div className="space-y-5">
-            <p className="text-stone-100 text-sm font-medium uppercase tracking-widest">Navegación</p>
-            <ul className="text-sm space-y-2.5">
+            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Navegación</p>
+            <ul className="text-base space-y-2.5">
               {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <a href={href} className="flex items-center gap-2 group hover:text-gold-400 transition-colors">
@@ -115,13 +115,13 @@ export const Footer = () => {
 
         {/* Línea inferior */}
         <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-stone-500">
+          <p className="text-sm text-stone-500">
             © {year} Centro AestheticA. Todos los derechos reservados.
           </p>
           <ul className="flex flex-wrap gap-5">
             {LEGAL_LINKS.map(({ label, to }) => (
               <li key={to}>
-                <Link to={to} className="text-xs text-stone-500 hover:text-gold-400 transition-colors">
+                <Link to={to} className="text-sm text-stone-500 hover:text-gold-400 transition-colors">
                   {label}
                 </Link>
               </li>
