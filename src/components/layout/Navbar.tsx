@@ -95,12 +95,12 @@ export const Navbar = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-neutral-100 px-4 py-6 flex flex-col gap-2 overflow-hidden">
+        <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-6 flex flex-col gap-1">
           {NAV_LINKS.map(({ label, href }) => (
             <button
               key={href}
               onClick={() => handleNavClick(href)}
-              className="bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors text-center"
+              className="text-left text-base text-neutral-700 hover:text-gold-500 py-3 border-b border-neutral-100 transition-colors"
             >
               {label}
             </button>
@@ -108,7 +108,7 @@ export const Navbar = () => {
           <div className="mt-4 flex flex-col gap-2">
             <a
               href={CLINIC.contact.phone_href}
-              className="inline-flex items-center justify-center gap-2 bg-gold-400 text-white text-base px-5 py-3 rounded-full hover:bg-gold-500 transition-colors"
+              className="inline-flex items-center justify-center gap-2 border border-gold-300 text-gold-500 text-base px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
             >
               <Phone className="w-4 h-4" />
               {CLINIC.contact.phone.replace('+34 ', '')}
