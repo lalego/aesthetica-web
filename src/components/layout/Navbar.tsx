@@ -35,12 +35,21 @@ export const Navbar = () => {
           : 'bg-transparent'
       )}
     >
-      <nav className="max-w-6xl mx-auto px-6 h-32 flex items-center justify-between">
-        {/* Logo */}
+      <nav className="relative max-w-6xl mx-auto px-6 h-32 flex items-center justify-between">
+        {/* Mobile: hamburger izquierda | Desktop: oculto */}
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          className="md:hidden p-2 text-neutral-700 z-10"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+        >
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+
+        {/* Logo — centrado en móvil (absolute), izquierda en desktop (static) */}
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-          className="flex items-center"
+          className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
         >
           <img
             src="/aesthetica.png"
@@ -80,14 +89,8 @@ export const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMenuOpen((v) => !v)}
-          className="md:hidden p-2 text-neutral-700"
-          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-        >
-          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        {/* Espaciador móvil derecha para equilibrar el hamburger izquierdo */}
+        <div className="md:hidden w-10 h-10" aria-hidden="true" />
       </nav>
 
       {/* Mobile menu */}
