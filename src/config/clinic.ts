@@ -1,16 +1,16 @@
-﻿export const CLINIC = {
+export const CLINIC = {
   name: 'Aesthetica',
-  legal_name: 'ClÃ­nica Aesthetica S.L.',
+  legal_name: 'Centro Aesthetica',
   cif: 'B-00000000', // reemplazar con el CIF real
 
   address: {
     street: 'C/ dels Centelles, 1',
     district: "Ruzafa",
     zip: '46006',
-    city: 'ValÃ¨ncia',
+    city: 'València',
     province: 'Valencia',
-    country: 'EspaÃ±a',
-    full: "C/ dels Centelles, 1, Ruzafa, 46006 ValÃ¨ncia, EspaÃ±a",
+    country: 'España',
+    full: "C/ dels Centelles, 1, Ruzafa, 46006 València, España",
   },
 
   contact: {
@@ -28,8 +28,8 @@
   },
 
   hours: [
-    { days: 'Lun â€“ Vie', time: '10:00 â€“ 20:00' },
-    { days: 'SÃ¡bado',    time: '10:00 â€“ 18:00' },
+    { days: 'Lun – Vie', time: '10:00 – 20:00' },
+    { days: 'Sábado',    time: '10:00 – 18:00' },
     { days: 'Domingo',   time: 'Cerrado' },
   ],
 } as const

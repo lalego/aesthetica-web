@@ -7,11 +7,11 @@ const ABOUT = {
   headline: 'Medicina estética con propósito',
   intro: [
     'AestheticA nació de la pasión y la visión de Alena Martseniuk, su fundadora. Un centro con alma propia, donde cada tratamiento se diseña de forma personalizada para potenciar tu belleza natural con seguridad y rigor.',
-    'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada paciente en su proceso, desde la primera consulta hasta el resultado final.',
+    'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada cliente en su proceso, desde la primera consulta hasta el resultado final.',
   ],
   stats: [
     { value: '+25', label: 'Años de experiencia' },
-    { value: '+800', label: 'Pacientes satisfechos' },
+    { value: '+800', label: 'Clientes satisfechos' },
     { value: '15+', label: 'Tratamientos disponibles' },
   ],
   values: [
@@ -25,7 +25,7 @@ const ABOUT = {
       icon: Heart,
       title: 'Trato cercano',
       description:
-        'Cada paciente es único. Dedicamos el tiempo necesario para entender tus objetivos y diseñar un protocolo a tu medida.',
+        'Cada cliente es único. Dedicamos el tiempo necesario para entender tus objetivos y diseñar un protocolo a tu medida.',
     },
     {
       icon: ShieldCheck,
@@ -38,7 +38,7 @@ const ABOUT = {
     {
       name: 'Alena Martseniuk',
       role: 'Fundadora · Especialista en Estética Avanzada',
-      bio: 'Alena es la fundadora y alma de Centro AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
+      bio: 'Alena es la fundadora y alma de Centro AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada cliente son la prioridad.',
       avatar: '/alena_bio.jpeg',
       languages: [
         { code: 'es', label: 'Español' },
