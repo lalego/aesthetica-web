@@ -4,13 +4,13 @@ export const CLINIC = {
   cif: 'B-00000000', // reemplazar con el CIF real
 
   address: {
-    street: 'C/ dels Centelles, 1',
+    street: 'C/ Centelles, 1',
     district: "Ruzafa",
     zip: '46006',
     city: 'València',
     province: 'Valencia',
     country: 'España',
-    full: "C/ dels Centelles, 1, Ruzafa, 46006 València, España",
+    full: "C/ Centelles, 1, Ruzafa, 46006 València, España",
   },
 
   contact: {
