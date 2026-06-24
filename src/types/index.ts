@@ -1,4 +1,4 @@
-export type TreatmentCategory = 'facial' | 'corporal' | 'bienestar' | 'capilar'
+export type TreatmentCategory = 'facial' | 'corporal' | 'laser' | 'capilar' | 'bienestar'
 
 export interface Treatment {
   id: string

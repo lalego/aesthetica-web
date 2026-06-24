@@ -10,15 +10,17 @@ const FILTERS: { label: string; value: FilterOption }[] = [
   { label: 'Todos',      value: 'todos' },
   { label: 'Facial',     value: 'facial' },
   { label: 'Corporal',   value: 'corporal' },
-  { label: 'Bienestar',  value: 'bienestar' },
+  { label: 'Láser',      value: 'laser' },
   { label: 'Capilar',    value: 'capilar' },
+  { label: 'Bienestar',  value: 'bienestar' },
 ]
 
 const CATEGORY_COLORS: Record<TreatmentCategory, string> = {
   facial:    'bg-rose-100 text-rose-600',
   corporal:  'bg-neutral-100 text-neutral-600',
-  bienestar: 'bg-amber-50 text-amber-600',
+  laser:     'bg-violet-50 text-violet-600',
   capilar:   'bg-teal-50 text-teal-600',
+  bienestar: 'bg-amber-50 text-amber-600',
 }
 
 export const TreatmentsSection = () => {
