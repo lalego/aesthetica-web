@@ -34,7 +34,7 @@ export const Navbar = () => {
           : 'bg-transparent'
       )}
     >
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="max-w-6xl mx-auto px-6 h-28 flex items-center justify-between">
         {/* Logo */}
         <a
           href="#"
@@ -44,7 +44,7 @@ export const Navbar = () => {
           <img
             src="/aesthetica.png"
             alt="Clínica AestheticA"
-            className="h-10 w-auto mix-blend-multiply"
+            className="h-24 w-auto mix-blend-multiply"
           />
         </a>
 
@@ -54,7 +54,7 @@ export const Navbar = () => {
             <li key={href}>
               <button
                 onClick={() => handleNavClick(href)}
-                className="text-sm text-neutral-600 hover:text-gold-500 transition-colors"
+                className="text-lg text-neutral-600 hover:text-gold-500 transition-colors"
               >
                 {label}
               </button>
@@ -65,7 +65,7 @@ export const Navbar = () => {
         {/* Desktop CTA */}
         <button
           onClick={() => handleNavClick(BOOKING_HREF)}
-          className="hidden md:inline-flex items-center bg-gold-400 text-white text-sm px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors"
+          className="hidden md:inline-flex items-center bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
         >
           Agendar cita
         </button>

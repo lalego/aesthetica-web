@@ -17,7 +17,7 @@ export const ContactSection = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="flex gap-4">
-              <MapPin className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+              <MapPin className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Dirección</h3>
                 <p className="text-neutral-600">
@@ -28,7 +28,7 @@ export const ContactSection = () => {
             </div>
 
             <div className="flex gap-4">
-              <Phone className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+              <Phone className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Teléfono</h3>
                 <a
@@ -42,7 +42,7 @@ export const ContactSection = () => {
 
             {CLINIC.contact.instagram && (
               <div className="flex gap-4">
-                <Instagram className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+                <Instagram className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-medium text-neutral-800 mb-1">Instagram</h3>
                   <a
@@ -58,7 +58,7 @@ export const ContactSection = () => {
             )}
 
             <div className="flex gap-4">
-              <Clock className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+              <Clock className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">Horarios</h3>
                 {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (

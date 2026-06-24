@@ -67,7 +67,7 @@ export const BookingSection = () => {
         {/* Encabezado */}
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            Agenda tu <span className="font-serif italic text-rose-500">cita</span>
+            Agenda tu <span className="font-serif italic text-gold-400">cita</span>
           </h2>
           <p className="text-neutral-600">
             Rellena el formulario y te contactaremos en menos de 24 h para confirmar.
@@ -77,7 +77,7 @@ export const BookingSection = () => {
         {/* Estado de éxito */}
         {status === 'success' ? (
           <div className="text-center py-16 space-y-4">
-            <CheckCircle className="w-14 h-14 text-rose-400 mx-auto" />
+            <CheckCircle className="w-14 h-14 text-gold-400 mx-auto" />
             <h3 className="text-xl font-light text-neutral-800">¡Solicitud recibida!</h3>
             <p className="text-neutral-500 max-w-sm mx-auto">
               Nos pondremos en contacto contigo en menos de 24 horas para confirmar tu cita.
@@ -163,7 +163,7 @@ export const BookingSection = () => {
                 <input
                   {...register('gdpr_consent')}
                   type="checkbox"
-                  className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-rose-500 focus:ring-rose-400"
+                  className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-gold-400 focus:ring-gold-300"
                 />
                 <span className="text-sm text-neutral-600 leading-snug">
                   He leído y acepto la{' '}
@@ -175,7 +175,7 @@ export const BookingSection = () => {
                 </span>
               </label>
               {errors.gdpr_consent && (
-                <p className="text-xs text-rose-500 pl-7">{errors.gdpr_consent.message}</p>
+                <p className="text-xs text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
               )}
             </div>
 
@@ -206,9 +206,9 @@ export const BookingSection = () => {
 const inputClass = (hasError: boolean) =>
   cn(
     'w-full rounded-xl border px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400',
-    'focus:outline-none focus:ring-2 focus:ring-rose-300 transition-shadow',
+    'focus:outline-none focus:ring-2 focus:ring-gold-300 transition-shadow',
     hasError
-      ? 'border-rose-400 bg-rose-50'
+      ? 'border-gold-400 bg-gold-50'
       : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300'
   )
 
@@ -222,6 +222,6 @@ const Field = ({ label, error, children }: FieldProps) => (
   <div className="space-y-1.5">
     <label className="block text-sm font-medium text-neutral-700">{label}</label>
     {children}
-    {error && <p className="text-xs text-rose-500">{error}</p>}
+    {error && <p className="text-xs text-gold-400">{error}</p>}
   </div>
 )

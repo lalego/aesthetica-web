@@ -6,8 +6,8 @@ import { Microscope, Heart, ShieldCheck } from 'lucide-react'
 const ABOUT = {
   headline: 'Medicina estética con propósito',
   intro: [
-    'En AestheticA creemos que la belleza auténtica nace del bienestar interior. Nuestra clínica nació con una misión clara: ofrecer tratamientos médico-estéticos personalizados, seguros y con resultados naturales que potencien tu confianza.',
-    'Contamos con un equipo de profesionales especializados y tecnología de vanguardia para acompañarte en cada etapa de tu proceso, siempre con transparencia y rigor clínico.',
+    'AestheticA nació de la pasión y la visión de Alena Martseniuk, su fundadora. Una clínica con alma propia, donde cada tratamiento se diseña de forma personalizada para potenciar tu belleza natural con seguridad y rigor.',
+    'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada paciente en su proceso, desde la primera consulta hasta el resultado final.',
   ],
   stats: [
     { value: '+5', label: 'Años de experiencia' },
@@ -36,12 +36,10 @@ const ABOUT = {
   ],
   team: [
     {
-      name: 'Dra. [Nombre Apellido]',
-      role: 'Médica estética — Directora clínica',
-      bio: 'Especialista en medicina estética con más de 8 años de experiencia. Formada en [Universidad/Centro]. Experta en tratamientos faciales y corporales mínimamente invasivos.',
-      // avatar: '/team/doctora.webp',  // descomenta cuando tengas la foto
+      name: 'Alena Martseniuk',
+      role: 'Fundadora · Especialista en Estética Avanzada',
+      bio: 'Alena es la fundadora y alma de Clínica AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
     },
-    // Añade más especialistas aquí
   ],
 }
 // ─────────────────────────────────────────────────────────────────
