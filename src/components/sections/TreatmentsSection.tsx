@@ -40,7 +40,7 @@ export const TreatmentsSection = () => {
             Nuestros <span className="font-serif italic text-gold-400">tratamientos</span>
           </h2>
           <p className="text-neutral-600 max-w-xl mx-auto">
-            Protocolos personalizados diseñados por nuestro equipo médico para resultados
+            Protocolos personalizados diseñados para resultados
             naturales y duraderos.
           </p>
         </div>
@@ -52,7 +52,7 @@ export const TreatmentsSection = () => {
               key={value}
               onClick={() => setActive(value)}
               className={cn(
-                'px-5 py-2 rounded-full text-sm transition-all duration-200',
+                'px-7 py-3 rounded-full text-base transition-all duration-200',
                 active === value
                   ? 'bg-gold-400 text-white shadow-sm'
                   : 'bg-white text-neutral-600 border border-neutral-200 hover:border-gold-300 hover:text-gold-500'
@@ -93,13 +93,13 @@ export const TreatmentsSection = () => {
               >
                 {/* Badge de categoría */}
                 <span className={cn(
-                  'self-start text-xs font-medium px-3 py-1 rounded-full capitalize mb-4',
+                  'self-start text-sm font-medium px-4 py-1.5 rounded-full capitalize mb-4',
                   CATEGORY_COLORS[treatment.category]
                 )}>
                   {treatment.category}
                 </span>
 
-                <h3 className="text-lg font-medium text-neutral-800 mb-2">
+                <h3 className="text-xl font-medium text-neutral-800 mb-2">
                   {treatment.name}
                 </h3>
 
@@ -110,14 +110,14 @@ export const TreatmentsSection = () => {
                 )}
 
                 <div className="flex items-center justify-between pt-4 border-t border-neutral-50">
-                  <div className="flex items-center gap-1.5 text-neutral-400 text-sm">
+                  <div className="flex items-center gap-1.5 text-neutral-400 text-base">
                     <Clock className="w-4 h-4" />
                     <span>{treatment.duration_min} min</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     {treatment.price_eur && (
-                      <span className="text-neutral-800 font-medium">
+                      <span className="text-neutral-800 font-medium text-base">
                         {treatment.price_eur.toLocaleString('es-ES', {
                           style: 'currency',
                           currency: 'EUR',
