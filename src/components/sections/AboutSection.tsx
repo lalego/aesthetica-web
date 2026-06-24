@@ -39,6 +39,7 @@ const ABOUT = {
       name: 'Alena Martseniuk',
       role: 'Fundadora · Especialista en Estética Avanzada',
       bio: 'Alena es la fundadora y alma de Clínica AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
+      avatar: '/alena_bio.jpeg',
     },
   ],
 }
@@ -104,19 +105,17 @@ export const AboutSection = () => {
               Tu especialista
             </h3>
             <div className="flex flex-wrap justify-center gap-8">
-              {ABOUT.team.map(({ name, role, bio }) => (
+              {ABOUT.team.map(({ name, role, bio, avatar }) => (
                 <div
                   key={name}
-                  className="flex flex-col items-center text-center max-w-xs space-y-4"
+                  className="flex flex-col items-center text-center max-w-sm space-y-4"
                 >
-                  {/* Avatar placeholder */}
-                  <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gold-100 to-neutral-100 flex items-center justify-center text-neutral-300 text-xs">
-                    Foto
-                    {/* <img src={avatar} alt={name} className="w-full h-full object-cover rounded-full" /> */}
+                  <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-gold-100 shadow-lg">
+                    <img src={avatar} alt={name} className="w-full h-full object-cover object-top" />
                   </div>
                   <div>
-                    <p className="font-medium text-neutral-800">{name}</p>
-                    <p className="text-xs text-gold-400 mt-0.5">{role}</p>
+                    <p className="text-lg font-medium text-neutral-800">{name}</p>
+                    <p className="text-sm text-gold-400 mt-0.5">{role}</p>
                   </div>
                   <p className="text-sm text-neutral-500 leading-relaxed">{bio}</p>
                 </div>
