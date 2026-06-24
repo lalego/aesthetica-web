@@ -40,6 +40,7 @@ const ABOUT = {
       role: 'Fundadora · Especialista en Estética Avanzada',
       bio: 'Alena es la fundadora y alma de Clínica AestheticA. Con una profunda formación en estética avanzada y una visión centrada en resultados naturales, ha creado un espacio donde la confianza y el bienestar de cada paciente son la prioridad.',
       avatar: '/alena_bio.jpeg',
+      languages: ['🇪🇸 Español', '🇬🇧 English', '🇮🇹 Italiano', '🇺🇦 Українська', '🇷🇺 Русский'],
     },
   ],
 }
@@ -103,7 +104,7 @@ export const AboutSection = () => {
               Tu especialista
             </h3>
             <div className="flex flex-wrap justify-center gap-8">
-              {ABOUT.team.map(({ name, role, bio, avatar }) => (
+              {ABOUT.team.map(({ name, role, bio, avatar, languages }) => (
                 <div
                   key={name}
                   className="flex flex-col items-center text-center max-w-sm space-y-4"
@@ -116,6 +117,15 @@ export const AboutSection = () => {
                     <p className="text-sm text-gold-400 mt-0.5">{role}</p>
                   </div>
                   <p className="text-sm text-neutral-500 leading-relaxed">{bio}</p>
+                  {languages && (
+                    <div className="flex flex-wrap justify-center gap-1.5 pt-1">
+                      {languages.map((lang) => (
+                        <span key={lang} className="text-xs bg-neutral-50 border border-neutral-100 text-neutral-500 px-2.5 py-1 rounded-full">
+                          {lang}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
