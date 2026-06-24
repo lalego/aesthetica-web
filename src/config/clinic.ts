@@ -5,7 +5,7 @@ export const CLINIC = {
 
   address: {
     street: 'C/ dels Centelles, 1',
-    district: "L'Eixample",
+    district: "Ruzafa",
     zip: '46006',
     city: 'València',
     province: 'Valencia',
