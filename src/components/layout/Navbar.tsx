@@ -108,7 +108,7 @@ export const Navbar = () => {
           <div className="mt-6 flex flex-col gap-3">
             <a
               href={CLINIC.contact.phone_href}
-              className="inline-flex items-center justify-center gap-2 border border-gold-300 text-gold-500 text-base px-6 py-3 rounded-full hover:bg-gold-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-gold-400 text-white text-base px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
             >
               <Phone className="w-4 h-4" />
               {CLINIC.contact.phone.replace('+34 ', '')}
