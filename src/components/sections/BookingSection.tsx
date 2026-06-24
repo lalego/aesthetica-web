@@ -84,7 +84,7 @@ export const BookingSection = () => {
             </p>
             <button
               onClick={() => setStatus('idle')}
-              className="mt-4 text-sm text-neutral-400 hover:text-neutral-700 underline transition-colors"
+              className="mt-4 text-base text-neutral-400 hover:text-neutral-700 underline transition-colors"
             >
               Hacer otra reserva
             </button>
@@ -165,7 +165,7 @@ export const BookingSection = () => {
                   type="checkbox"
                   className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-gold-400 focus:ring-gold-300"
                 />
-                <span className="text-sm text-neutral-600 leading-snug">
+                <span className="text-base text-neutral-600 leading-snug">
                   He leído y acepto la{' '}
                   <a href="#privacidad" className="underline hover:text-neutral-900">
                     Política de privacidad
@@ -175,7 +175,7 @@ export const BookingSection = () => {
                 </span>
               </label>
               {errors.gdpr_consent && (
-                <p className="text-xs text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
+                <p className="text-sm text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
               )}
             </div>
 
@@ -205,7 +205,7 @@ export const BookingSection = () => {
 
 const inputClass = (hasError: boolean) =>
   cn(
-    'w-full rounded-xl border px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400',
+    'w-full rounded-xl border px-4 py-3 text-base text-neutral-800 placeholder-neutral-400',
     'focus:outline-none focus:ring-2 focus:ring-gold-300 transition-shadow',
     hasError
       ? 'border-gold-400 bg-gold-50'
@@ -220,8 +220,8 @@ interface FieldProps {
 
 const Field = ({ label, error, children }: FieldProps) => (
   <div className="space-y-1.5">
-    <label className="block text-sm font-medium text-neutral-700">{label}</label>
+    <label className="block text-base font-medium text-neutral-700">{label}</label>
     {children}
-    {error && <p className="text-xs text-gold-400">{error}</p>}
+    {error && <p className="text-sm text-gold-400">{error}</p>}
   </div>
 )
