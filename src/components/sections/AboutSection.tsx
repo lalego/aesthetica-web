@@ -63,10 +63,8 @@ export const AboutSection = () => {
             ))}
           </div>
 
-          {/* Imagen placeholder — reemplaza src cuando tengas foto */}
-          <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-gold-50 to-neutral-100 overflow-hidden flex items-center justify-center">
-            <p className="text-neutral-300 text-sm">Foto de clínica / equipo</p>
-            {/* <img src="/about-clinic.webp" alt="Clínica AestheticA" className="w-full h-full object-cover" /> */}
+          <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
+            <img src="/alena_laser.jpeg" alt="Alena Martseniuk — Clínica AestheticA" className="w-full h-full object-cover" />
           </div>
         </div>
 
