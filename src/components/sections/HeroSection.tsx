@@ -12,9 +12,11 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
 
       <div className="relative max-w-6xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
-          <span className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-full">
-            Centro de Estética Avanzada · Ruzafa, València
-          </span>
+          <div className="flex justify-center lg:justify-start">
+            <span className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-full">
+              Centro de Estética Avanzada · Ruzafa, València
+            </span>
+          </div>
 
           <h1 className="text-4xl lg:text-6xl font-light text-neutral-800 leading-tight">
             Realza tu{' '}
