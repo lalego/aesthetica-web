@@ -64,7 +64,7 @@ export const AboutSection = () => {
           </div>
 
           <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
-            <img src="/alena_laser.jpeg" alt="Alena Martseniuk — Clínica AestheticA" className="w-full h-full object-cover" />
+            <img src="/alena_laser.jpeg" alt="Alena Martseniuk — Clínica AestheticA" className="w-full h-full object-cover object-top" />
           </div>
         </div>
 
