@@ -10,7 +10,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
       <div className="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
           <span className="text-rose-400 font-medium tracking-wide text-sm uppercase">
-            Clínica Estética
+            Centro de Estética Avanzada
           </span>
           <h1 className="text-4xl lg:text-6xl font-light text-neutral-800 leading-tight">
             Realza tu <span className="font-serif italic text-rose-500">belleza natural</span>
@@ -37,9 +37,9 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
         <div className="relative">
           <div className="aspect-[4/5] rounded-3xl bg-gradient-to-br from-rose-100 to-neutral-100 overflow-hidden">
             <img
-              src="/hero-clinic.webp"
-              alt="Clínica estética"
-              className="w-full h-full object-cover mix-blend-multiply"
+              src="/hero-clinic.jpeg"
+              alt="Clínica AestheticA — C/ dels Centelles, València"
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl">
