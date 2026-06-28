@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Monorepo
+apps/*/dist
+apps/admin/.next
+apps/admin/.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
