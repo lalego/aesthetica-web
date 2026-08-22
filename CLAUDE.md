@@ -138,17 +138,20 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 - **Build output:** `apps/web/dist`
 - **Root directory:** `/` (raíz del monorepo)
 - **Variables de entorno:** `NODE_VERSION=18`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-- **Auto-deploy:** cualquier push a `main`
+- **Auto-deploy:** cualquier push a `main` — verificado funcionando el 2026-08-21 (llevaba ~1 mes roto tras la migración a monorepo; ver `doc/entorno-desarrollo-estado.md` para el detalle)
+- **Cuenta Cloudflare:** el proyecto vive en la cuenta `Lalego@gmail.com`, login vía **"Continue with GitHub"** (no email/contraseña — esa es otra cuenta distinta, `Lalego@hotmail.com`, sin proyectos)
 
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
 - **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NEXTAUTH_SECRET`
+- **⚠️ Sin confirmar:** no se encontró GitHub App de Vercel instalada en el repo — comprobar si el deploy de admin existe de verdad antes de asumir que está en producción
 
 ## Próximos pasos (Fase 2+)
 
-- [ ] Conectar Supabase con credenciales reales
-- [ ] Completar panel admin: citas, pacientes, tratamientos, facturación
+- [ ] Conectar Supabase con credenciales reales (local, Cloudflare Pages y Vercel siguen todos en placeholder)
+- [ ] Confirmar que `apps/admin` tiene un proyecto Vercel real conectado y desplegando
+- [ ] Completar panel admin: citas, pacientes, tratamientos, facturación (de momento son páginas placeholder de ~8 líneas cada una, sin API Routes)
 - [ ] Autenticación staff en admin (Supabase Auth)
 - [ ] Dominio personalizado en Cloudflare Pages
 - [ ] App móvil Expo en `apps/mobile/` (comparte `packages/shared`)

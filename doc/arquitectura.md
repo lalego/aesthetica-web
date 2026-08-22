@@ -210,37 +210,23 @@ El proyecto original `aesthetica-web` (Vite + React) fue convertido en la raíz 
 - `packages/shared/src/clinic.ts` ← `src/config/clinic.ts`
 - `apps/web/src/types/index.ts` y `apps/web/src/config/clinic.ts` convertidos en re-exports de `@aesthetica/shared`
 
-### Pendiente (ejecutar en terminal)
+### Hecho (pasos 1-7 completados)
 
-```bash
-# 1. Instalar pnpm
-npm install -g pnpm
+Pasos 1-6 (pnpm, lockfile, workspace, landing verificada, admin creado con Next.js 14, shadcn/ui inicializado) completados durante la migración inicial.
 
-# 2. Desde la raíz del monorepo — convertir lockfile y limpiar
-pnpm import
-del package-lock.json
-rmdir /s /q node_modules
-
-# 3. Instalar todo el workspace
-pnpm install
-
-# 4. Verificar landing
-pnpm dev --filter=@aesthetica/web
-
-# 5. Crear admin con Next.js 14
-pnpm create next-app apps/admin --typescript --tailwind --app --no-src-dir --import-alias "@/*"
-# → src/ directory: No
-# → Turbopack: No
-
-# 6. Inicializar shadcn/ui
-cd apps/admin
-pnpm dlx shadcn-ui@latest init
-
-# 7. Actualizar Cloudflare Pages (en el dashboard)
-#    Build command:        pnpm turbo build --filter=@aesthetica/web
-#    Build output dir:     apps/web/dist
-#    NODE_VERSION:         18
+Paso 7 completado el **2026-08-21**, con retraso: el build de Cloudflare Pages llevaba desactualizado desde la migración (`npm run build` / `dist`, sin reflejar el monorepo), lo que rompió el auto-deploy en silencio durante ~1 mes. Corregido en el dashboard de Cloudflare (cuenta `Lalego@gmail.com`, login vía GitHub — ver `doc/entorno-desarrollo-estado.md` para el detalle completo):
 ```
+Build command:        pnpm turbo build --filter=@aesthetica/web
+Build output dir:     apps/web/dist
+NODE_VERSION:         18
+```
+Además hizo falta un `.npmrc` con `hoist=false` en la raíz para evitar que pnpm mezclara `@types/react` de `apps/web` (v18) y `apps/admin` (v19) — ver detalle en `doc/entorno-desarrollo-estado.md`.
+
+### Pendiente
+
+- [ ] Variables de entorno reales de Supabase (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`) — siguen en placeholder en local y en Cloudflare Pages.
+- [ ] Confirmar que `apps/admin` tiene un proyecto Vercel real conectado (no se encontró GitHub App de Vercel instalada en el repo).
+- [ ] Completar los módulos de `apps/admin` (Agenda, Pacientes, Tratamientos, Facturación) — de momento son páginas placeholder de ~8 líneas, sin API Routes ni auth implementadas.
 
 ---
 
@@ -248,7 +234,7 @@ pnpm dlx shadcn-ui@latest init
 
 | Fase | Contenido |
 |---|---|
-| ✅ Fase 1 | Landing pública (web) — desplegada en Cloudflare Pages |
-| 🔄 Fase 2 | Panel admin (Next.js) + Supabase real + Auth staff |
+| ✅ Fase 1 | Landing pública (web) — desplegada en Cloudflare Pages, auto-deploy verificado (2026-08-21) |
+| 🔄 Fase 2 | Panel admin (Next.js, scaffolding + shadcn/ui listo) + Supabase real + Auth staff — módulos aún placeholder |
 | ⬜ Fase 3 | App móvil Expo (Android) + packages/ui NativeWind |
 | ⬜ Fase 4 | Dominio personalizado, panel pacientes, notificaciones |
