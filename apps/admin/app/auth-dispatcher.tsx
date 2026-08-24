@@ -5,9 +5,16 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 
 // Página raíz: no requiere sesión previa porque también es donde aterriza
-// el enlace de invitación de Supabase (token consumido del fragmento #,
-// que solo el navegador puede leer). Decide a dónde mandar al usuario:
-// - viene de una invitación → /set-password
+// el enlace de invitación de Supabase (token en el fragmento #, que solo
+// el navegador puede leer). @supabase/ssr fuerza flowType: 'pkce' tanto en
+// el cliente de navegador como en el de servidor (no se puede desactivar),
+// así que su detección automática de sesión busca un ?code= en la URL —
+// nunca el #access_token=...&type=invite que produce el enlace de
+// invitación por defecto de Supabase (plan Free, sin SMTP propio para
+// personalizar la plantilla con un token_hash). Por eso hay que leer el
+// fragmento a mano y llamar a setSession() explícitamente.
+// Decide a dónde mandar al usuario:
+// - viene de una invitación/recuperación → /set-password
 // - ya tiene sesión → /citas
 // - nada de lo anterior → /login
 export function AuthDispatcher() {
@@ -15,25 +22,30 @@ export function AuthDispatcher() {
 
   useEffect(() => {
     const supabase = createClient()
-    const isInviteHash = window.location.hash.includes('type=invite')
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && isInviteHash) {
-        router.replace('/set-password')
-      } else if (session) {
-        router.replace('/citas')
+    async function dispatch() {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1))
+      const accessToken = hashParams.get('access_token')
+      const refreshToken = hashParams.get('refresh_token')
+      const type = hashParams.get('type')
+
+      if (accessToken && refreshToken) {
+        const { error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        })
+
+        if (!error) {
+          router.replace(type === 'invite' || type === 'recovery' ? '/set-password' : '/citas')
+          return
+        }
       }
-    })
 
-    if (!window.location.hash) {
-      supabase.auth.getSession().then(({ data }) => {
-        router.replace(data.session ? '/citas' : '/login')
-      })
+      const { data } = await supabase.auth.getSession()
+      router.replace(data.session ? '/citas' : '/login')
     }
 
-    return () => subscription.unsubscribe()
+    dispatch()
   }, [router])
 
   return null
