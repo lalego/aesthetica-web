@@ -11,36 +11,21 @@ export interface BookingFormData {
 }
 
 export const submitBooking = async (data: BookingFormData): Promise<void> => {
-  // 1. Upsert paciente (por email)
-  const { data: patient, error: patientError } = await supabase
-    .from('patients')
-    .upsert(
-      {
-        full_name: data.name,
-        email: data.email,
-        phone: data.phone,
-        gdpr_consent: true,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'email', ignoreDuplicates: false }
-    )
-    .select('id')
-    .single()
-
-  if (patientError) throw patientError
-
-  // 2. Crear cita pendiente
   const scheduledAt = new Date(data.preferred_date)
   scheduledAt.setHours(10, 0, 0, 0) // hora por defecto: 10:00
 
-  const { error: appointmentError } = await supabase.from('appointments').insert({
-    patient_id: patient.id,
-    treatment_id: data.treatment_id,
-    scheduled_at: scheduledAt.toISOString(),
-    duration_min: 60, // se actualizará desde el tratamiento real
-    status: 'pending',
-    notes: data.notes ?? null,
+  // Upsert de paciente + creación de cita 'pending' en una sola transacción,
+  // vía RPC (ver supabase/schema.sql: submit_booking). patients/appointments
+  // no tienen políticas RLS para anon, así que este es el único camino de escritura.
+  const { error } = await supabase.rpc('submit_booking', {
+    p_name: data.name,
+    p_email: data.email,
+    p_phone: data.phone,
+    p_treatment_id: data.treatment_id,
+    p_scheduled_at: scheduledAt.toISOString(),
+    p_notes: data.notes ?? null,
+    p_gdpr_consent: data.gdpr_consent,
   })
 
-  if (appointmentError) throw appointmentError
+  if (error) throw error
 }

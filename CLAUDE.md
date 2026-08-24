@@ -125,7 +125,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 
 **Backend:** Supabase configurado con placeholders en `apps/web/.env.local`. Fallback a mock data si Supabase no está disponible. Credenciales reales en `.env.local` (gitignored) y variables de entorno de Cloudflare Pages / Vercel.
 
-**Supabase schema:** tablas `treatments`, `patients`, `specialists`, `appointments`, `treatment_history` con RLS habilitado.
+**Supabase schema:** tablas `treatments`, `patients`, `specialists`, `appointments`, `treatment_history` con RLS habilitado. Fuente de verdad: `supabase/schema.sql` (ejecutar entero en el SQL Editor de un proyecto Supabase nuevo). `treatments` tiene lectura pública (`is_active = true`); `patients`/`appointments` no tienen políticas para `anon` — toda escritura del formulario de reserva pasa por la función `submit_booking()` (SECURITY DEFINER), llamada desde `apps/web/src/services/bookingService.ts` vía `supabase.rpc(...)`. `specialists`/`treatment_history` sin políticas públicas todavía (pendiente auth de staff).
 
 **Icons:** `lucide-react` únicamente.
 
