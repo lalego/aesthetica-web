@@ -123,7 +123,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 - Client → Zustand
 - Forms → `react-hook-form` + `zod`
 
-**Backend:** Supabase configurado con placeholders en `apps/web/.env.local`. Fallback a mock data si Supabase no está disponible. Credenciales reales en `.env.local` (gitignored) y variables de entorno de Cloudflare Pages / Vercel.
+**Backend:** Supabase real conectado (2026-08-24) — proyecto `aesthetica` (org `aesthetica-clinic`), URL `https://vhcmpglvmpwfwblexhcs.supabase.co`. Credenciales en `.env.local` de cada app (gitignored) y en las env vars de Cloudflare Pages / Vercel. Fallback a `MOCK_TREATMENTS` solo si Supabase no responde.
 
 **Supabase schema:** tablas `treatments`, `patients`, `specialists`, `appointments`, `treatment_history` con RLS habilitado. Fuente de verdad: `supabase/schema.sql` (ejecutar entero en el SQL Editor de un proyecto Supabase nuevo). `treatments` tiene lectura pública (`is_active = true`); `patients`/`appointments` no tienen políticas para `anon` — toda escritura del formulario de reserva pasa por la función `submit_booking()` (SECURITY DEFINER), llamada desde `apps/web/src/services/bookingService.ts` vía `supabase.rpc(...)`. `specialists`/`treatment_history` sin políticas públicas todavía (pendiente auth de staff).
 
@@ -150,7 +150,6 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 
 ## Próximos pasos (Fase 2+)
 
-- [ ] Conectar Supabase con credenciales reales (local, Cloudflare Pages y Vercel siguen todos en placeholder)
 - [ ] Completar panel admin: citas, pacientes, tratamientos, facturación (de momento son páginas placeholder de ~8 líneas cada una, sin API Routes)
 - [ ] Autenticación staff en admin (Supabase Auth)
 - [ ] Dominio personalizado en Cloudflare Pages
