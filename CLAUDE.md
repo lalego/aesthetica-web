@@ -87,12 +87,41 @@ apps/web/src/
 │   └── Home.tsx
 ├── services/
 │   ├── treatmentService.ts     # fetchTreatments() — Supabase + MOCK_TREATMENTS fallback
-│   └── bookingService.ts       # submitBooking() — upsert patients + insert appointments
+│   └── bookingService.ts       # submitBooking() — supabase.rpc('submit_booking', ...)
 ├── store/
-│   └── bookingStore.ts
+│   └── bookingStore.ts         # useBookings() sin usar (apunta a tabla 'citas' inexistente) — código muerto
 └── types/
     └── index.ts                # Re-exporta desde @aesthetica/shared
 ```
+
+## apps/admin — Source tree
+
+```
+apps/admin/
+├── app/(dashboard)/
+│   ├── layout.tsx               # <AppSidebar /> + <main>
+│   ├── citas/
+│   │   ├── page.tsx             # Server Component: fetch appointments + join patients/treatments
+│   │   ├── appointments-table.tsx  # 'use client': Select de estado por fila
+│   │   └── actions.ts           # 'use server': setAppointmentStatus()
+│   ├── pacientes/
+│   │   ├── page.tsx             # Server Component: fetch patients
+│   │   └── patients-table.tsx   # 'use client': solo lectura + filtro de búsqueda
+│   ├── tratamientos/
+│   │   ├── page.tsx             # Server Component: fetch treatments (activos e inactivos)
+│   │   ├── treatments-table.tsx # 'use client': toggle activo/inactivo
+│   │   ├── treatment-form-dialog.tsx  # 'use client': alta/edición
+│   │   └── actions.ts           # 'use server': saveTreatment(), setTreatmentActive()
+│   └── facturas/                # placeholder, sin implementar
+├── components/ui/                # primitivas shadcn (radix-nova) — algunas escritas a mano, ver abajo
+└── lib/
+    ├── supabase.ts               # cliente anon — para futuro login de staff (Supabase Auth), no usado aún
+    └── supabase-admin.ts         # cliente service_role, 'server-only' — el que usan todas las páginas de arriba
+```
+
+**Por qué `supabase-admin.ts` con `service_role`:** `patients`/`appointments` no tienen políticas RLS para `anon`/`authenticated` a propósito (ver `supabase/schema.sql`) — la única vía de escritura pública es la función `submit_booking()`. El panel admin necesita leer y escribir esas tablas directamente, así que todas las páginas de citas/pacientes/tratamientos son Server Components/Server Actions que usan `supabaseAdmin` (import protegido con el paquete `server-only`, nunca se debe importar desde un archivo `'use client'`). Esto sustituye, de momento, a la autenticación de staff (pendiente más abajo) — cualquiera que acceda a la URL del panel puede ver/editar estos datos, así que no compartir la URL de `aesthetica-web-admin.vercel.app` hasta que haya login.
+
+**shadcn CLI no funciona en este entorno:** requiere Node ≥20.18.1 y el Node portátil de la máquina sin permisos de admin es v18.14.1/v18.20.8. Los componentes de `components/ui/` que faltaban (`table`, `badge`, `input`, `label`, `textarea`, `select`, `switch`, `dialog`) están escritos a mano siguiendo el estilo `radix-nova` ya configurado en `components.json`, usando los primitivos de `radix-ui` (paquete unificado, mismo patrón que `button.tsx`: `import { Dialog } from "radix-ui"` → `Dialog.Root`, etc.). Si se necesita añadir un componente nuevo, replicar ese patrón en vez de intentar correr `pnpm dlx shadcn add` — falla con `Cannot find native binding` en Node 18.
 
 ## packages/shared
 
@@ -144,13 +173,13 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
-- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NEXTAUTH_SECRET` — configuradas vacías (placeholder) de momento, igual que en local; no bloquean el build porque `apps/admin/lib/supabase.ts` aún no se importa desde ninguna página
+- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key, real desde el 24/08), `SUPABASE_SERVICE_ROLE_KEY` (secret key, real desde el 24/08 — la usan las Server Actions de citas/pacientes/tratamientos, ver `apps/admin — Source tree` más arriba), `NEXTAUTH_SECRET` (vacía, `NextAuth` aún no está wireado)
 - **Proyecto:** `aesthetica-web-admin` en la cuenta/team `aesthetica1` de Vercel — verificado en producción el 2026-08-24, `aesthetica-web-admin.vercel.app` sirve correctamente el panel (Citas, Pacientes, Tratamientos, Facturación)
 - **Auto-deploy:** cualquier push a `main` (Production Deployment conectado vía GitHub)
 
 ## Próximos pasos (Fase 2+)
 
-- [ ] Completar panel admin: citas, pacientes, tratamientos, facturación (de momento son páginas placeholder de ~8 líneas cada una, sin API Routes)
+- [ ] Completar panel admin: facturación sigue siendo placeholder (citas, pacientes y tratamientos ya conectados a Supabase real, ver `apps/admin — Source tree` más arriba)
 - [ ] Autenticación staff en admin (Supabase Auth)
 - [ ] Dominio personalizado en Cloudflare Pages
 - [ ] App móvil Expo en `apps/mobile/` (comparte `packages/shared`)
