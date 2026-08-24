@@ -98,28 +98,43 @@ apps/web/src/
 
 ```
 apps/admin/
-├── app/(dashboard)/
-│   ├── layout.tsx               # <AppSidebar /> + <main>
-│   ├── citas/
-│   │   ├── page.tsx             # Server Component: fetch appointments + join patients/treatments
-│   │   ├── appointments-table.tsx  # 'use client': Select de estado por fila
-│   │   └── actions.ts           # 'use server': setAppointmentStatus()
-│   ├── pacientes/
-│   │   ├── page.tsx             # Server Component: fetch patients
-│   │   └── patients-table.tsx   # 'use client': solo lectura + filtro de búsqueda
-│   ├── tratamientos/
-│   │   ├── page.tsx             # Server Component: fetch treatments (activos e inactivos)
-│   │   ├── treatments-table.tsx # 'use client': toggle activo/inactivo
-│   │   ├── treatment-form-dialog.tsx  # 'use client': alta/edición
-│   │   └── actions.ts           # 'use server': saveTreatment(), setTreatmentActive()
-│   └── facturas/                # placeholder, sin implementar
+├── proxy.ts                      # antes "middleware.ts" (Next 16 lo renombró) — gate de auth optimista
+├── app/
+│   ├── page.tsx + auth-dispatcher.tsx  # landing de '/': decide login/citas/set-password (ver auth más abajo)
+│   ├── login/                    # email+password, Server Action (lib/auth-actions.ts → login)
+│   ├── set-password/             # tras aceptar invitación, fija contraseña (→ auth-actions.ts → setInitialPassword)
+│   └── (dashboard)/
+│       ├── layout.tsx            # verifyStaffSession() + <AppSidebar /> + <main>
+│       ├── citas/
+│       │   ├── page.tsx             # Server Component: fetch appointments + join patients/treatments
+│       │   ├── appointments-table.tsx  # 'use client': Select de estado por fila
+│       │   └── actions.ts           # 'use server': setAppointmentStatus()
+│       ├── pacientes/
+│       │   ├── page.tsx             # Server Component: fetch patients
+│       │   └── patients-table.tsx   # 'use client': solo lectura + filtro de búsqueda
+│       ├── tratamientos/
+│       │   ├── page.tsx             # Server Component: fetch treatments (activos e inactivos)
+│       │   ├── treatments-table.tsx # 'use client': toggle activo/inactivo
+│       │   ├── treatment-form-dialog.tsx  # 'use client': alta/edición
+│       │   └── actions.ts           # 'use server': saveTreatment(), setTreatmentActive()
+│       └── facturas/                # placeholder, sin implementar
 ├── components/ui/                # primitivas shadcn (radix-nova) — algunas escritas a mano, ver abajo
 └── lib/
-    ├── supabase.ts               # cliente anon — para futuro login de staff (Supabase Auth), no usado aún
-    └── supabase-admin.ts         # cliente service_role, 'server-only' — el que usan todas las páginas de arriba
+    ├── supabase-server.ts         # cliente anon + cookies (Server Components/Actions) — solo para saber quién está logueado
+    ├── supabase-browser.ts        # cliente anon + cookies (navegador) — solo lo usa auth-dispatcher.tsx, ver abajo
+    ├── supabase-admin.ts          # cliente service_role, 'server-only' — el que usan todas las páginas de datos
+    ├── dal.ts                     # verifyStaffSession() — comprobación real, la llaman layout.tsx y cada Server Action
+    └── auth-actions.ts            # 'use server': login(), signOut(), setInitialPassword()
 ```
 
-**Por qué `supabase-admin.ts` con `service_role`:** `patients`/`appointments` no tienen políticas RLS para `anon`/`authenticated` a propósito (ver `supabase/schema.sql`) — la única vía de escritura pública es la función `submit_booking()`. El panel admin necesita leer y escribir esas tablas directamente, así que todas las páginas de citas/pacientes/tratamientos son Server Components/Server Actions que usan `supabaseAdmin` (import protegido con el paquete `server-only`, nunca se debe importar desde un archivo `'use client'`). Esto sustituye, de momento, a la autenticación de staff (pendiente más abajo) — cualquiera que acceda a la URL del panel puede ver/editar estos datos, así que no compartir la URL de `aesthetica-web-admin.vercel.app` hasta que haya login.
+**Por qué `supabase-admin.ts` con `service_role`:** `patients`/`appointments` no tienen políticas RLS para `anon`/`authenticated` a propósito (ver `supabase/schema.sql`) — la única vía de escritura pública es la función `submit_booking()`. El panel admin necesita leer y escribir esas tablas directamente, así que todas las páginas de citas/pacientes/tratamientos son Server Components/Server Actions que usan `supabaseAdmin` (import protegido con el paquete `server-only`, nunca se debe importar desde un archivo `'use client'`).
+
+**Autenticación de staff (Supabase Auth, implementada 2026-08-24):** `proxy.ts` hace una comprobación optimista en cada request (redirige a `/login` si no hay sesión) y `lib/dal.ts` → `verifyStaffSession()` vuelve a comprobarla de verdad en cada Server Component y cada Server Action de citas/tratamientos — un Server Action es un endpoint público igual que una API route, no basta con proteger la página. `service_role` sigue bypasseando RLS igual que antes; Supabase Auth aquí solo decide quién puede *llegar* a usar esas Server Actions, no cambia las políticas RLS de las tablas.
+
+- **Alta de staff:** no hay UI de gestión de usuarios (fuera de alcance de momento) — se invita desde el dashboard de Supabase (Authentication → Users → Add user → Send invitation). El proyecto está en el plan Free **sin SMTP propio configurado**, así que Supabase usa sus plantillas de email por defecto y **no se pueden personalizar** (bloqueado hasta configurar SMTP custom). Eso significa que el link de invitación no puede apuntar a una ruta tipo `/auth/confirm?token_hash=...` propia — usa el flujo implícito de siempre: verifica en el propio servidor de Supabase y redirige a `Site URL` con los tokens en el fragmento `#` de la URL (invisible para el servidor). Por eso `app/page.tsx` (fuera del grupo `(dashboard)`, público en `proxy.ts`) monta `auth-dispatcher.tsx`, un client component con `lib/supabase-browser.ts` (`createBrowserClient` de `@supabase/ssr`, con las env vars `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`) que consume ese fragmento, sincroniza la sesión en cookies, y manda a `/set-password` (si el hash trae `type=invite`) o a `/citas`.
+- **Si en el futuro se configura SMTP propio:** ahí sí se podría personalizar la plantilla "Invite user" para usar `{{ .TokenHash }}` + una ruta propia `/auth/confirm` (Route Handler que llama a `supabase.auth.verifyOtp()` server-side) en vez de este flujo basado en fragmento — es más simple y no necesita cliente de navegador. No implementado porque el flujo actual ya cubre el caso de uso con el plan Free.
+- **Site URL / Redirect URLs:** configurados en el dashboard de Supabase (Authentication → URL Configuration) → Site URL = `https://aesthetica-web-admin.vercel.app`, Redirect URLs incluye también `http://localhost:3000/**` para pruebas en local.
+- **`NEXTAUTH_SECRET`** ya no existe como variable — era un placeholder de un plan inicial de usar NextAuth.js que nunca se implementó; se usa Supabase Auth en su lugar, ver arriba.
 
 **shadcn CLI no funciona en este entorno:** requiere Node ≥20.18.1 y el Node portátil de la máquina sin permisos de admin es v18.14.1/v18.20.8. Los componentes de `components/ui/` que faltaban (`table`, `badge`, `input`, `label`, `textarea`, `select`, `switch`, `dialog`) están escritos a mano siguiendo el estilo `radix-nova` ya configurado en `components.json`, usando los primitivos de `radix-ui` (paquete unificado, mismo patrón que `button.tsx`: `import { Dialog } from "radix-ui"` → `Dialog.Root`, etc.). Si se necesita añadir un componente nuevo, replicar ese patrón en vez de intentar correr `pnpm dlx shadcn add` — falla con `Cannot find native binding` en Node 18.
 
@@ -173,13 +188,13 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
-- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key, real desde el 24/08), `SUPABASE_SERVICE_ROLE_KEY` (secret key, real desde el 24/08 — la usan las Server Actions de citas/pacientes/tratamientos, ver `apps/admin — Source tree` más arriba), `NEXTAUTH_SECRET` (vacía, `NextAuth` aún no está wireado)
+- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key), `SUPABASE_SERVICE_ROLE_KEY` (secret key — la usan las Server Actions de citas/pacientes/tratamientos), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (mismos valores que las dos primeras, con prefijo público — las necesita `lib/supabase-browser.ts` para el flujo de invitación, ver `apps/admin — Source tree` más arriba)
 - **Proyecto:** `aesthetica-web-admin` en la cuenta/team `aesthetica1` de Vercel — verificado en producción el 2026-08-24, `aesthetica-web-admin.vercel.app` sirve correctamente el panel (Citas, Pacientes, Tratamientos, Facturación)
 - **Auto-deploy:** cualquier push a `main` (Production Deployment conectado vía GitHub)
 
 ## Próximos pasos (Fase 2+)
 
 - [ ] Completar panel admin: facturación sigue siendo placeholder (citas, pacientes y tratamientos ya conectados a Supabase real, ver `apps/admin — Source tree` más arriba)
-- [ ] Autenticación staff en admin (Supabase Auth)
+- [ ] UI de gestión de staff en admin (alta/baja de usuarios) — de momento se invita a mano desde el dashboard de Supabase, ver nota de autenticación más arriba
 - [ ] Dominio personalizado en Cloudflare Pages
 - [ ] App móvil Expo en `apps/mobile/` (comparte `packages/shared`)
