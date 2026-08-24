@@ -144,13 +144,13 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
-- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NEXTAUTH_SECRET`
-- **⚠️ Sin confirmar:** no se encontró GitHub App de Vercel instalada en el repo — comprobar si el deploy de admin existe de verdad antes de asumir que está en producción
+- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NEXTAUTH_SECRET` — configuradas vacías (placeholder) de momento, igual que en local; no bloquean el build porque `apps/admin/lib/supabase.ts` aún no se importa desde ninguna página
+- **Proyecto:** `aesthetica-web-admin` en la cuenta/team `aesthetica1` de Vercel — verificado en producción el 2026-08-24, `aesthetica-web-admin.vercel.app` sirve correctamente el panel (Citas, Pacientes, Tratamientos, Facturación)
+- **Auto-deploy:** cualquier push a `main` (Production Deployment conectado vía GitHub)
 
 ## Próximos pasos (Fase 2+)
 
 - [ ] Conectar Supabase con credenciales reales (local, Cloudflare Pages y Vercel siguen todos en placeholder)
-- [ ] Confirmar que `apps/admin` tiene un proyecto Vercel real conectado y desplegando
 - [ ] Completar panel admin: citas, pacientes, tratamientos, facturación (de momento son páginas placeholder de ~8 líneas cada una, sin API Routes)
 - [ ] Autenticación staff en admin (Supabase Auth)
 - [ ] Dominio personalizado en Cloudflare Pages
