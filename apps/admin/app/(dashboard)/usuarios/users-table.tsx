@@ -20,9 +20,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { removeStaff } from './actions'
+import { removeUser } from './actions'
 
-export interface StaffMember {
+export interface Member {
   id: string
   email: string
   confirmed: boolean
@@ -31,15 +31,15 @@ export interface StaffMember {
 
 const dateFormatter = new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium' })
 
-export function StaffTable({
+export function UsersTable({
   members,
   currentUserId,
 }: {
-  members: StaffMember[]
+  members: Member[]
   currentUserId: string
 }) {
   if (members.length === 0) {
-    return <p className="text-muted-foreground">Todavía no hay staff invitado.</p>
+    return <p className="text-muted-foreground">Todavía no hay usuarios invitados.</p>
   }
 
   return (
@@ -54,14 +54,14 @@ export function StaffTable({
       </TableHeader>
       <TableBody>
         {members.map((member) => (
-          <StaffRow key={member.id} member={member} isSelf={member.id === currentUserId} />
+          <UserRow key={member.id} member={member} isSelf={member.id === currentUserId} />
         ))}
       </TableBody>
     </Table>
   )
 }
 
-function StaffRow({ member, isSelf }: { member: StaffMember; isSelf: boolean }) {
+function UserRow({ member, isSelf }: { member: Member; isSelf: boolean }) {
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -70,7 +70,7 @@ function StaffRow({ member, isSelf }: { member: StaffMember; isSelf: boolean }) 
     setError(null)
     startTransition(async () => {
       try {
-        await removeStaff(member.id)
+        await removeUser(member.id)
         setConfirmOpen(false)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'No se pudo eliminar el usuario')
@@ -98,14 +98,14 @@ function StaffRow({ member, isSelf }: { member: StaffMember; isSelf: boolean }) 
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Eliminar del staff"
+              aria-label="Eliminar usuario"
               onClick={() => setConfirmOpen(true)}
             >
               <Trash2 />
             </Button>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Eliminar del staff</DialogTitle>
+                <DialogTitle>Eliminar usuario</DialogTitle>
                 <DialogDescription>
                   {member.email} perderá el acceso al panel inmediatamente. Esta acción no se
                   puede deshacer.

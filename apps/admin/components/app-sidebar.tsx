@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { href: '/pacientes',     label: 'Pacientes',      icon: Users     },
   { href: '/tratamientos',  label: 'Tratamientos',   icon: Sparkles  },
   { href: '/facturas',      label: 'Facturación',    icon: FileText  },
-  { href: '/staff',         label: 'Staff',          icon: UserCog   },
+  { href: '/usuarios',      label: 'Usuarios',       icon: UserCog   },
 ]
 
 interface AppSidebarProps {

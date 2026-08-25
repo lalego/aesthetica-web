@@ -1,8 +1,8 @@
 import { AppSidebar } from '@/components/app-sidebar'
-import { verifyStaffSession } from '@/lib/dal'
+import { verifySession } from '@/lib/dal'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { email } = await verifyStaffSession()
+  const { email } = await verifySession()
 
   return (
     <div className="flex h-screen overflow-hidden">

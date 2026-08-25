@@ -15,12 +15,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { inviteStaff, type InviteStaffState } from './actions'
+import { inviteUser, type InviteUserState } from './actions'
 
-export function InviteStaffDialog() {
+export function InviteUserDialog() {
   const [open, setOpen] = useState(false)
-  const [state, formAction, isPending] = useActionState<InviteStaffState, FormData>(
-    inviteStaff,
+  const [state, formAction, isPending] = useActionState<InviteUserState, FormData>(
+    inviteUser,
     undefined
   )
 
@@ -36,12 +36,12 @@ export function InviteStaffDialog() {
       <DialogTrigger asChild>
         <Button>
           <Plus />
-          Invitar staff
+          Invitar usuario
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invitar a un miembro del staff</DialogTitle>
+          <DialogTitle>Invitar a un usuario</DialogTitle>
           <DialogDescription>
             Le llegará un email para que elija su contraseña y acceda al panel.
           </DialogDescription>

@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto'
 import { revalidatePath } from 'next/cache'
 import type { TreatmentCategory } from '@aesthetica/shared'
 import { supabaseAdmin } from '@/lib/supabase-admin'
-import { verifyStaffSession } from '@/lib/dal'
+import { verifySession } from '@/lib/dal'
 
 export interface TreatmentInput {
   id?: string
@@ -17,7 +17,7 @@ export interface TreatmentInput {
 }
 
 export async function saveTreatment(input: TreatmentInput) {
-  await verifyStaffSession()
+  await verifySession()
 
   const id = input.id ?? randomUUID()
 
@@ -36,7 +36,7 @@ export async function saveTreatment(input: TreatmentInput) {
 }
 
 export async function setTreatmentActive(id: string, is_active: boolean) {
-  await verifyStaffSession()
+  await verifySession()
 
   const { error } = await supabaseAdmin.from('treatments').update({ is_active }).eq('id', id)
   if (error) throw new Error(error.message)

@@ -2,15 +2,15 @@
 
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase-admin'
-import { verifyStaffSession } from '@/lib/dal'
+import { verifySession } from '@/lib/dal'
 
-export type InviteStaffState = { error?: string; success?: string } | undefined
+export type InviteUserState = { error?: string; success?: string } | undefined
 
-export async function inviteStaff(
-  _prevState: InviteStaffState,
+export async function inviteUser(
+  _prevState: InviteUserState,
   formData: FormData
-): Promise<InviteStaffState> {
-  await verifyStaffSession()
+): Promise<InviteUserState> {
+  await verifySession()
 
   const email = String(formData.get('email') ?? '').trim()
   if (!email) {
@@ -24,12 +24,12 @@ export async function inviteStaff(
     return { error: error.message }
   }
 
-  revalidatePath('/staff')
+  revalidatePath('/usuarios')
   return { success: `Invitación enviada a ${email}.` }
 }
 
-export async function removeStaff(userId: string) {
-  const session = await verifyStaffSession()
+export async function removeUser(userId: string) {
+  const session = await verifySession()
 
   if (userId === session.userId) {
     throw new Error('No puedes eliminar tu propia cuenta desde aquí.')
@@ -38,5 +38,5 @@ export async function removeStaff(userId: string) {
   const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
   if (error) throw new Error(error.message)
 
-  revalidatePath('/staff')
+  revalidatePath('/usuarios')
 }

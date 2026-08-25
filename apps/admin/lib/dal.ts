@@ -7,7 +7,7 @@ import { createClient } from './supabase-server'
 // Server Actions. proxy.ts ya hace una comprobación optimista antes de que
 // esto se ejecute, pero las Server Actions son endpoints públicos igual que
 // una API route — hay que volver a comprobar aquí, no basta con proteger la página.
-export const verifyStaffSession = cache(async () => {
+export const verifySession = cache(async () => {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getClaims()
 
