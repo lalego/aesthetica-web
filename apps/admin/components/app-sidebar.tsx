@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calendar, Users, Sparkles, FileText, LogOut } from 'lucide-react'
+import { Calendar, Users, Sparkles, FileText, LogOut, UserCog } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/auth-actions'
 
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: '/pacientes',     label: 'Pacientes',      icon: Users     },
   { href: '/tratamientos',  label: 'Tratamientos',   icon: Sparkles  },
   { href: '/facturas',      label: 'Facturación',    icon: FileText  },
+  { href: '/staff',         label: 'Staff',          icon: UserCog   },
 ]
 
 interface AppSidebarProps {
