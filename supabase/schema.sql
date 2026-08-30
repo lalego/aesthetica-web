@@ -142,6 +142,18 @@ begin
         updated_at = now()
   returning id into v_patient_id;
 
+  -- Defensa contra carrera: dos personas reservando el mismo hueco a la vez.
+  -- get_available_slots() ya filtra huecos ocupados, pero esto es la última
+  -- palabra justo antes de escribir.
+  if exists (
+    select 1 from appointments
+    where status in ('pending', 'confirmed')
+      and scheduled_at < p_scheduled_at + (v_duration_min || ' minutes')::interval
+      and (scheduled_at + (duration_min || ' minutes')::interval) > p_scheduled_at
+  ) then
+    raise exception 'Ese hueco ya no está disponible, elige otro.';
+  end if;
+
   insert into appointments (patient_id, treatment_id, scheduled_at, duration_min, status, notes)
   values (v_patient_id, p_treatment_id, p_scheduled_at, v_duration_min, 'pending', p_notes)
   returning id into v_appointment_id;
@@ -151,6 +163,73 @@ end;
 $$;
 
 grant execute on function submit_booking(text, text, text, text, timestamptz, text, boolean) to anon;
+
+-- ── get_available_slots(): huecos libres para la web pública ───────────────
+-- SECURITY DEFINER + grant a anon (mismo patrón que submit_booking): no
+-- expone la tabla appointments en crudo, solo devuelve horas de inicio libres.
+-- El horario de apertura reproduce CLINIC.hours de packages/shared/src/clinic.ts
+-- (Lun–Vie 10:00–20:00, Sáb 10:00–18:00, Dom cerrado) — si ese horario cambia,
+-- actualizar también aquí.
+
+create or replace function get_available_slots(
+  p_date date,
+  p_treatment_id text
+) returns setof timestamptz
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_duration_min integer;
+  v_dow integer;
+  v_open time;
+  v_close time;
+  v_slot timestamptz;
+  v_close_at timestamptz;
+begin
+  select duration_min into v_duration_min
+  from treatments
+  where id = p_treatment_id and is_active = true;
+
+  if v_duration_min is null then
+    return;
+  end if;
+
+  v_dow := extract(dow from p_date); -- 0 = domingo, 6 = sábado
+
+  if v_dow = 0 then
+    return; -- domingo cerrado
+  elsif v_dow = 6 then
+    v_open := time '10:00';
+    v_close := time '18:00';
+  else
+    v_open := time '10:00';
+    v_close := time '20:00';
+  end if;
+
+  v_slot := (p_date + v_open) at time zone 'Europe/Madrid';
+  v_close_at := (p_date + v_close) at time zone 'Europe/Madrid';
+
+  while v_slot + (v_duration_min || ' minutes')::interval <= v_close_at loop
+    if v_slot > now()
+      and not exists (
+        select 1 from appointments
+        where status in ('pending', 'confirmed')
+          and scheduled_at < v_slot + (v_duration_min || ' minutes')::interval
+          and (scheduled_at + (duration_min || ' minutes')::interval) > v_slot
+      )
+    then
+      return next v_slot;
+    end if;
+
+    v_slot := v_slot + interval '30 minutes';
+  end loop;
+
+  return;
+end;
+$$;
+
+grant execute on function get_available_slots(date, text) to anon;
 
 -- ── Seed: tratamientos reales de Clínica AestheticA (fuente: Booksy) ───────
 -- Mismos datos que MOCK_TREATMENTS en apps/web/src/services/treatmentService.ts,

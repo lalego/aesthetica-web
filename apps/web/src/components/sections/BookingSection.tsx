@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTreatments } from '@/hooks/useTreatments'
+import { useAvailableSlots } from '@/hooks/useAvailableSlots'
 import { submitBooking } from '@/services/bookingService'
 
 // ── Schema de validación ─────────────────────────────────────────────────────
@@ -23,6 +24,7 @@ const bookingSchema = z.object({
     .refine((d) => new Date(d) >= new Date(new Date().toDateString()), {
       message: 'La fecha no puede ser en el pasado',
     }),
+  scheduled_at: z.string().min(1, 'Selecciona una hora'),
   notes: z.string().optional(),
   gdpr_consent: z.literal(true, {
     errorMap: () => ({ message: 'Debes aceptar la política de privacidad para continuar' }),
@@ -41,10 +43,24 @@ export const BookingSection = () => {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<BookingSchema>({
     resolver: zodResolver(bookingSchema),
+    defaultValues: { scheduled_at: '' },
   })
+
+  const treatmentId = watch('treatment_id')
+  const preferredDate = watch('preferred_date')
+  const scheduledAt = watch('scheduled_at')
+
+  const { data: slots, isLoading: slotsLoading } = useAvailableSlots(preferredDate, treatmentId)
+
+  // Si cambian tratamiento o fecha, la hora elegida antes ya no vale.
+  useEffect(() => {
+    setValue('scheduled_at', '')
+  }, [treatmentId, preferredDate, setValue])
 
   const onSubmit = async (data: BookingSchema) => {
     setStatus('loading')
@@ -147,6 +163,45 @@ export const BookingSection = () => {
               />
             </Field>
 
+            {/* Hora disponible */}
+            {treatmentId && preferredDate && (
+              <Field label="Hora disponible" error={errors.scheduled_at?.message}>
+                {slotsLoading ? (
+                  <p className="text-base text-neutral-500">Buscando huecos…</p>
+                ) : slots && slots.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {slots.map((iso) => {
+                      const label = new Date(iso).toLocaleTimeString('es-ES', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        timeZone: 'Europe/Madrid',
+                      })
+                      const selected = scheduledAt === iso
+                      return (
+                        <button
+                          key={iso}
+                          type="button"
+                          onClick={() => setValue('scheduled_at', iso, { shouldValidate: true })}
+                          className={cn(
+                            'rounded-full border px-4 py-1.5 text-sm transition-colors',
+                            selected
+                              ? 'border-gold-400 bg-gold-400 text-white'
+                              : 'border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-gold-300'
+                          )}
+                        >
+                          {label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-base text-neutral-500">
+                    No hay huecos libres este día, prueba con otra fecha.
+                  </p>
+                )}
+              </Field>
+            )}
+
             {/* Notas */}
             <Field label="Notas o consultas (opcional)" error={errors.notes?.message}>
               <textarea
@@ -182,7 +237,7 @@ export const BookingSection = () => {
             {/* Submit */}
             <button
               type="submit"
-              disabled={status === 'loading'}
+              disabled={status === 'loading' || !scheduledAt}
               className="w-full bg-gold-400 text-white py-3 rounded-full hover:bg-gold-500 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-md shadow-gold-200"
             >
               {status === 'loading' ? (
