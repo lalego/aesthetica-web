@@ -9,6 +9,20 @@ Búsqueda comprobada en directo el 2026-08-25 (Cloudflare Registrar + Namecheap)
 | `aesthetica` | ❌ cogido | ❌ cogido | ❌ cogido | ❌ cogido |
 | `centroaesthetica` | ❌ cogido | ❌ cogido | ✅ libre — $8,50 primer año (Cloudflare) | ✅ libre — $11,86/año (Cloudflare) |
 | `alenaesthetica` | ✅ libre — $10,46/año (Cloudflare) | ✅ libre — ~$19/año (Namecheap) | ✅ libre — $8,50 primer año (Cloudflare) | ✅ libre |
+| `aestheticavanzada` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `estudioaesthetica` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticavalencia` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticaruzafa` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticaclinica` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticamedica` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticalaser` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `somosaesthetica` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aesthetica-valencia` ¹ | ✅ libre | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `clinicaaesthetica` ¹ | ❌ cogido | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+| `aestheticaclinic` ¹ | ❌ cogido | ✅ probablemente libre ² | ✅ libre | ✅ libre |
+
+¹ Comprobado el 2026-10-17 vía RDAP (registro público, validado contra `aesthetica`, que sí devuelve registrado), sin consultar precios — por precio de extensión deberían rondar los mismos que las filas de arriba.
+² `.es` no tiene RDAP; el dominio no existe en DNS (NXDOMAIN), lo que casi siempre significa libre, pero confirmar en el registrador antes de comprar.
 
 ## Notas
 
@@ -21,7 +35,7 @@ Búsqueda comprobada en directo el 2026-08-25 (Cloudflare Registrar + Namecheap)
 
 **`centroaesthetica.org`** — libre en `.org` y `.net`, gestionable entero desde la misma cuenta de Cloudflare (registro + DNS + Pages) sin necesidad de un registrador externo, y es la opción más barata de todo lo comprobado.
 
-Si se prefiere mantener el nombre `aesthetica` tal cual, la única variante libre encontrada es `alenaesthetica` (cambia el nombre, no es un match exacto).
+Si se prefiere mantener el nombre `aesthetica` tal cual, hay muchas variantes libres en las 4 extensiones (ver tabla). La más recomendable es **`aestheticavalencia`** (`.com` y/o `.es`): mantiene el nombre de la clínica intacto y ayuda al SEO local ("estética València"). Lo ideal sería comprar `.com` + `.es` y redirigir uno al otro (~20 €/año en total); si se quiere todo dentro de Cloudflare (que no vende `.es`), basta con el `.com`.
 
 ## Pendiente
 
