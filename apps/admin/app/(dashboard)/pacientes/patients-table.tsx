@@ -16,7 +16,8 @@ import { Input } from '@/components/ui/input'
 export interface Patient {
   id: string
   full_name: string
-  email: string
+  email: string | null
+  tax_id: string | null
   phone: string | null
   gdpr_consent: boolean
   created_at: string
@@ -32,7 +33,8 @@ export function PatientsTable({ patients }: { patients: Patient[] }) {
     if (!q) return true
     return (
       p.full_name.toLowerCase().includes(q) ||
-      p.email.toLowerCase().includes(q) ||
+      (p.email ?? '').toLowerCase().includes(q) ||
+      (p.tax_id ?? '').toLowerCase().includes(q) ||
       (p.phone ?? '').toLowerCase().includes(q)
     )
   })
@@ -42,7 +44,7 @@ export function PatientsTable({ patients }: { patients: Patient[] }) {
       <div className="relative max-w-sm">
         <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Buscar por nombre, email o teléfono…"
+          placeholder="Buscar por nombre, email, teléfono o DNI…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pl-8"
@@ -58,6 +60,7 @@ export function PatientsTable({ patients }: { patients: Patient[] }) {
           <TableHeader>
             <TableRow>
               <TableHead>Nombre</TableHead>
+              <TableHead>DNI / NIF</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Teléfono</TableHead>
               <TableHead>RGPD</TableHead>
@@ -68,7 +71,8 @@ export function PatientsTable({ patients }: { patients: Patient[] }) {
             {filtered.map((patient) => (
               <TableRow key={patient.id}>
                 <TableCell className="font-medium">{patient.full_name}</TableCell>
-                <TableCell className="text-muted-foreground">{patient.email}</TableCell>
+                <TableCell className="text-muted-foreground">{patient.tax_id ?? '—'}</TableCell>
+                <TableCell className="text-muted-foreground">{patient.email ?? '—'}</TableCell>
                 <TableCell className="text-muted-foreground">{patient.phone ?? '—'}</TableCell>
                 <TableCell>
                   <Badge variant={patient.gdpr_consent ? 'success' : 'destructive'}>

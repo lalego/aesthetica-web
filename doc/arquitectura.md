@@ -99,7 +99,7 @@ Panel interno para el personal de la clínica. Requiere autenticación.
 | Agenda | `/citas` | Calendario, crear/ver/cancelar citas |
 | Pacientes | `/pacientes` | Lista, ficha individual, historial |
 | Tratamientos | `/tratamientos` | CRUD: nombre, precio, duración, categoría |
-| Facturación | `/facturas` | Generar facturas, listado, estado de pago |
+| Facturación | `/facturas` | ✅ Listado, alta libre o desde cita completada, PDF con la plantilla de PdfFormFiller (2026-10-17) — ver CLAUDE.md → "Facturación" |
 
 **API Routes (backend):**
 ```
@@ -158,10 +158,12 @@ Para la UI, `packages/ui/` en Fase 3 usará **NativeWind** (Tailwind para React 
 
 ```
 treatments          id, name, category, description, duration_min, price_eur, is_active, image_url
-patients            id, full_name, email, phone, gdpr_consent, updated_at
+patients            id, full_name, email (opcional), phone, gdpr_consent, tax_id, address, postal_code, updated_at
 specialists         id, name, bio, image_url
 appointments        id, patient_id, treatment_id, specialist_id, scheduled_at, duration_min, status, notes
 treatment_history   id, patient_id, treatment_id, performed_at, notes, specialist_id
+invoices            id, number, series, seq, issued_on, patient_id, appointment_id, customer_* (snapshot), payment_method, observations, tax_rate, subtotal, tax, total
+invoice_items       id, invoice_id, position (1-3), description, amount (IVA incl.), treatment_id
 ```
 
 RLS habilitado en todas las tablas.
@@ -226,7 +228,7 @@ Además hizo falta un `.npmrc` con `hoist=false` en la raíz para evitar que pnp
 
 - [ ] Variables de entorno reales de Supabase (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`) — siguen en placeholder en local y en Cloudflare Pages.
 - [ ] Confirmar que `apps/admin` tiene un proyecto Vercel real conectado (no se encontró GitHub App de Vercel instalada en el repo).
-- [ ] Completar los módulos de `apps/admin` (Agenda, Pacientes, Tratamientos, Facturación) — de momento son páginas placeholder de ~8 líneas, sin API Routes ni auth implementadas.
+- [x] Módulos de `apps/admin` (Citas, Pacientes, Tratamientos, Usuarios, Facturación) conectados a Supabase real con auth de staff. No se usan API Routes sino Server Components + Server Actions (más un Route Handler para el PDF de facturas) — ver CLAUDE.md.
 
 ---
 

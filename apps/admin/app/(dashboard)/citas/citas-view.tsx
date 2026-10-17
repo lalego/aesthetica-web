@@ -3,10 +3,16 @@
 import { useState } from 'react'
 import { Calendar, List } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import type { BillingTreatment } from '@/lib/invoices'
 import { AppointmentsTable, type AppointmentRow } from './appointments-table'
 import { WeekCalendar } from './week-calendar'
 
-export function CitasView({ appointments }: { appointments: AppointmentRow[] }) {
+interface CitasViewProps {
+  appointments: AppointmentRow[]
+  treatments: BillingTreatment[]
+}
+
+export function CitasView({ appointments, treatments }: CitasViewProps) {
   const [mode, setMode] = useState<'calendar' | 'list'>('calendar')
 
   return (
@@ -33,7 +39,7 @@ export function CitasView({ appointments }: { appointments: AppointmentRow[] }) 
       {mode === 'calendar' ? (
         <WeekCalendar appointments={appointments} />
       ) : (
-        <AppointmentsTable appointments={appointments} />
+        <AppointmentsTable appointments={appointments} treatments={treatments} />
       )}
     </div>
   )

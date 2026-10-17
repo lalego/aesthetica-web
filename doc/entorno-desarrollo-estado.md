@@ -28,6 +28,13 @@ Contexto: en este equipo no hay permisos de admin, así que no se pudo instalar 
    - Deploy de producción verificado en vivo: `aesthetica-web.pages.dev` sirve correctamente el commit `e76f796`.
 10. **⚠️ Cuenta de Cloudflare** — el proyecto `aesthetica-web` de Cloudflare Pages vive en la cuenta `Lalego@gmail.com` (login vía GitHub OAuth), **no** en `Lalego@hotmail.com` (login vía email/contraseña), que no tiene ningún proyecto. Son cuentas de Cloudflare distintas aunque el email personal sea similar. Para gestionar el deploy de `apps/web` (variables de entorno, dominios, etc.), iniciar sesión en Cloudflare con el botón **"Continue with GitHub"**, no con email/contraseña.
 
+## Actualización 2026-10-17
+
+- `D:\tools` ya no existe en esta máquina. Hay **nvm-windows** (`C:\Users\laleg\AppData\Roaming\nvm\`, versiones 14 a 22) y `C:\Program Files\nodejs` → **v22.5.1**. Desde Git Bash: `export PATH="/c/Program Files/nodejs:$PATH"`.
+- El corepack de Node 22.5.1 falla con `Cannot find matching keyid` (claves de firma de npm rotadas) → `COREPACK_INTEGRITY_KEYS=0 corepack pnpm ...`.
+- `node_modules` se había creado antes de `hoist=false` (`ERR_PNPM_HOIST_PATTERN_DIFF`); se regeneró con `pnpm install` (~4 min).
+- ESLint de `apps/admin` falla con `Cannot find module 'next/dist/compiled/babel/eslint-parser'` (consecuencia de `hoist=false`). Pendiente de arreglar; `tsc --noEmit` sí funciona.
+
 ## Pendiente
 
 - [ ] Rellenar `apps/web/.env.local`, `apps/admin/.env.local` **y las variables de entorno reales de Supabase en Cloudflare Pages/Vercel** (siguen todas con placeholders; el mock fallback funciona en local pero no hay datos reales en ningún entorno).

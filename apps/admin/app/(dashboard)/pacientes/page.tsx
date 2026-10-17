@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 export default async function PacientesPage() {
   const { data, error } = await supabaseAdmin
     .from('patients')
-    .select('id, full_name, email, phone, gdpr_consent, created_at')
+    .select('id, full_name, email, phone, tax_id, gdpr_consent, created_at')
     .order('created_at', { ascending: false })
 
   if (error) throw new Error(error.message)

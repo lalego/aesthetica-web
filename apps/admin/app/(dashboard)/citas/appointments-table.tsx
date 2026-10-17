@@ -17,7 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import type { BillingTreatment } from '@/lib/invoices'
+import { InvoiceFormDialog } from '../facturas/invoice-form-dialog'
 import { setAppointmentStatus, type AppointmentStatus } from './actions'
+
+interface AppointmentInvoice {
+  id: string
+  number: string
+}
 
 export interface AppointmentRow {
   id: string
@@ -25,9 +32,28 @@ export interface AppointmentRow {
   duration_min: number
   status: AppointmentStatus
   notes: string | null
-  patients: { full_name: string; email: string; phone: string | null } | null
+  patient_id: string
+  treatment_id: string
+  patients: {
+    full_name: string
+    email: string | null
+    phone: string | null
+    tax_id: string | null
+    address: string | null
+    postal_code: string | null
+  } | null
   treatments: { name: string } | null
+  // invoices.appointment_id es unique: PostgREST lo devuelve como objeto, pero
+  // según la versión puede llegar como array de 0–1 elementos.
+  invoices: AppointmentInvoice | AppointmentInvoice[] | null
 }
+
+function invoiceOf(appointment: AppointmentRow): AppointmentInvoice | null {
+  const { invoices } = appointment
+  return Array.isArray(invoices) ? (invoices[0] ?? null) : invoices
+}
+
+const madridDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid' })
 
 const STATUS_LABELS: Record<AppointmentStatus, string> = {
   pending: 'Pendiente',
@@ -48,7 +74,12 @@ const dateFormatter = new Intl.DateTimeFormat('es-ES', {
   timeStyle: 'short',
 })
 
-export function AppointmentsTable({ appointments }: { appointments: AppointmentRow[] }) {
+interface AppointmentsTableProps {
+  appointments: AppointmentRow[]
+  treatments: BillingTreatment[]
+}
+
+export function AppointmentsTable({ appointments, treatments }: AppointmentsTableProps) {
   if (appointments.length === 0) {
     return <p className="text-muted-foreground">Todavía no hay citas.</p>
   }
@@ -62,18 +93,29 @@ export function AppointmentsTable({ appointments }: { appointments: AppointmentR
           <TableHead>Tratamiento</TableHead>
           <TableHead>Notas</TableHead>
           <TableHead>Estado</TableHead>
+          <TableHead>Factura</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {appointments.map((appointment) => (
-          <AppointmentRowItem key={appointment.id} appointment={appointment} />
+          <AppointmentRowItem
+            key={appointment.id}
+            appointment={appointment}
+            treatments={treatments}
+          />
         ))}
       </TableBody>
     </Table>
   )
 }
 
-function AppointmentRowItem({ appointment }: { appointment: AppointmentRow }) {
+interface AppointmentRowItemProps {
+  appointment: AppointmentRow
+  treatments: BillingTreatment[]
+}
+
+function AppointmentRowItem({ appointment, treatments }: AppointmentRowItemProps) {
+  const invoice = invoiceOf(appointment)
   const [status, setStatus] = useState(appointment.status)
   const [isPending, startTransition] = useTransition()
 
@@ -119,6 +161,31 @@ function AppointmentRowItem({ appointment }: { appointment: AppointmentRow }) {
             ))}
           </SelectContent>
         </Select>
+      </TableCell>
+      <TableCell>
+        {invoice ? (
+          <a
+            href={`/facturas/${invoice.id}/pdf`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm font-medium tabular-nums underline-offset-4 hover:underline"
+          >
+            {invoice.number}
+          </a>
+        ) : status === 'completed' && appointment.patients ? (
+          <InvoiceFormDialog
+            patients={[{ id: appointment.patient_id, ...appointment.patients }]}
+            treatments={treatments}
+            appointment={{
+              id: appointment.id,
+              patientId: appointment.patient_id,
+              treatmentId: appointment.treatment_id,
+              date: madridDate.format(new Date(appointment.scheduled_at)),
+            }}
+          />
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        )}
       </TableCell>
     </TableRow>
   )

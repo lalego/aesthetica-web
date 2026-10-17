@@ -104,32 +104,52 @@ apps/admin/
 │   ├── login/                    # email+password, Server Action (lib/auth-actions.ts → login)
 │   ├── set-password/             # tras aceptar invitación, fija contraseña (→ auth-actions.ts → setInitialPassword)
 │   └── (dashboard)/
-│       ├── layout.tsx            # verifyStaffSession() + <AppSidebar /> + <main>
+│       ├── layout.tsx            # verifySession() + <AppSidebar /> + <main>
 │       ├── citas/
-│       │   ├── page.tsx             # Server Component: fetch appointments + join patients/treatments
-│       │   ├── appointments-table.tsx  # 'use client': Select de estado por fila
-│       │   └── actions.ts           # 'use server': setAppointmentStatus()
+│       │   ├── page.tsx             # Server Component: fetch appointments + join patients/treatments/invoices
+│       │   ├── citas-view.tsx       # 'use client': alterna calendario semanal / lista
+│       │   ├── week-calendar.tsx + reschedule-dialog.tsx
+│       │   ├── appointments-table.tsx  # 'use client': Select de estado por fila + columna Factura ("Facturar" si está completada)
+│       │   └── actions.ts           # 'use server': setAppointmentStatus(), rescheduleAppointment()
 │       ├── pacientes/
 │       │   ├── page.tsx             # Server Component: fetch patients
-│       │   └── patients-table.tsx   # 'use client': solo lectura + filtro de búsqueda
+│       │   └── patients-table.tsx   # 'use client': solo lectura + filtro de búsqueda (nombre, email, teléfono, DNI)
 │       ├── tratamientos/
 │       │   ├── page.tsx             # Server Component: fetch treatments (activos e inactivos)
 │       │   ├── treatments-table.tsx # 'use client': toggle activo/inactivo
 │       │   ├── treatment-form-dialog.tsx  # 'use client': alta/edición
 │       │   └── actions.ts           # 'use server': saveTreatment(), setTreatmentActive()
-│       └── facturas/                # placeholder, sin implementar
+│       ├── facturas/                # ver "Facturación" más abajo
+│       │   ├── page.tsx             # Server Component: fetch invoices + patients + treatments activos
+│       │   ├── invoices-table.tsx   # 'use client': listado, búsqueda, descarga PDF
+│       │   ├── invoice-form-dialog.tsx  # 'use client': alta libre o desde una cita (prop `appointment`)
+│       │   ├── actions.ts           # 'use server': createInvoice() → rpc('create_invoice')
+│       │   └── [id]/pdf/route.ts    # Route Handler GET: genera el PDF al vuelo
+│       └── usuarios/                # gestión de staff (invitar, listar) — actions.ts + invite-user-dialog.tsx
 ├── components/ui/                # primitivas shadcn (radix-nova) — algunas escritas a mano, ver abajo
 └── lib/
     ├── supabase-server.ts         # cliente anon + cookies (Server Components/Actions) — solo para saber quién está logueado
     ├── supabase-browser.ts        # cliente anon + cookies (navegador) — solo lo usa auth-dispatcher.tsx, ver abajo
     ├── supabase-admin.ts          # cliente service_role, 'server-only' — el que usan todas las páginas de datos
-    ├── dal.ts                     # verifyStaffSession() — comprobación real, la llaman layout.tsx y cada Server Action
-    └── auth-actions.ts            # 'use server': login(), signOut(), setInitialPassword()
+    ├── dal.ts                     # verifySession() — comprobación real, la llaman layout.tsx, cada Server Action y el route del PDF
+    ├── auth-actions.ts            # 'use server': login(), signOut(), setInitialPassword()
+    ├── invoices.ts                # facturación sin deps de servidor: series, computeTotals(), formatEuro(), tipos Billing*
+    └── invoice-pdf.ts             # 'server-only': renderInvoicePdf() con pdf-lib sobre la plantilla de Storage
 ```
+
+**Facturación (implementada 2026-10-17, sustituye a PdfFormFiller):** antes las facturas se hacían con una app de consola Java aparte (`C:\Users\laleg\IdeaProjects\PdfFormFiller`, PDFBox + CSVs). Su lógica se ha portado a TypeScript dentro del admin:
+
+- **Datos:** tablas `invoices` + `invoice_items` (máx. 3 líneas, las que caben en la plantilla). La factura guarda un *snapshot* de los datos del cliente (nombre, DNI, dirección, CP) — no cambia aunque luego se edite el paciente. `patients` ganó `tax_id`/`address`/`postal_code` y `email` pasó a ser opcional (los clientes históricos no tienen email).
+- **Numeración:** `{serie}-{seq:4}-{año}`, p. ej. `C-0052-2026`. El `seq` es **un único correlativo global** compartido entre series y años (así lo hacía PdfFormFiller: 2025 acabó en 26 y 2026 empezó en 27). Lo asigna la función SQL `create_invoice()` con un advisory lock — nunca calcularlo en JS. Serie: `F` (facial/láser/capilar) o `C` (corporal/bienestar), según el primer tratamiento (`seriesForCategory()` en `lib/invoices.ts`), editable en el formulario.
+- **IVA:** los importes llevan IVA incluido (21%), igual que `price_eur`. Base = `round(total / 1.21, 2)`, IVA = total − base (`TaxCalculator` de PdfFormFiller). Las líneas del PDF muestran el importe con IVA.
+- **PDF:** se genera al vuelo en `/facturas/[id]/pdf` rellenando los campos AcroForm de `formulario.pdf` (`Numero`, `Fecha`, `Nombre`, `DNI`, `Direccion`, `CodigoPostal`, `Desc1-3`, `Total1-3`, `Subtotal`, `IVA 21`, `Total`, `Forma`, `Observaciones`) y aplanando el formulario. DNI vacío → `PENDIENTE-IDENTIFICAR`. No se guardan los PDFs.
+- **⚠️ La plantilla NO está en el repo** (el repo es público y la plantilla lleva el NIF de la clínica): vive en el bucket privado `invoice-templates` de Supabase Storage, archivo `formulario.pdf`. El original está en `PdfFormFiller/src/main/resources/formulario.pdf`. Si se cambia el diseño, basta con subir la nueva versión al bucket (mismos nombres de campo).
+- **`create_invoice()` no es SECURITY DEFINER y tiene `revoke execute ... from public, anon, authenticated`** — Postgres da EXECUTE a PUBLIC por defecto y PostgREST expone las funciones de `public`, sin el revoke cualquiera con la anon key podría emitir facturas.
+- **Histórico:** las 42 facturas emitidas con PdfFormFiller (`F-0010-2025` … `C-0051-2026`) se importan con un SQL generado a partir del texto de los PDFs de `PdfFormFiller/out/` + `customers.csv`. Ese SQL lleva datos personales y **no se guarda en el repo**: está en `PdfFormFiller/dev/migracion-aesthetica-web/` (junto con el script `build-import.mjs` que lo genera). Los PDFs originales siguen en `PdfFormFiller/out/` como archivo; las facturas antiguas imprimían la base imponible en cada línea (no el importe con IVA), así que el PDF regenerado desde el admin no es idéntico al original en esas líneas.
 
 **Por qué `supabase-admin.ts` con `service_role`:** `patients`/`appointments` no tienen políticas RLS para `anon`/`authenticated` a propósito (ver `supabase/schema.sql`) — la única vía de escritura pública es la función `submit_booking()`. El panel admin necesita leer y escribir esas tablas directamente, así que todas las páginas de citas/pacientes/tratamientos son Server Components/Server Actions que usan `supabaseAdmin` (import protegido con el paquete `server-only`, nunca se debe importar desde un archivo `'use client'`).
 
-**Autenticación de staff (Supabase Auth, implementada 2026-08-24):** `proxy.ts` hace una comprobación optimista en cada request (redirige a `/login` si no hay sesión) y `lib/dal.ts` → `verifyStaffSession()` vuelve a comprobarla de verdad en cada Server Component y cada Server Action de citas/tratamientos — un Server Action es un endpoint público igual que una API route, no basta con proteger la página. `service_role` sigue bypasseando RLS igual que antes; Supabase Auth aquí solo decide quién puede *llegar* a usar esas Server Actions, no cambia las políticas RLS de las tablas.
+**Autenticación de staff (Supabase Auth, implementada 2026-08-24):** `proxy.ts` hace una comprobación optimista en cada request (redirige a `/login` si no hay sesión) y `lib/dal.ts` → `verifySession()` vuelve a comprobarla de verdad en cada Server Component y cada Server Action de citas/tratamientos — un Server Action es un endpoint público igual que una API route, no basta con proteger la página. `service_role` sigue bypasseando RLS igual que antes; Supabase Auth aquí solo decide quién puede *llegar* a usar esas Server Actions, no cambia las políticas RLS de las tablas.
 
 - **Alta de staff:** no hay UI de gestión de usuarios (fuera de alcance de momento) — se invita desde el dashboard de Supabase (Authentication → Users → Add user → Send invitation). El proyecto está en el plan Free **sin SMTP propio configurado**, así que Supabase usa sus plantillas de email por defecto y **no se pueden personalizar** (bloqueado hasta configurar SMTP custom). Eso significa que el link de invitación no puede apuntar a una ruta tipo `/auth/confirm?token_hash=...` propia — usa el flujo implícito de siempre: verifica en el propio servidor de Supabase y redirige a `Site URL` con los tokens en el fragmento `#` de la URL (invisible para el servidor). Por eso `app/page.tsx` (fuera del grupo `(dashboard)`, público en `proxy.ts`) monta `auth-dispatcher.tsx`, un client component con `lib/supabase-browser.ts` (`createBrowserClient` de `@supabase/ssr`, con las env vars `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`) que consume ese fragmento, sincroniza la sesión en cookies, y manda a `/set-password` (si el hash trae `type=invite`) o a `/citas`.
 - **⚠️ Trampa de `@supabase/ssr` con el fragmento `#access_token=...`:** `createBrowserClient` fuerza `flowType: 'pkce'` internamente y no se puede desactivar (ni pasando `auth.flowType` en las opciones — el valor hardcodeado gana igual). En modo PKCE la detección automática de sesión busca un `?code=` en la URL, nunca `#access_token=`, así que `auth-dispatcher.tsx` NO puede confiar en `detectSessionInUrl` ni en esperar a que dispare `onAuthStateChange('SIGNED_IN')` — hay que leer el fragmento a mano (`new URLSearchParams(window.location.hash.slice(1))`) y llamar a `supabase.auth.setSession({ access_token, refresh_token })` explícitamente. El primer intento (2026-08-24, antes del fix) se quedaba en una página en blanco sin redirigir a ningún sitio porque de esto.
@@ -137,7 +157,9 @@ apps/admin/
 - **Site URL / Redirect URLs:** configurados en el dashboard de Supabase (Authentication → URL Configuration) → Site URL = `https://aesthetica-web-admin.vercel.app`, Redirect URLs incluye también `http://localhost:3000/**` para pruebas en local.
 - **`NEXTAUTH_SECRET`** ya no existe como variable — era un placeholder de un plan inicial de usar NextAuth.js que nunca se implementó; se usa Supabase Auth en su lugar, ver arriba.
 
-**shadcn CLI no funciona en este entorno:** requiere Node ≥20.18.1 y el Node portátil de la máquina sin permisos de admin es v18.14.1/v18.20.8. Los componentes de `components/ui/` que faltaban (`table`, `badge`, `input`, `label`, `textarea`, `select`, `switch`, `dialog`) están escritos a mano siguiendo el estilo `radix-nova` ya configurado en `components.json`, usando los primitivos de `radix-ui` (paquete unificado, mismo patrón que `button.tsx`: `import { Dialog } from "radix-ui"` → `Dialog.Root`, etc.). Si se necesita añadir un componente nuevo, replicar ese patrón en vez de intentar correr `pnpm dlx shadcn add` — falla con `Cannot find native binding` en Node 18.
+**Node en esta máquina (actualizado 2026-10-17):** hay nvm-windows con varias versiones en `C:\Users\laleg\AppData\Roaming\nvm\` y `C:\Program Files\nodejs` apunta a **v22.5.1** (la de `D:\tools` ya no existe). Desde el Bash de Claude Code no está en el PATH: `export PATH="/c/Program Files/nodejs:$PATH"`. El corepack de esa versión falla con `Cannot find matching keyid` (claves de firma antiguas) → usar `COREPACK_INTEGRITY_KEYS=0 corepack pnpm ...`. Type-check del admin: `apps/admin/node_modules/.bin/tsc --noEmit -p apps/admin` (ignorar el error de `.next/dev/types/validator.ts`, es de tipos generados antiguos). **ESLint del admin está roto** (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false` en `.npmrc`) — ya lo estaba antes de facturación.
+
+**shadcn CLI no funciona en este entorno:** se escribió cuando solo había Node v18.14.1/v18.20.8 (requiere ≥20.18.1); con el Node 22 de arriba quizá ya funcione, no probado. Los componentes de `components/ui/` que faltaban (`table`, `badge`, `input`, `label`, `textarea`, `select`, `switch`, `dialog`) están escritos a mano siguiendo el estilo `radix-nova` ya configurado en `components.json`, usando los primitivos de `radix-ui` (paquete unificado, mismo patrón que `button.tsx`: `import { Dialog } from "radix-ui"` → `Dialog.Root`, etc.). Si se necesita añadir un componente nuevo, replicar ese patrón en vez de intentar correr `pnpm dlx shadcn add` — falla con `Cannot find native binding` en Node 18.
 
 ## packages/shared
 
@@ -170,7 +192,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 
 **Backend:** Supabase real conectado (2026-08-24) — proyecto `aesthetica` (org `aesthetica-clinic`), URL `https://vhcmpglvmpwfwblexhcs.supabase.co`. Credenciales en `.env.local` de cada app (gitignored) y en las env vars de Cloudflare Pages / Vercel. Fallback a `MOCK_TREATMENTS` solo si Supabase no responde.
 
-**Supabase schema:** tablas `treatments`, `patients`, `specialists`, `appointments`, `treatment_history` con RLS habilitado. Fuente de verdad: `supabase/schema.sql` (ejecutar entero en el SQL Editor de un proyecto Supabase nuevo). `treatments` tiene lectura pública (`is_active = true`); `patients`/`appointments` no tienen políticas para `anon` — toda escritura del formulario de reserva pasa por la función `submit_booking()` (SECURITY DEFINER), llamada desde `apps/web/src/services/bookingService.ts` vía `supabase.rpc(...)`. `specialists`/`treatment_history` sin políticas públicas todavía (pendiente auth de staff).
+**Supabase schema:** tablas `treatments`, `patients`, `specialists`, `appointments`, `treatment_history`, `invoices`, `invoice_items` con RLS habilitado. Fuente de verdad: `supabase/schema.sql` (ejecutar entero en el SQL Editor de un proyecto Supabase nuevo). Los cambios sobre el proyecto ya existente van además como SQL incremental e idempotente en `supabase/migrations/AAAAMMDD_*.sql` (se ejecutan a mano en el SQL Editor; no hay Supabase CLI ni `psql` en esta máquina). `invoices`/`invoice_items` siguen el mismo criterio que `patients`: sin políticas para `anon`/`authenticated`, solo `service_role`. `treatments` tiene lectura pública (`is_active = true`); `patients`/`appointments` no tienen políticas para `anon` — toda escritura del formulario de reserva pasa por la función `submit_booking()` (SECURITY DEFINER), llamada desde `apps/web/src/services/bookingService.ts` vía `supabase.rpc(...)`. `specialists`/`treatment_history` sin políticas públicas todavía (pendiente auth de staff).
 
 **Icons:** `lucide-react` únicamente.
 
@@ -189,13 +211,29 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
-- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key), `SUPABASE_SERVICE_ROLE_KEY` (secret key — la usan las Server Actions de citas/pacientes/tratamientos), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (mismos valores que las dos primeras, con prefijo público — las necesita `lib/supabase-browser.ts` para el flujo de invitación, ver `apps/admin — Source tree` más arriba)
+- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key), `SUPABASE_SERVICE_ROLE_KEY` (secret key — la usan las Server Actions de citas/pacientes/tratamientos/facturas y la descarga de la plantilla PDF de Storage; **no está en `apps/admin/.env.local`**, así que en local las páginas de datos no funcionan sin añadirla), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (mismos valores que las dos primeras, con prefijo público — las necesita `lib/supabase-browser.ts` para el flujo de invitación, ver `apps/admin — Source tree` más arriba)
 - **Proyecto:** `aesthetica-web-admin` en la cuenta/team `aesthetica1` de Vercel — verificado en producción el 2026-08-24, `aesthetica-web-admin.vercel.app` sirve correctamente el panel (Citas, Pacientes, Tratamientos, Facturación)
 - **Auto-deploy:** cualquier push a `main` (Production Deployment conectado vía GitHub)
 
 ## Próximos pasos (Fase 2+)
 
-- [ ] Completar panel admin: facturación sigue siendo placeholder (citas, pacientes y tratamientos ya conectados a Supabase real, ver `apps/admin — Source tree` más arriba)
-- [ ] UI de gestión de staff en admin (alta/baja de usuarios) — de momento se invita a mano desde el dashboard de Supabase, ver nota de autenticación más arriba
+- [x] Facturación en el admin (2026-10-17): el código está hecho, ver "Facturación" más arriba
+- [x] UI de gestión de staff en admin (`/usuarios`, commit a72fb90)
+
+**Puesta en marcha de facturación (en este orden):**
+- [ ] Ejecutar `supabase/migrations/20261017_facturas.sql` en el SQL Editor de Supabase
+- [ ] Subir `PdfFormFiller/src/main/resources/formulario.pdf` a Storage → bucket `invoice-templates` → `formulario.pdf`
+- [ ] Ejecutar `PdfFormFiller/dev/migracion-aesthetica-web/import-facturas-historicas.sql` en el SQL Editor (la comprobación del final debe dar 42 facturas)
+- [ ] Commit + push de los cambios de facturación (auto-deploy a Vercel)
+- [ ] Probar en producción: el listado tiene 42 facturas, se descarga una antigua y se emite una nueva (debe salir `…-0052-2026`) desde `/facturas` y desde "Facturar" en una cita completada
+- [ ] Añadir `SUPABASE_SERVICE_ROLE_KEY` a `apps/admin/.env.local` para poder probar las páginas de datos en local
+
+**Mejoras futuras de facturación:**
+- [ ] Facturas rectificativas/anulación (ahora una factura emitida no se puede editar ni borrar desde el panel)
+- [ ] Editar los datos fiscales (DNI, dirección, CP) desde la ficha del paciente (ahora solo se puede desde el formulario de factura)
+- [ ] Filtro por año o trimestre en `/facturas` y exportación para el gestor (CSV con base, IVA y total)
+
+**Entorno:**
+- [ ] Arreglar ESLint en `apps/admin` (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false`)
 - [ ] Dominio personalizado en Cloudflare Pages
 - [ ] App móvil Expo en `apps/mobile/` (comparte `packages/shared`)
