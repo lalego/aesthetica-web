@@ -234,6 +234,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 - [ ] Facturas rectificativas/anulación (ahora una factura emitida no se puede editar ni borrar desde el panel)
 - [ ] Editar los datos fiscales (DNI, dirección, CP) desde la ficha del paciente (ahora solo se puede desde el formulario de factura)
 - [ ] Filtro por año o trimestre en `/facturas` y exportación para el gestor (CSV con base, IVA y total)
+- [ ] Automatizar el envío al gestor. Ahora se hace a mano: primero se suben los PDFs de las facturas a Dropbox y después se le manda un correo. Hay que automatizar los dos pasos: subir a Dropbox (API de Dropbox) y enviar el correo. Todavía no está decidido cómo (botón en `/facturas`, cron por trimestre…). Ojo: hoy los PDFs no se guardan, se generan al vuelo, así que para subirlos habría que generarlos con `renderInvoicePdf()`.
 
 **Entorno:**
 - [ ] Arreglar ESLint en `apps/admin` (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false`)
