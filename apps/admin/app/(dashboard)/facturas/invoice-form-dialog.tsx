@@ -9,7 +9,10 @@ import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -57,6 +60,24 @@ interface InvoiceFormDialogProps {
   treatments: BillingTreatment[]
   /** Si viene, la factura se crea desde esa cita: paciente fijo y primera línea precargada. */
   appointment?: InvoiceAppointmentPreset
+}
+
+function TreatmentGroup({ label, treatments }: { label: string; treatments: BillingTreatment[] }) {
+  if (treatments.length === 0) return null
+  return (
+    <>
+      <SelectSeparator />
+      <SelectGroup>
+        <SelectLabel>{label}</SelectLabel>
+        {treatments.map((treatment) => (
+          <SelectItem key={treatment.id} value={treatment.id}>
+            {treatment.name}
+            {treatment.price_eur != null ? ` · ${formatEuro(treatment.price_eur)}` : ''}
+          </SelectItem>
+        ))}
+      </SelectGroup>
+    </>
+  )
 }
 
 function todayInMadrid() {
@@ -271,11 +292,14 @@ export function InvoiceFormDialog({ patients, treatments, appointment }: Invoice
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value={FREE_LINE}>Concepto libre</SelectItem>
-                    {treatments.map((treatment) => (
-                      <SelectItem key={treatment.id} value={treatment.id}>
-                        {treatment.name}
-                      </SelectItem>
-                    ))}
+                    <TreatmentGroup
+                      label="Catálogo web"
+                      treatments={treatments.filter((t) => t.is_active)}
+                    />
+                    <TreatmentGroup
+                      label="Solo facturación (no visibles en la web)"
+                      treatments={treatments.filter((t) => !t.is_active)}
+                    />
                   </SelectContent>
                 </Select>
                 <Input

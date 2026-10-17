@@ -19,8 +19,7 @@ export default async function FacturasPage() {
       .order('full_name'),
     supabaseAdmin
       .from('treatments')
-      .select('id, name, category, price_eur')
-      .eq('is_active', true)
+      .select('id, name, category, price_eur, is_active')
       .order('category')
       .order('name'),
   ])

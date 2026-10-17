@@ -58,4 +58,7 @@ export interface BillingTreatment {
   name: string
   category: TreatmentCategory
   price_eur: number | null
+  // Los inactivos (p. ej. los servicios importados de PdfFormFiller) no salen en
+  // la web pero sí se pueden facturar.
+  is_active: boolean
 }

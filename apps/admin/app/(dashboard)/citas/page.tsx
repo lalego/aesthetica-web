@@ -15,7 +15,7 @@ export default async function CitasPage() {
       .order('scheduled_at', { ascending: true }),
     supabaseAdmin
       .from('treatments')
-      .select('id, name, category, price_eur')
+      .select('id, name, category, price_eur, is_active')
       .order('category')
       .order('name'),
   ])
