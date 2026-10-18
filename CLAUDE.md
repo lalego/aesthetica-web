@@ -160,6 +160,21 @@ apps/admin/
 
 **Node en esta máquina (actualizado 2026-10-17):** hay nvm-windows con varias versiones en `C:\Users\laleg\AppData\Roaming\nvm\` y `C:\Program Files\nodejs` apunta a **v22.5.1** (la de `D:\tools` ya no existe). Desde el Bash de Claude Code no está en el PATH: `export PATH="/c/Program Files/nodejs:$PATH"`. El corepack de esa versión falla con `Cannot find matching keyid` (claves de firma antiguas) → usar `COREPACK_INTEGRITY_KEYS=0 corepack pnpm ...`. Type-check del admin: `apps/admin/node_modules/.bin/tsc --noEmit -p apps/admin` (ignorar el error de `.next/dev/types/validator.ts`, es de tipos generados antiguos). **ESLint del admin está roto** (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false` en `.npmrc`) — ya lo estaba antes de facturación.
 
+**Supabase en local (montado 2026-10-18):** Supabase CLI vía `npx supabase@2.121.0` (no instalado globalmente) sobre Docker Desktop. Se arranca en versión recortada (solo Postgres, API, Auth y Storage) para gastar poca memoria:
+
+```bash
+export PATH="/c/Program Files/nodejs:/c/Program Files/Docker/Docker/resources/bin:$PATH"
+npx supabase@2.121.0 start -x realtime,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+npx supabase@2.121.0 stop          # parar (los datos se conservan)
+```
+
+- `supabase/config.toml`: `[db.migrations] enabled = false` y `[db.seed] sql_paths = ["./schema.sql"]`. En una base nueva carga `schema.sql` entero, y las migraciones incrementales no se ejecutan (fallarían, porque cuentan con que las tablas ya existan). `site_url` = `http://localhost:3000`. Analytics y edge functions, apagados.
+- Sin Studio. Para ver o editar datos, **DBeaver** en `localhost:54322`, base `postgres`, usuario `postgres` / contraseña `postgres`.
+- `apps/admin/.env.local` apunta a local (`http://127.0.0.1:54321` + las claves de demo fijas de Supabase local).
+- Datos cargados en local: la plantilla en el bucket `invoice-templates` (subida con la API de Storage) y la importación del histórico (`docker exec -i supabase_db_aesthetica-web psql -U postgres < import-facturas-historicas.sql`). Hay un usuario de staff local con el email del usuario. Sin servidor de correo, así que los usuarios se crean con `POST /auth/v1/admin/users` (`email_confirm: true`), no con invitación.
+- `npx supabase@2.121.0 db reset` borra todo y vuelve a cargar `schema.sql`; después hay que repetir la plantilla, la importación y el usuario.
+- **Docker vive en `D:\Docker\wsl`** (`CustomWslDistroDir` en `%APPDATA%\Docker\settings-store.json`), porque C: se quedó sin espacio y el disco de Docker pasó a solo lectura. El volumen Oracle del proyecto `aad` (contenedor `aad-db`, imagen `doctorkirk/oracle-19c`, ambos borrados) está guardado en `D:\docker-backup\oracle-aad-db-volume.tar`.
+
 **shadcn CLI no funciona en este entorno:** se escribió cuando solo había Node v18.14.1/v18.20.8 (requiere ≥20.18.1); con el Node 22 de arriba quizá ya funcione, no probado. Los componentes de `components/ui/` que faltaban (`table`, `badge`, `input`, `label`, `textarea`, `select`, `switch`, `dialog`) están escritos a mano siguiendo el estilo `radix-nova` ya configurado en `components.json`, usando los primitivos de `radix-ui` (paquete unificado, mismo patrón que `button.tsx`: `import { Dialog } from "radix-ui"` → `Dialog.Root`, etc.). Si se necesita añadir un componente nuevo, replicar ese patrón en vez de intentar correr `pnpm dlx shadcn add` — falla con `Cannot find native binding` en Node 18.
 
 ## packages/shared
@@ -212,7 +227,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 ### apps/admin → Vercel
 - **Root directory:** `apps/admin`
 - **Framework:** Next.js (auto-detectado)
-- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key), `SUPABASE_SERVICE_ROLE_KEY` (secret key — la usan las Server Actions de citas/pacientes/tratamientos/facturas y la descarga de la plantilla PDF de Storage; **no está en `apps/admin/.env.local`**, así que en local las páginas de datos no funcionan sin añadirla), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (mismos valores que las dos primeras, con prefijo público — las necesita `lib/supabase-browser.ts` para el flujo de invitación, ver `apps/admin — Source tree` más arriba)
+- **Variables de entorno:** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (publishable key), `SUPABASE_SERVICE_ROLE_KEY` (secret key — la usan las Server Actions de citas/pacientes/tratamientos/facturas y la descarga de la plantilla PDF de Storage; en local, `apps/admin/.env.local` usa la de Supabase local, ver "Supabase en local"), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (mismos valores que las dos primeras, con prefijo público — las necesita `lib/supabase-browser.ts` para el flujo de invitación, ver `apps/admin — Source tree` más arriba)
 - **Proyecto:** `aesthetica-web-admin` en la cuenta/team `aesthetica1` de Vercel — verificado en producción el 2026-08-24, `aesthetica-web-admin.vercel.app` sirve correctamente el panel (Citas, Pacientes, Tratamientos, Facturación)
 - **Auto-deploy:** cualquier push a `main` (Production Deployment conectado vía GitHub)
 
@@ -228,7 +243,7 @@ Import en cualquier app: `import { CLINIC } from '@aesthetica/shared'`
 - [ ] Ejecutar `PdfFormFiller/dev/migracion-aesthetica-web/import-facturas-historicas.sql` en el SQL Editor (la comprobación del final debe dar 42 facturas)
 - [ ] Commit + push de los cambios de facturación (auto-deploy a Vercel)
 - [ ] Probar en producción: el listado tiene 42 facturas, se descarga una antigua y se emite una nueva (debe salir `…-0052-2026`) desde `/facturas` y desde "Facturar" en una cita completada
-- [ ] Añadir `SUPABASE_SERVICE_ROLE_KEY` a `apps/admin/.env.local` para poder probar las páginas de datos en local
+- [x] Probar en local (2026-10-18): Supabase local con schema, plantilla e histórico. `/facturas` muestra las 42 y el PDF se genera bien. Ver "Supabase en local".
 
 **Mejoras futuras de facturación:**
 - [ ] Facturas rectificativas/anulación (ahora una factura emitida no se puede editar ni borrar desde el panel)
