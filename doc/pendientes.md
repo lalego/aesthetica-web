@@ -27,4 +27,4 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 - [ ] Dominio personalizado en Cloudflare Pages (ver `doc/dominio-personalizado.md`)
 - [ ] App móvil Expo en `apps/mobile/` (compartiría `packages/shared`)
 - [x] Borrar el código muerto `apps/web/src/store/bookingStore.ts` (2026-10-18)
-- [ ] Revisar los comentarios de `supabase/schema.sql` que hablan de "staff auth futuro" (la auth de staff ya existe)
+- [x] Revisar los comentarios de `supabase/schema.sql` que hablan de "staff auth futuro" (2026-10-18)

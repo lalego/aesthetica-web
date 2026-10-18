@@ -28,8 +28,10 @@ create policy "treatments_public_read_active"
   to anon, authenticated
   using (is_active = true);
 
--- Sin políticas de escritura para anon/authenticated: la edición de tratamientos
--- queda reservada a service_role hasta que exista auth de staff en apps/admin.
+-- Sin políticas de escritura para anon/authenticated: los tratamientos se editan
+-- desde apps/admin, que usa service_role en el servidor tras verifySession().
+-- Ojo: 'authenticated' no equivale a staff, así que no añadas políticas de
+-- escritura para ese rol.
 
 -- ── specialists ───────────────────────────────────────────────────────────
 
@@ -42,7 +44,7 @@ create table if not exists specialists (
 );
 
 alter table specialists enable row level security;
--- Sin políticas públicas todavía: solo accesible vía service_role / staff auth futuro.
+-- Sin políticas para anon/authenticated: solo accesible vía service_role (apps/admin).
 
 -- ── patients ──────────────────────────────────────────────────────────────
 -- Sin acceso directo de anon/authenticated (ni SELECT ni INSERT/UPDATE):
@@ -99,7 +101,7 @@ create table if not exists treatment_history (
 );
 
 alter table treatment_history enable row level security;
--- Sin políticas públicas: solo accesible vía service_role / staff auth futuro.
+-- Sin políticas para anon/authenticated: solo accesible vía service_role (apps/admin).
 
 -- ── submit_booking(): único punto de escritura para el formulario público ──
 -- Upsert de paciente por email + creación de cita 'pending', en una transacción.
