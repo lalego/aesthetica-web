@@ -31,3 +31,4 @@ apps/admin/.vercel
 # Archivos de desarrollo local
 dev/
 .claude/settings.local.json
+CLAUDE.local.md

@@ -8,6 +8,25 @@ Descripción del repositorio abierto. Los elementos marcados como verificados se
 
 El repositorio es un monorepo gestionado con pnpm workspaces y Turborepo. Contiene dos aplicaciones de interfaz y un paquete compartido; no se encontró un backend propio separado. Ambas aplicaciones se conectan directamente a Supabase.
 
+~~~mermaid
+flowchart LR
+    subgraph Repo["Monorepo"]
+        Web["apps/web<br/>React + Vite"]
+        Admin["apps/admin<br/>Next.js"]
+        Shared["packages/shared<br/>tipos + configuración"]
+        Web --> Shared
+        Admin --> Shared
+    end
+
+    Web -->|"anon key: catálogo y RPCs"| Supabase["Supabase"]
+    Admin -->|"Auth con cookies"| Auth["Supabase Auth"]
+    Admin -->|"service_role solo servidor"| Data["Postgres / Data API"]
+    Admin -->|"plantilla PDF"| Storage["Supabase Storage"]
+    Auth --- Supabase
+    Data --- Supabase
+    Storage --- Supabase
+~~~
+
 ~~~text
 apps/web ───────┐
                 ├── Supabase (Auth, Postgres, RPC y Storage para facturas)
@@ -16,7 +35,7 @@ apps/admin ─────┘
 packages/shared (configuración de clínica y tipos TypeScript)
 ~~~
 
-La relación de despliegue descrita en CLAUDE.md es Cloudflare Pages para la web y Vercel para el panel. No se verificó el estado actual de esos proyectos externos.
+La relación de despliegue (detalle en CLAUDE.md → Deploy) es Cloudflare Pages para la web y Vercel para el panel. No se verificó el estado actual de esos proyectos externos.
 
 ## Estructura
 
@@ -25,6 +44,7 @@ La relación de despliegue descrita en CLAUDE.md es Cloudflare Pages para la web
 - packages/shared/src/: clinic.ts configura datos compartidos de la clínica; types.ts declara tipos; index.ts los exporta.
 - supabase/schema.sql: esquema y funciones SQL; supabase/migrations/: cambios incrementales.
 - docs/: documentación de arquitectura, flujos y desarrollo.
+- docs/DATABASE.md: tablas, relaciones, RLS, RPC y recomendaciones para cambios de esquema.
 
 ## Tecnologías verificadas
 

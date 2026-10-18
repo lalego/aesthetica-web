@@ -1,27 +1,67 @@
-# React + TypeScript + Vite
+# AestheticA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Monorepo de las aplicaciones de Clínica AestheticA. Usa pnpm workspaces para los paquetes y Turborepo para ejecutar tareas en paralelo.
 
-Currently, two official plugins are available:
+## Aplicaciones
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Ruta | Descripción | Tecnologías |
+|---|---|---|
+| apps/web | Web pública: inicio, información legal, tratamientos y solicitud de citas | React 18, Vite, TypeScript |
+| apps/admin | Panel interno: citas, pacientes, tratamientos, facturas y usuarios | Next.js 16, React 19, TypeScript |
+| packages/shared | Configuración de clínica y tipos compartidos | TypeScript |
+| supabase | Esquema, funciones RPC y migraciones de Postgres | Supabase |
 
-## Expanding the ESLint configuration
+La web y el panel usan Supabase para autenticación y datos. El panel utiliza una clave privilegiada únicamente desde código de servidor; no la expongas al navegador.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Requisitos
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js compatible con Next.js 16.
+- pnpm 10.34.4, versión declarada en el campo packageManager del manifiesto raíz.
+- Docker Desktop y Supabase CLI solo si vas a trabajar contra Supabase local.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## Inicio rápido
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Desde la raíz del repositorio:
+
+~~~bash
+pnpm install
+~~~
+
+Configura las variables locales siguiendo [Desarrollo local](docs/DEVELOPMENT.md#instalación-y-configuración). No añadas valores de credenciales al repositorio. Para desarrollar contra una instancia local de Supabase, sigue también [Arranque local con Supabase](docs/DEVELOPMENT.md#arranque-local-con-supabase).
+
+Arranca ambas apps:
+
+~~~bash
+pnpm dev
+~~~
+
+Por defecto, Vite sirve la web en http://localhost:5173 y Next.js el panel en http://localhost:3000. Para iniciar una sola aplicación:
+
+~~~bash
+pnpm dev --filter=@aesthetica/web
+pnpm dev --filter=@aesthetica/admin
+~~~
+
+## Comandos habituales
+
+~~~bash
+pnpm build
+pnpm lint
+pnpm test
+~~~
+
+Las pruebas unitarias se pueden ejecutar por separado con pnpm run test:web o pnpm run test:admin. Simulan las llamadas a Supabase y Next; no sustituyen una comprobación de Postgres, RLS o Storage en Supabase local.
+
+## Documentación
+
+- [Arquitectura](docs/ARCHITECTURE.md): estructura, tecnologías y límites entre aplicaciones.
+- [Flujo de datos](docs/DATA-FLOW.md): reservas públicas y operaciones del panel.
+- [Esquema de datos](docs/DATABASE.md): tablas, relaciones, RLS y RPC.
+- [Desarrollo](docs/DEVELOPMENT.md): variables por nombre, configuración local, servicios y comandos.
+- [Instrucciones para Codex](AGENTS.md): convenciones y guía para cambios en el repositorio.
+
+## Notas
+
+- La fuente compartida de configuración y tipos está en packages/shared.
+- El esquema de Supabase está en supabase/schema.sql; las migraciones incrementales están en supabase/migrations/. Revisa las pautas de seguridad en docs/DATABASE.md antes de modificarlo.
+- La configuración de despliegue y los servicios remotos no se describen como requisitos para desarrollo local; consulta la documentación del entorno si necesitas desplegar.
