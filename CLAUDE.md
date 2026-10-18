@@ -61,8 +61,6 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 **Estilo:** Tailwind con `cn()` (`@/lib/utils`), Inter y Playfair Display, paleta rose + neutral. Iconos solo de `lucide-react`. TypeScript strict, props con interfaces explícitas. En la web: React Query v4 para datos asíncronos, Zustand para estado de cliente, react-hook-form + zod para formularios. El contenido de las secciones está en objetos al principio de cada archivo (`ABOUT` en `AboutSection.tsx`, `MOCK_TREATMENTS` en `treatmentService.ts`, que se usa solo si Supabase falla).
 
-**Código muerto:** `apps/web/src/store/bookingStore.ts` (`useBookings()`) no lo importa nadie y apunta a una tabla `citas` que no existe.
-
 ## Supabase
 
 - **Producción:** proyecto `aesthetica` (org `aesthetica-clinic`), `https://vhcmpglvmpwfwblexhcs.supabase.co`. En Authentication → URL Configuration, Site URL = `https://aesthetica-web-admin.vercel.app`, y Redirect URLs incluye `http://localhost:3000/**`. No ejecutes SQL ni migraciones en remoto sin que lo pida el usuario.

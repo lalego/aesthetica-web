@@ -26,5 +26,5 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 - [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)
 - [ ] Dominio personalizado en Cloudflare Pages (ver `doc/dominio-personalizado.md`)
 - [ ] App móvil Expo en `apps/mobile/` (compartiría `packages/shared`)
-- [ ] Borrar el código muerto `apps/web/src/store/bookingStore.ts`
+- [x] Borrar el código muerto `apps/web/src/store/bookingStore.ts` (2026-10-18)
 - [ ] Revisar los comentarios de `supabase/schema.sql` que hablan de "staff auth futuro" (la auth de staff ya existe)

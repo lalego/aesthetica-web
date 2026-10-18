@@ -67,8 +67,6 @@ apps/web/src/
 ├── services/
 │   ├── treatmentService.ts   Supabase + MOCK_TREATMENTS fallback
 │   └── bookingService.ts     upsert patients + insert appointments
-├── store/
-│   └── bookingStore.ts       Zustand: selectedDate
 └── types/
     └── index.ts              Re-exporta desde @aesthetica/shared
 ```

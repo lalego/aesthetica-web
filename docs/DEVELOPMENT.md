@@ -116,6 +116,5 @@ TypeScript forma parte del build de la web (tsc); el script de build del admin d
 - No se inspeccionaron valores de .env.local. Comprueba localmente que las claves correspondan al endpoint Supabase elegido y que no sean placeholders.
 - Las variables locales no cargan por sí solas el esquema de una instancia remota; revisa docs/DATABASE.md y el flujo de despliegue de base de datos antes de tocarla.
 - El correo de invitación no está incluido en el arranque local ligero descrito arriba.
-- apps/web/src/store/bookingStore.ts es código muerto: no se importa y apunta a una tabla citas inexistente.
 - apps/admin/AGENTS.md incluye una instrucción vigente de consultar la documentación instalada de Next antes de modificar la app; apps/admin/CLAUDE.md la importa con @AGENTS.md.
 - No se ejecutaron builds, linters, migraciones, tests, instalaciones ni arranques durante la edición de esta guía.
