@@ -8,7 +8,7 @@ Llevaba ~1 mes roto desde la migración a monorepo. El sitio seguía sirviendo e
 
 - La configuración de build en el dashboard era de antes del monorepo (`npm run build` / `dist`).
 - `NODE_VERSION=16`, que no basta para el corepack que resuelve pnpm. Se subió a 18.
-- `@types/react` 19 (admin) se colaba en la resolución de tipos de la web (React 18). Se arregló con `hoist=false` en `.npmrc` (commit e76f796). Como efecto secundario, ESLint del admin dejó de funcionar.
+- `@types/react` 19 (admin) se colaba en la resolución de tipos de la web (React 18). Se arregló con `hoist=false` en `.npmrc` (commit e76f796). Como efecto secundario, ESLint del admin dejó de funcionar (`eslint-config-next` hace `require` de `next` sin declararlo). Se arregló el 2026-10-18 con `packageExtensions` en `pnpm-workspace.yaml`.
 
 ## 2026-08-24 — Supabase real y auth de staff
 

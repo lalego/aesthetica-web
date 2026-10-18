@@ -22,7 +22,7 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 
 ## Entorno y producto
 
-- [ ] Arreglar ESLint en `apps/admin` (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false`)
+- [x] Arreglar ESLint en `apps/admin` (2026-10-18, con `packageExtensions` en `pnpm-workspace.yaml`)
 - [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)
 - [ ] Dominio personalizado en Cloudflare Pages (ver `doc/dominio-personalizado.md`)
 - [ ] App móvil Expo en `apps/mobile/` (compartiría `packages/shared`)

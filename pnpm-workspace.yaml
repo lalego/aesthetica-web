@@ -1,3 +1,10 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+
+# eslint-config-next hace require('next/dist/compiled/babel/eslint-parser') sin
+# declarar next como dependencia. Con hoist=false (.npmrc) no lo encuentra.
+packageExtensions:
+  eslint-config-next:
+    peerDependencies:
+      next: '*'

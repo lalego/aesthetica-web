@@ -29,8 +29,8 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 `pnpm dev | build | lint | test` desde la raíz. Para una sola app, `--filter=@aesthetica/web` o `--filter=@aesthetica/admin`. `pnpm test` ejecuta Vitest (pruebas unitarias de web y admin con Supabase simulado). No sustituye a probar contra Postgres.
 
-- **ESLint del admin está roto** (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false` en `.npmrc`). No lo presentes como superado. Para comprobar tipos: `apps/admin/node_modules/.bin/tsc --noEmit -p apps/admin` (ignora el error de `.next/dev/types/validator.ts`, que sale de tipos generados antiguos).
-- `.npmrc` → `hoist=false` es necesario: sin él se mezclan `@types/react` 18 (web) y 19 (admin) y falla `tsc` en web.
+- Para comprobar tipos del admin: `apps/admin/node_modules/.bin/tsc --noEmit -p apps/admin` (ignora el error de `.next/dev/types/validator.ts`, que sale de tipos generados antiguos).
+- `.npmrc` → `hoist=false` es necesario: sin él se mezclan `@types/react` 18 (web) y 19 (admin) y falla `tsc` en web. Como efecto secundario, un paquete que haga `require` de algo que no declara como dependencia falla al cargarse. Esos casos se arreglan con `packageExtensions` en `pnpm-workspace.yaml` (como ya se hizo con `eslint-config-next` → `next`), nunca quitando `hoist=false`.
 
 ## Reglas que no se deducen del código
 

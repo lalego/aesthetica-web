@@ -33,7 +33,7 @@ Contexto: en este equipo no hay permisos de admin, así que no se pudo instalar 
 - `D:\tools` ya no existe en esta máquina. Hay **nvm-windows** (`C:\Users\laleg\AppData\Roaming\nvm\`, versiones 14 a 22) y `C:\Program Files\nodejs` → **v22.5.1**. Desde Git Bash: `export PATH="/c/Program Files/nodejs:$PATH"`.
 - El corepack de Node 22.5.1 falla con `Cannot find matching keyid` (claves de firma de npm rotadas) → `COREPACK_INTEGRITY_KEYS=0 corepack pnpm ...`.
 - `node_modules` se había creado antes de `hoist=false` (`ERR_PNPM_HOIST_PATTERN_DIFF`); se regeneró con `pnpm install` (~4 min).
-- ESLint de `apps/admin` falla con `Cannot find module 'next/dist/compiled/babel/eslint-parser'` (consecuencia de `hoist=false`). Pendiente de arreglar; `tsc --noEmit` sí funciona.
+- ESLint de `apps/admin` falla con `Cannot find module 'next/dist/compiled/babel/eslint-parser'` (consecuencia de `hoist=false`). Arreglado el 2026-10-18 (ver `historial.md`).
 
 ## Pendiente
 
