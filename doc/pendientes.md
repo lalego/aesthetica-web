@@ -23,7 +23,7 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 ## Entorno y producto
 
 - [ ] Arreglar ESLint en `apps/admin` (`Cannot find module 'next/dist/compiled/babel/eslint-parser'`, por `hoist=false`)
-- [ ] Commit de las pruebas Vitest y de la documentación de `docs/` (están sin versionar a 2026-10-18)
+- [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)
 - [ ] Dominio personalizado en Cloudflare Pages (ver `doc/dominio-personalizado.md`)
 - [ ] App móvil Expo en `apps/mobile/` (compartiría `packages/shared`)
 - [ ] Borrar el código muerto `apps/web/src/store/bookingStore.ts`
