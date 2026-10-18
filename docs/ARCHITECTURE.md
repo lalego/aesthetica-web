@@ -49,7 +49,7 @@ La relación de despliegue (detalle en CLAUDE.md → Deploy) es Cloudflare Pages
 ## Tecnologías verificadas
 
 - Gestor: pnpm 10.34.4 (campo packageManager); orquestación: Turborepo (latest, por tanto sin versión fija en package.json).
-- Web: React 18.2, Vite 4.4, TypeScript ^5, React Router ^7, TanStack Query ^4, Supabase JS ^2, Tailwind CSS ^3, Zustand ^4, React Hook Form ^7 y Zod ^3.
+- Web: React 18.2, Vite 4.4, TypeScript ^5, React Router ^7, TanStack Query ^4, Supabase JS ^2, Tailwind CSS ^3, React Hook Form ^7 y Zod ^3.
 - Admin: Next.js 16.2.9, React 19.2.4, TypeScript ^5, Supabase JS ^2, @supabase/ssr ^0.12, Tailwind CSS ^4, Radix UI, lucide-react y pdf-lib 1.17.1.
 - Compartido: TypeScript; package workspace @aesthetica/shared exporta directamente desde src/index.ts.
 - Datos: Supabase/Postgres; tablas documentadas en el esquema: treatments, specialists, patients, appointments, treatment_history, invoices e invoice_items.

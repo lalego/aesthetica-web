@@ -59,7 +59,7 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 **UI del admin:** el CLI de shadcn no se usa aquí. Los componentes de `components/ui/` están escritos a mano con el estilo `radix-nova` y el paquete unificado `radix-ui` (`import { Dialog } from "radix-ui"` → `Dialog.Root`). Para añadir uno, copia ese patrón.
 
-**Estilo:** Tailwind con `cn()` (`@/lib/utils`), Inter y Playfair Display, paleta rose + neutral. Iconos solo de `lucide-react`. TypeScript strict, props con interfaces explícitas. En la web: React Query v4 para datos asíncronos, Zustand para estado de cliente, react-hook-form + zod para formularios. El contenido de las secciones está en objetos al principio de cada archivo (`ABOUT` en `AboutSection.tsx`, `MOCK_TREATMENTS` en `treatmentService.ts`, que se usa solo si Supabase falla).
+**Estilo:** Tailwind con `cn()` (`@/lib/utils`), Inter y Playfair Display, paleta rose + neutral. Iconos solo de `lucide-react`. TypeScript strict, props con interfaces explícitas. En la web: React Query v4 para datos asíncronos y react-hook-form + zod para formularios (no hay librería de estado global). El contenido de las secciones está en objetos al principio de cada archivo (`ABOUT` en `AboutSection.tsx`, `MOCK_TREATMENTS` en `treatmentService.ts`, que se usa solo si Supabase falla).
 
 ## Supabase
 
