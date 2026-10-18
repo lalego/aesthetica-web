@@ -24,7 +24,8 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 
 - [x] Arreglar ESLint en `apps/admin` (2026-10-18, con `packageExtensions` en `pnpm-workspace.yaml`)
 - [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)
-- [ ] Dominio personalizado en Cloudflare Pages (ver `doc/dominio-personalizado.md`)
+- [x] Dominio personalizado en Cloudflare Pages: `aestheticavanzada.com` (2026-10-19)
+- [ ] Siguientes pasos del dominio y del correo `info@` (SMTP con Resend, datos de contacto de la web, redirecciones): ver `doc/dominio-personalizado.md`
 - [ ] App móvil Expo en `apps/mobile/` (compartiría `packages/shared`)
 - [x] Borrar el código muerto `apps/web/src/store/bookingStore.ts` (2026-10-18)
 - [x] Revisar los comentarios de `supabase/schema.sql` que hablan de "staff auth futuro" (2026-10-18)

@@ -71,5 +71,5 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 Los dos despliegan solos con cada push a `main`.
 
-- **apps/web → Cloudflare Pages** (`aesthetica-web.pages.dev`): build `pnpm turbo build --filter=@aesthetica/web`, output `apps/web/dist`, root `/`. Variables: `NODE_VERSION=18`, `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. El proyecto está en la cuenta de Cloudflare `Lalego@gmail.com`, a la que se entra con **"Continue with GitHub"**. La cuenta `Lalego@hotmail.com` es otra y no tiene proyectos.
+- **apps/web → Cloudflare Pages** (`https://aestheticavanzada.com`, también `www` y `aesthetica-web.pages.dev`): build `pnpm turbo build --filter=@aesthetica/web`, output `apps/web/dist`, root `/`. Variables: `NODE_VERSION=18`, `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. El proyecto está en la cuenta de Cloudflare `Lalego@gmail.com`, a la que se entra con **"Continue with GitHub"**. La cuenta `Lalego@hotmail.com` es otra y no tiene proyectos.
 - **apps/admin → Vercel**: proyecto `aesthetica-web-admin` (team `aesthetica1`), root `apps/admin`. Variables: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
