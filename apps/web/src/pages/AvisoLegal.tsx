@@ -21,7 +21,7 @@ export const AvisoLegal = () => {
             <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes datos del titular:</p>
             <ul className="space-y-1 pl-4 list-disc">
               <li><strong>Titular:</strong> Alena Martseniuk</li>
-              <li><strong>Nombre comercial:</strong> Centro AestheticA</li>
+              <li><strong>Nombre comercial:</strong> Estudio AestheticA</li>
               <li><strong>Domicilio:</strong> {CLINIC.address.full}</li>
               <li><strong>Teléfono:</strong> {CLINIC.contact.phone}</li>
               <li><strong>Correo electrónico:</strong> <a href={`mailto:${CLINIC.contact.email}`} className="text-gold-500 hover:underline">{CLINIC.contact.email}</a></li>
@@ -30,7 +30,7 @@ export const AvisoLegal = () => {
 
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-neutral-800">2. Objeto y ámbito de aplicación</h2>
-            <p>El presente Aviso Legal regula el acceso y uso del sitio web <strong>{new URL(CLINIC.website).host}</strong> (en adelante, "el Sitio Web"), titularidad de Alena Martseniuk, que ofrece información sobre los servicios de estética avanzada de Centro AestheticA.</p>
+            <p>El presente Aviso Legal regula el acceso y uso del sitio web <strong>{new URL(CLINIC.website).host}</strong> (en adelante, "el Sitio Web"), titularidad de Alena Martseniuk, que ofrece información sobre los servicios de estética avanzada de Estudio AestheticA.</p>
             <p>El acceso al Sitio Web implica la aceptación plena y sin reservas de las presentes condiciones.</p>
           </section>
 
@@ -41,7 +41,7 @@ export const AvisoLegal = () => {
 
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-neutral-800">4. Exclusión de responsabilidad</h2>
-            <p>La información publicada en este Sitio Web tiene carácter orientativo. Centro AestheticA no se responsabiliza de los daños derivados del uso del Sitio Web, ni de posibles errores en los contenidos. Los resultados de los tratamientos pueden variar según cada persona.</p>
+            <p>La información publicada en este Sitio Web tiene carácter orientativo. Estudio AestheticA no se responsabiliza de los daños derivados del uso del Sitio Web, ni de posibles errores en los contenidos. Los resultados de los tratamientos pueden variar según cada persona.</p>
           </section>
 
           <section className="space-y-3">

@@ -19,7 +19,7 @@ export const Privacidad = () => {
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-neutral-800">1. Responsable del tratamiento</h2>
             <ul className="space-y-1 pl-4 list-disc">
-              <li><strong>Responsable:</strong> Alena Martseniuk (Centro AestheticA)</li>
+              <li><strong>Responsable:</strong> Alena Martseniuk (Estudio AestheticA)</li>
               <li><strong>Domicilio:</strong> {CLINIC.address.full}</li>
               <li><strong>Contacto:</strong> <a href={`mailto:${CLINIC.contact.email}`} className="text-gold-500 hover:underline">{CLINIC.contact.email}</a></li>
             </ul>

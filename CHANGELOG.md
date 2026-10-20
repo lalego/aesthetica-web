@@ -19,6 +19,7 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 
 ### Cambios
 - El email de contacto de la web y de las páginas legales pasa a ser **info@aestheticavanzada.com**, y el aviso legal cita el dominio `aestheticavanzada.com`.
+- Las páginas legales usan el nombre comercial **Estudio AestheticA** (antes "Centro AestheticA").
 
 ## 1.0.0 — 2026-10-20
 
