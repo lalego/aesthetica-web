@@ -14,6 +14,12 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 
 ## Sin publicar
 
+_Nada todavía._
+
+## 1.1.0 — 2026-10-20
+
+Web más ligera y datos de contacto con el dominio propio.
+
 ### Novedades
 - La versión se ve en el pie del menú del panel, con un enlace a estas novedades.
 
