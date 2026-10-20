@@ -12,7 +12,6 @@
   "dependencies": {
     "@aesthetica/shared": "workspace:*",
     "@hookform/resolvers": "^3.3.4",
-    "@supabase/supabase-js": "^2.39.7",
     "@tanstack/react-query": "^4.36.1",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",

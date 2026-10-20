@@ -29,7 +29,7 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 - [ ] Google Search Console: verificar el dominio (registro DNS en Cloudflare) y enviar `https://aestheticavanzada.com/sitemap.xml`.
 - [ ] Google Business Profile: poner `https://aestheticavanzada.com` como web, revisar que el nombre, la dirección y el teléfono coincidan con `clinic.ts` y añadir los servicios con enlace a su página.
 - [ ] Rich Results Test (https://search.google.com/test/rich-results) sobre la portada y una página de tratamiento, tras el despliegue.
-- [ ] Rendimiento: el JS pesa ~160 KB comprimido, sobre todo `@supabase/supabase-js`. Se podría cargar el formulario de reserva y Supabase bajo demanda, o llamar a las RPC con `fetch`. También se podrían alojar las fuentes en el propio dominio en vez de usar Google Fonts.
+- [x] (2026-10-20) Rendimiento: el JS baja de 160 a 121 KB gzip. `apps/web/src/lib/supabase.ts` es un cliente REST propio en lugar de `@supabase/supabase-js`, y zod se carga con `import()` al tocar el formulario (`bookingValidation.ts`, 14 KB). Lo que queda: react-dom 41 KB, código propio 32 KB (9 KB son los textos de `landings.ts`), react-router 13 KB. Opcional: alojar las fuentes en el propio dominio.
 - [ ] Hacer un deploy hook de Cloudflare Pages para redesplegar cuando cambien los tratamientos en el panel.
 
 ## Entorno y producto

@@ -18,6 +18,7 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 - La versión se ve en el pie del menú del panel, con un enlace a estas novedades.
 
 ### Cambios
+- **La web pesa un 24 % menos** (de 160 a 121 KB de JavaScript comprimido): se quita la librería completa de Supabase, que solo hacía falta para tres llamadas, y la validación del formulario se descarga al usarlo.
 - El email de contacto de la web y de las páginas legales pasa a ser **info@aestheticavanzada.com**, y el aviso legal cita el dominio `aestheticavanzada.com`.
 - `www.aestheticavanzada.com` y `aesthetica-web.pages.dev` redirigen al dominio principal, así Google no ve la web duplicada.
 - Las páginas legales usan el nombre comercial **Estudio AestheticA** (antes "Centro AestheticA").

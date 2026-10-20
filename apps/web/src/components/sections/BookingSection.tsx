@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import type { Resolver } from 'react-hook-form'
+import type { BookingErrors, BookingSchema } from './bookingValidation'
 import { AlertCircle, CheckCircle, Loader2, MessageCircle, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTreatments } from '@/hooks/useTreatments'
@@ -100,33 +100,19 @@ const COPY = {
     failText: 'It may be a temporary issue. Please try again in a few minutes or book directly:',
     call: 'Call',
   },
-}
+} satisfies Record<Lang, { errors: BookingErrors } & Record<string, unknown>>
 
-// ── Schema de validación ─────────────────────────────────────────────────────
+// ── Validación (zod, cargado bajo demanda) ───────────────────────────────────
 
-const makeBookingSchema = (e: (typeof COPY)[Lang]['errors']) =>
-  z.object({
-    name: z.string().min(2, e.name),
-    email: z.string().email(e.email),
-    phone: z
-      .string()
-      .min(9, e.phoneMin)
-      .regex(/^[+\d\s()-]{9,}$/, e.phoneFormat),
-    treatment_id: z.string().min(1, e.treatment),
-    preferred_date: z
-      .string()
-      .min(1, e.date)
-      .refine((d) => new Date(d) >= new Date(new Date().toDateString()), {
-        message: e.pastDate,
-      }),
-    scheduled_at: z.string().min(1, e.time),
-    notes: z.string().optional(),
-    gdpr_consent: z.literal(true, {
-      errorMap: () => ({ message: e.gdpr }),
-    }),
-  })
+const loadValidation = () => import('./bookingValidation')
 
-type BookingSchema = z.infer<ReturnType<typeof makeBookingSchema>>
+// El esquema vive en bookingValidation.ts y se descarga al tocar el formulario
+// (onFocus) o, como tarde, al enviarlo: zod no hace falta para pintar la página.
+const lazyResolver = (errors: BookingErrors): Resolver<BookingSchema> =>
+  async (values, context, options) => {
+    const { bookingResolver } = await loadValidation()
+    return bookingResolver(errors)(values, context, options)
+  }
 
 // ── Componente ────────────────────────────────────────────────────────────────
 
@@ -136,7 +122,7 @@ export const BookingSection = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'slot_taken'>('idle')
   const queryClient = useQueryClient()
   const { data: treatments = [] } = useTreatments()
-  const schema = useMemo(() => makeBookingSchema(t.errors), [t])
+  const resolver = useMemo(() => lazyResolver(t.errors), [t])
 
   const {
     register,
@@ -146,7 +132,7 @@ export const BookingSection = () => {
     setValue,
     formState: { errors },
   } = useForm<BookingSchema>({
-    resolver: zodResolver(schema),
+    resolver,
     defaultValues: { scheduled_at: '' },
   })
 
@@ -211,7 +197,7 @@ export const BookingSection = () => {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} onFocus={() => void loadValidation()} noValidate className="space-y-5">
             {/* Nombre */}
             <Field label={t.name} error={errors.name?.message}>
               <input

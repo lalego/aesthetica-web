@@ -49,7 +49,7 @@ describe('submitBooking', () => {
 
 describe('isSlotTakenError', () => {
   it('reconoce el error de hueco ocupado de submit_booking()', () => {
-    // Forma en que llega un PostgrestError de supabase-js.
+    // Forma en que llega el error de PostgREST (ver lib/supabase.ts).
     expect(isSlotTakenError({ message: 'Ese hueco ya no está disponible, elige otro.', code: 'P0001' })).toBe(true)
   })
 

@@ -4,7 +4,7 @@ export const fetchAvailableSlots = async (
   date: string,
   treatmentId: string
 ): Promise<string[]> => {
-  const { data, error } = await supabase.rpc('get_available_slots', {
+  const { data, error } = await supabase.rpc<string[]>('get_available_slots', {
     p_date: date,
     p_treatment_id: treatmentId,
   })
@@ -14,5 +14,5 @@ export const fetchAvailableSlots = async (
     return []
   }
 
-  return (data as string[]) ?? []
+  return data ?? []
 }

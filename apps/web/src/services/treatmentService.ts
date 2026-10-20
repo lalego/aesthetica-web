@@ -418,11 +418,10 @@ export const MOCK_TREATMENTS: Treatment[] = [
 ]
 
 export const fetchTreatments = async (): Promise<Treatment[]> => {
-  const { data, error } = await supabase
-    .from('treatments')
-    .select('*')
-    .eq('is_active', true)
-    .order('category')
+  const { data, error } = await supabase.select<Treatment[]>(
+    'treatments',
+    'select=*&is_active=eq.true&order=category',
+  )
 
   if (error) {
     console.warn('[treatmentService] Supabase no disponible, usando mock data:', error.message)
