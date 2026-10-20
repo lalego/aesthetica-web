@@ -4,17 +4,17 @@ import { CLINIC } from '@/config/clinic'
 
 export const Privacidad = () => {
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-cream-100">
       <div className="max-w-3xl mx-auto px-6 py-16">
         <Link to="/" className="inline-flex items-center gap-2 text-gold-500 hover:text-gold-600 mb-10 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Volver al inicio
         </Link>
 
-        <h1 className="text-3xl font-light text-neutral-800 mb-2">Política de Privacidad</h1>
-        <p className="text-sm text-neutral-400 mb-10">Última actualización: octubre 2026</p>
+        <h1 className="text-3xl font-normal text-neutral-900 mb-2">Política de Privacidad</h1>
+        <p className="text-sm text-neutral-500 mb-10">Última actualización: octubre 2026</p>
 
-        <div className="space-y-8 text-neutral-600 leading-relaxed">
+        <div className="space-y-8 text-neutral-700 leading-relaxed">
 
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-neutral-800">1. Responsable del tratamiento</h2>

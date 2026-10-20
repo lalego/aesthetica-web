@@ -30,6 +30,9 @@ export const statsFor = (lang: Lang, labels: [string, string, string]) => [
   { value: formatStat(STATS.treatments, lang, false), label: labels[2] },
 ]
 
+/** Tratamientos que salen en la portada (por id, en este orden). El resto, en /tratamientos. */
+export const FEATURED_TREATMENTS = ['f2', 'f7', 'f6', 'f8', 'l2', 'c1']
+
 // ─────────────────────────────────────────────────────────────────
 //  EDITA AQUÍ — título (≤ 60 caracteres), descripción (≤ 155) y H1
 //  de las páginas fijas. Los de tratamientos están en landings.ts.

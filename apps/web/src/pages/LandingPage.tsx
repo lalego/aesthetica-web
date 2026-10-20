@@ -70,7 +70,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
             href={CLINIC.contact.whatsapp_href}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-full hover:border-gold-300 hover:text-gold-500 transition-colors"
+            className="border border-neutral-300 text-neutral-700 px-8 py-3.5 rounded-full hover:border-gold-300 hover:text-gold-500 transition-colors"
           >
             {t.whatsapp}
           </a>
@@ -79,9 +79,9 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
 
       {/* Tratamientos con precio (de Supabase) */}
       {matched.length > 0 && (
-        <section className="bg-neutral-50 py-16">
+        <section className="bg-cream-100 py-16">
           <div className="max-w-6xl mx-auto px-6 space-y-8">
-            <h2 className="text-3xl font-light text-neutral-800 text-center">{t.prices}</h2>
+            <h2 className="text-3xl font-normal text-neutral-900 text-center">{t.prices}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {matched.map((tr) => (
                 <TreatmentCard key={tr.id} treatment={tr} linkToLanding={landing.kind === 'category'} />
@@ -96,9 +96,9 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
         <div className="max-w-3xl mx-auto px-6 space-y-12">
           {copy.sections.map(({ h2, paragraphs }) => (
             <div key={h2} className="space-y-4">
-              <h2 className="text-2xl lg:text-3xl font-light text-neutral-800">{h2}</h2>
+              <h2 className="text-2xl lg:text-3xl font-normal text-neutral-900">{h2}</h2>
               {paragraphs.map((p, i) => (
-                <p key={i} className="text-neutral-600 leading-relaxed">{p}</p>
+                <p key={i} className="text-neutral-700 leading-relaxed">{p}</p>
               ))}
             </div>
           ))}
@@ -106,13 +106,13 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
           {/* Enlaces internos: subpáginas o categoría padre */}
           {(children.length > 0 || parent) && (
             <div className="space-y-4">
-              <h2 className="text-2xl lg:text-3xl font-light text-neutral-800">{t.related}</h2>
+              <h2 className="text-2xl lg:text-3xl font-normal text-neutral-900">{t.related}</h2>
               <ul className="flex flex-wrap gap-2">
                 {children.map((l) => (
                   <li key={l.key}>
                     <Link
                       to={landingPath(l, lang)}
-                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
+                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-700 hover:border-gold-300 hover:text-gold-500 transition-colors"
                     >
                       {l.label[lang]}
                     </Link>
@@ -122,7 +122,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
                   <li>
                     <Link
                       to={landingPath(parent, lang)}
-                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
+                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-700 hover:border-gold-300 hover:text-gold-500 transition-colors"
                     >
                       {t.seeAll} {parent.label[lang].toLowerCase()}
                     </Link>
@@ -135,7 +135,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
           {/* Preguntas frecuentes (también van en el JSON-LD FAQPage) */}
           {copy.faqs.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-2xl lg:text-3xl font-light text-neutral-800">{t.faq}</h2>
+              <h2 className="text-2xl lg:text-3xl font-normal text-neutral-900">{t.faq}</h2>
               <div className="divide-y divide-neutral-100 border-y border-neutral-100">
                 {copy.faqs.map(({ q, a }) => (
                   <details key={q} className="group py-4">
@@ -143,7 +143,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
                       <h3>{q}</h3>
                       <span className="text-gold-400 group-open:rotate-45 transition-transform">+</span>
                     </summary>
-                    <p className="pt-3 text-neutral-600 leading-relaxed">{a}</p>
+                    <p className="pt-3 text-neutral-700 leading-relaxed">{a}</p>
                   </details>
                 ))}
               </div>

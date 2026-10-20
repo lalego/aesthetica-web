@@ -46,25 +46,25 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
   const t = HERO[lang]
 
   return (
-    <section className="relative bg-stone-50 min-h-screen flex items-start lg:items-center overflow-hidden">
+    <section className="relative bg-cream-100 overflow-hidden">
       {/* Sutil degradado decorativo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gold-50 via-stone-50 to-stone-100 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-cream-50 via-cream-100 to-cream-200 pointer-events-none" />
 
-      <div className="relative max-w-6xl mx-auto px-6 pt-52 pb-16 lg:py-24 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-6xl mx-auto px-6 pt-52 pb-20 lg:pt-40 lg:pb-24 grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <div className="flex justify-center lg:justify-start">
-            <h1 className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-full">
+            <h1 className="inline-block text-gold-600 font-medium tracking-widest text-xs uppercase border border-gold-300 bg-white/70 px-4 py-1.5 rounded-full">
               {t.h1}
             </h1>
           </div>
 
-          <p className="text-4xl lg:text-6xl font-light text-neutral-800 leading-tight">
+          <p className="text-4xl lg:text-6xl font-normal text-neutral-900 leading-tight">
             {t.slogan[0]}{' '}
-            <span className="font-serif italic text-gold-400">{t.slogan[1]}</span>
+            <span className="font-serif italic text-gold-500">{t.slogan[1]}</span>
             <br />{t.slogan[2]}
           </p>
 
-          <p className="text-lg text-neutral-500 leading-relaxed max-w-md">{t.text}</p>
+          <p className="text-lg text-neutral-700 leading-relaxed max-w-md">{t.text}</p>
 
           <div className="flex flex-wrap gap-4 pt-2">
             <button
@@ -76,20 +76,20 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
             </button>
             <Link
               to={PATHS.treatments[lang]}
-              className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-full hover:border-gold-300 hover:text-gold-500 transition-colors"
+              className="border border-neutral-400 bg-white/60 text-neutral-800 px-8 py-3.5 rounded-full hover:border-gold-400 hover:text-gold-600 transition-colors"
             >
               {t.see}
             </Link>
           </div>
 
           {/* Sellos de confianza */}
-          <div className="flex items-center gap-6 pt-4 border-t border-neutral-200">
+          <div className="flex items-center gap-6 pt-4 border-t border-cream-300">
             {t.stats.map(({ value, label }, i) => (
               <div key={label} className="contents">
-                {i > 0 && <div className="w-px h-8 bg-neutral-200" />}
+                {i > 0 && <div className="w-px h-8 bg-cream-300" />}
                 <div className="text-center">
-                  <p className="text-2xl font-light text-neutral-800">{value}</p>
-                  <p className="text-xs text-neutral-400 mt-0.5">{label}</p>
+                  <p className="text-2xl font-normal text-neutral-900">{value}</p>
+                  <p className="text-xs text-neutral-600 mt-0.5">{label}</p>
                 </div>
               </div>
             ))}
@@ -114,8 +114,8 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           </div>
 
           {/* Badge flotante */}
-          <div className="absolute -bottom-5 -left-5 bg-white px-6 py-4 rounded-2xl shadow-xl border border-neutral-100">
-            <p className="text-xs text-neutral-400 mb-0.5">{t.badge[0]}</p>
+          <div className="absolute -bottom-5 -left-5 bg-white px-6 py-4 rounded-2xl shadow-xl border border-cream-200">
+            <p className="text-xs text-neutral-500 mb-0.5">{t.badge[0]}</p>
             <p className="text-sm font-medium text-neutral-800">{t.badge[1]}</p>
           </div>
 

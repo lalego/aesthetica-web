@@ -23,7 +23,7 @@ export const Home = () => {
     <PageLayout>
       <div className="pt-16">
         <HeroSection onBookingClick={handleBookingClick} />
-        <TreatmentsSection />
+        <TreatmentsSection featured />
         <AboutSection />
         <BookingSection />
         <ContactSection />

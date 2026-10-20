@@ -40,13 +40,13 @@ export const ContactSection = () => {
   const t = COPY[lang]
 
   return (
-    <section id="contacto" className="bg-white py-20">
+    <section id="contacto" className="bg-cream-200 py-20">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-normal text-neutral-900 mb-4">
             {t.title}
           </h2>
-          <p className="text-neutral-600 max-w-xl mx-auto">{t.intro}</p>
+          <p className="text-neutral-700 max-w-xl mx-auto">{t.intro}</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
@@ -60,7 +60,7 @@ export const ContactSection = () => {
                   href={CLINIC.maps.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-neutral-600 hover:text-gold-500 transition-colors"
+                  className="text-neutral-700 hover:text-gold-500 transition-colors"
                 >
                   {CLINIC.address.street}<br />
                   {CLINIC.address.district}, {CLINIC.address.zip} {CLINIC.address.city}
@@ -73,7 +73,7 @@ export const ContactSection = () => {
               <Phone className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">{t.phone}</h3>
-                <a href={CLINIC.contact.phone_href} className="text-neutral-600 hover:text-gold-500 transition-colors">
+                <a href={CLINIC.contact.phone_href} className="text-neutral-700 hover:text-gold-500 transition-colors">
                   {CLINIC.contact.phone}
                 </a>
               </div>
@@ -85,7 +85,7 @@ export const ContactSection = () => {
               <div>
                 <h3 className="font-medium text-neutral-800 mb-1">{t.hours}</h3>
                 {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
-                  <p key={days} className="text-neutral-600 text-sm">
+                  <p key={days} className="text-neutral-700 text-sm">
                     <span className="font-medium">{hoursLabel(days, lang)}:</span> {hoursLabel(time, lang)}
                   </p>
                 ))}
@@ -98,7 +98,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.instagram_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-700 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <Instagram className="w-4 h-4" />
                 Instagram
@@ -107,7 +107,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.facebook_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-700 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <Facebook className="w-4 h-4" />
                 Facebook
@@ -116,7 +116,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.whatsapp_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-700 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <WhatsAppIcon />
                 WhatsApp

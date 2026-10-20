@@ -141,23 +141,25 @@ export const AboutSection = () => {
   const c = ABOUT[useLang()]
 
   return (
-    <section id="nosotros" className="bg-white py-20">
+    <section id="nosotros" className="relative bg-espresso-900 text-stone-300 py-20">
+      {/* Sección oscura, con la misma línea dorada que el pie */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
       <div className="max-w-6xl mx-auto px-6 space-y-20">
 
         {/* Intro */}
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-light text-neutral-800">
-              <span className="font-serif italic text-gold-400">{c.title[0]}</span> {c.title[1]}
+            <h2 className="text-3xl lg:text-4xl font-normal text-white">
+              <span className="font-serif italic text-gold-300">{c.title[0]}</span> {c.title[1]}
             </h2>
             {c.intro.map((p, i) => (
-              <p key={i} className="text-neutral-600 leading-relaxed">
+              <p key={i} className="text-stone-300 leading-relaxed">
                 {p}
               </p>
             ))}
           </div>
 
-          <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
+          <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gold-400/20">
             <img
               src="/img/alena_laser-900.webp"
               alt={c.imgAlt}
@@ -171,28 +173,28 @@ export const AboutSection = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 border-y border-neutral-100 py-12">
+        <div className="grid grid-cols-3 gap-6 border-y border-espresso-700 py-12">
           {c.stats.map(({ value, label }) => (
             <div key={label} className="text-center space-y-1">
-              <p className="text-4xl font-light text-neutral-900">{value}</p>
-              <p className="text-sm text-neutral-500">{label}</p>
+              <p className="text-4xl font-normal text-gold-300">{value}</p>
+              <p className="text-sm text-stone-400">{label}</p>
             </div>
           ))}
         </div>
 
         {/* Valores */}
         <div className="space-y-8">
-          <h3 className="text-3xl font-light text-neutral-800 text-center">
+          <h3 className="text-3xl font-normal text-white text-center">
             {c.valuesTitle}
           </h3>
           <div className="grid sm:grid-cols-3 gap-8">
             {c.values.map(({ icon: Icon, title, description }) => (
               <div key={title} className="space-y-3">
-                <div className="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-gold-400" />
+                <div className="w-10 h-10 rounded-full bg-espresso-800 ring-1 ring-gold-400/30 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-gold-300" />
                 </div>
-                <h4 className="font-medium text-neutral-800">{title}</h4>
-                <p className="text-sm text-neutral-500 leading-relaxed">{description}</p>
+                <h4 className="font-medium text-stone-100">{title}</h4>
+                <p className="text-sm text-stone-400 leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
@@ -201,7 +203,7 @@ export const AboutSection = () => {
         {/* Equipo */}
         {c.team.length > 0 && (
           <div className="space-y-8">
-            <h3 className="text-3xl font-light text-neutral-800 text-center">
+            <h3 className="text-3xl font-normal text-white text-center">
               {c.teamTitle}
             </h3>
             <div className="flex flex-wrap justify-center gap-8">
@@ -210,7 +212,7 @@ export const AboutSection = () => {
                   key={name}
                   className="flex flex-col items-center text-center max-w-lg space-y-5"
                 >
-                  <div className="w-48 h-48 rounded-full overflow-hidden ring-4 ring-gold-100 shadow-lg">
+                  <div className="w-48 h-48 rounded-full overflow-hidden ring-4 ring-gold-400/40 shadow-lg">
                     <img
                       src={avatar}
                       alt={name}
@@ -222,14 +224,14 @@ export const AboutSection = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-2xl font-medium text-neutral-800">{name}</p>
-                    <p className="text-base text-gold-400 mt-1">{role}</p>
+                    <p className="text-2xl font-medium text-white">{name}</p>
+                    <p className="text-base text-gold-300 mt-1">{role}</p>
                   </div>
-                  <p className="text-base text-neutral-500 leading-relaxed">{bio}</p>
+                  <p className="text-base text-stone-300 leading-relaxed">{bio}</p>
                   {languages && (
                     <div className="flex flex-wrap justify-center gap-2 pt-1">
                       {languages.map(({ code, label }) => (
-                        <span key={code} className="inline-flex items-center gap-1.5 text-sm bg-neutral-50 border border-neutral-100 text-neutral-500 px-3 py-1.5 rounded-full">
+                        <span key={code} className="inline-flex items-center gap-1.5 text-sm bg-espresso-800 border border-espresso-700 text-stone-300 px-3 py-1.5 rounded-full">
                           <img
                             src={`https://flagcdn.com/20x15/${code}.png`}
                             alt=""

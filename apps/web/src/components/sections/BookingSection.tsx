@@ -215,25 +215,25 @@ export const BookingSection = () => {
   useEffect(() => setToday(new Date().toISOString().split('T')[0]), [])
 
   return (
-    <section id="agendar" className="bg-white py-20">
+    <section id="agendar" className="bg-cream-50 py-20">
       <div className="max-w-2xl mx-auto px-6">
         {/* Encabezado */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            {t.title[0]} <span className="font-serif italic text-gold-400">{t.title[1]}</span>
+          <h2 className="text-3xl lg:text-4xl font-normal text-neutral-900 mb-4">
+            {t.title[0]} <span className="font-serif italic text-gold-500">{t.title[1]}</span>
           </h2>
-          <p className="text-neutral-600">{t.intro}</p>
+          <p className="text-neutral-700">{t.intro}</p>
         </div>
 
         {/* Estado de éxito */}
         {status === 'success' ? (
           <div className="text-center py-16 space-y-4">
             <CheckCircle className="w-14 h-14 text-gold-400 mx-auto" />
-            <h3 className="text-xl font-light text-neutral-800">{t.successTitle}</h3>
-            <p className="text-neutral-500 max-w-sm mx-auto">{t.successText}</p>
+            <h3 className="text-xl font-normal text-neutral-900">{t.successTitle}</h3>
+            <p className="text-neutral-600 max-w-sm mx-auto">{t.successText}</p>
             <button
               onClick={() => setStatus('idle')}
-              className="mt-4 text-base text-neutral-400 hover:text-neutral-700 underline transition-colors"
+              className="mt-4 text-base text-neutral-500 hover:text-neutral-700 underline transition-colors"
             >
               {t.again}
             </button>
@@ -300,7 +300,7 @@ export const BookingSection = () => {
             {treatmentId && preferredDate && (
               <Field label={t.time} error={errors.scheduled_at?.message}>
                 {slotsLoading ? (
-                  <p className="text-base text-neutral-500">{t.searching}</p>
+                  <p className="text-base text-neutral-600">{t.searching}</p>
                 ) : slots && slots.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {slots.map((iso) => {
@@ -319,7 +319,7 @@ export const BookingSection = () => {
                             'rounded-full border px-4 py-1.5 text-sm transition-colors',
                             selected
                               ? 'border-gold-400 bg-gold-400 text-white'
-                              : 'border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-gold-300'
+                              : 'border-cream-300 bg-white text-neutral-800 hover:border-gold-400'
                           )}
                         >
                           {label}
@@ -328,7 +328,7 @@ export const BookingSection = () => {
                     })}
                   </div>
                 ) : (
-                  <p className="text-base text-neutral-500">{t.noSlots}</p>
+                  <p className="text-base text-neutral-600">{t.noSlots}</p>
                 )}
               </Field>
             )}
@@ -351,7 +351,7 @@ export const BookingSection = () => {
                   type="checkbox"
                   className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-gold-400 focus:ring-gold-300"
                 />
-                <span className="text-base text-neutral-600 leading-snug">
+                <span className="text-base text-neutral-700 leading-snug">
                   {t.gdpr[0]}
                   <Link to="/privacidad" target="_blank" className="underline hover:text-neutral-900">
                     {t.gdpr[1]}
@@ -360,7 +360,7 @@ export const BookingSection = () => {
                 </span>
               </label>
               {errors.gdpr_consent && (
-                <p className="text-sm text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
+                <p className="text-sm text-red-700 pl-7">{errors.gdpr_consent.message}</p>
               )}
             </div>
 
@@ -430,7 +430,7 @@ const inputClass = (hasError: boolean) =>
     'focus:outline-none focus:ring-2 focus:ring-gold-300 transition-shadow',
     hasError
       ? 'border-gold-400 bg-gold-50'
-      : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300'
+      : 'border-cream-300 bg-white hover:border-neutral-400'
   )
 
 interface FieldProps {
@@ -443,6 +443,6 @@ const Field = ({ label, error, children }: FieldProps) => (
   <div className="space-y-1.5">
     <label className="block text-base font-medium text-neutral-700">{label}</label>
     {children}
-    {error && <p className="text-sm text-gold-400">{error}</p>}
+    {error && <p className="text-sm text-red-700">{error}</p>}
   </div>
 )

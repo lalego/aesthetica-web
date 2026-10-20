@@ -30,7 +30,7 @@ export const TreatmentCard = ({ treatment: raw, linkToLanding = true }: Treatmen
   const href = landing ? landingPath(landing, lang) : undefined
 
   return (
-    <article className="bg-white rounded-2xl p-6 border border-neutral-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
+    <article className="bg-white rounded-2xl p-6 border border-cream-200 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
       {/* Badge de categoría */}
       <span className={cn(
         'self-start text-sm font-medium px-4 py-1.5 rounded-full mb-4',
@@ -48,13 +48,13 @@ export const TreatmentCard = ({ treatment: raw, linkToLanding = true }: Treatmen
       </h3>
 
       {treatment.description && (
-        <p className="text-sm text-neutral-500 leading-relaxed flex-1 mb-4">
+        <p className="text-sm text-neutral-600 leading-relaxed flex-1 mb-4">
           {treatment.description}
         </p>
       )}
 
-      <div className="flex items-center justify-between pt-4 border-t border-neutral-50 mt-auto">
-        <div className="flex items-center gap-1.5 text-neutral-400 text-base">
+      <div className="flex items-center justify-between pt-4 border-t border-cream-200 mt-auto">
+        <div className="flex items-center gap-1.5 text-neutral-500 text-base">
           <Clock className="w-4 h-4" />
           <span>{treatment.duration_min} {MINUTES[lang]}</span>
         </div>
