@@ -1,21 +1,55 @@
 import { Instagram, Facebook, MapPin, Phone, Mail, Clock } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { CLINIC } from '@/config/clinic'
+import { PATHS, bookingHref, hoursLabel, useLang } from '@/i18n'
+import { LANDINGS, landingPath } from '@/content/landings'
 
-const LEGAL_LINKS = [
-  { label: 'Aviso legal', to: '/aviso-legal' },
-  { label: 'Política de privacidad', to: '/privacidad' },
-  { label: 'Política de cookies', to: '/politica-cookies' },
-]
+// Las páginas legales solo existen en castellano.
+const LEGAL_LINKS = {
+  es: [
+    { label: 'Aviso legal', to: '/aviso-legal' },
+    { label: 'Política de privacidad', to: '/privacidad' },
+    { label: 'Política de cookies', to: '/politica-cookies' },
+  ],
+  en: [
+    { label: 'Legal notice', to: '/aviso-legal' },
+    { label: 'Privacy policy', to: '/privacidad' },
+    { label: 'Cookie policy', to: '/politica-cookies' },
+  ],
+}
 
-const NAV_LINKS = [
-  { label: 'Tratamientos', href: '/#tratamientos' },
-  { label: 'Quiénes somos', href: '/#nosotros' },
-  { label: 'Agendar cita', href: '/#agendar' },
-  { label: 'Contacto', href: '/#contacto' },
-]
+const FOOTER = {
+  es: {
+    tagline: `Estudio de estética avanzada en ${CLINIC.address.district}, ${CLINIC.address.city}. Tratamientos personalizados con tecnología de vanguardia.`,
+    contact: 'Contacto',
+    treatments: 'Tratamientos',
+    nav: 'Navegación',
+    links: [
+      { label: 'Todos los tratamientos', to: PATHS.treatments.es },
+      { label: 'Quiénes somos', to: PATHS.about.es },
+      { label: 'Agendar cita', to: bookingHref('es') },
+      { label: 'Contacto', to: PATHS.contact.es },
+    ],
+    rights: 'Todos los derechos reservados.',
+  },
+  en: {
+    tagline: `Advanced aesthetics studio in ${CLINIC.address.district}, ${CLINIC.address.city}. Personalised treatments with cutting-edge technology.`,
+    contact: 'Contact',
+    treatments: 'Treatments',
+    nav: 'Navigation',
+    links: [
+      { label: 'All treatments', to: PATHS.treatments.en },
+      { label: 'About us', to: PATHS.about.en },
+      { label: 'Book now', to: bookingHref('en') },
+      { label: 'Contact', to: PATHS.contact.en },
+    ],
+    rights: 'All rights reserved.',
+  },
+}
 
 export const Footer = () => {
+  const lang = useLang()
+  const t = FOOTER[lang]
   const year = new Date().getFullYear()
 
   return (
@@ -23,14 +57,11 @@ export const Footer = () => {
       <div className="h-px bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
 
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Marca */}
           <div className="space-y-5">
-            <img src="/aesthetica.png" alt="AestheticA" className="h-20 w-auto brightness-0 invert opacity-80" />
-            <p className="text-base leading-relaxed">
-              Centro de estética avanzada en {CLINIC.address.district}, {CLINIC.address.city}.
-              Tratamientos personalizados con tecnología de vanguardia.
-            </p>
+            <img src="/aesthetica.png" alt="AestheticA" width={545} height={313} loading="lazy" className="h-20 w-auto brightness-0 invert opacity-80" />
+            <p className="text-base leading-relaxed">{t.tagline}</p>
             <div className="flex gap-2">
               <a
                 href={CLINIC.contact.instagram_href}
@@ -62,34 +93,34 @@ export const Footer = () => {
           </div>
 
           {/* Contacto — centrado */}
-          <div className="space-y-5 md:text-center">
-            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Contacto</p>
+          <div className="space-y-5">
+            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">{t.contact}</p>
             <address className="not-italic text-base space-y-3">
-              <div className="flex items-start justify-center gap-3">
+              <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
                 <a href={CLINIC.maps.href} target="_blank" rel="noopener noreferrer" className="hover:text-stone-100 transition-colors leading-relaxed text-left">
                   {CLINIC.address.street}<br />
                   {CLINIC.address.district}, {CLINIC.address.zip} {CLINIC.address.city}
                 </a>
               </div>
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-gold-400 shrink-0" />
                 <a href={CLINIC.contact.phone_href} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.phone}
                 </a>
               </div>
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-gold-400 shrink-0" />
                 <a href={`mailto:${CLINIC.contact.email}`} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.email}
                 </a>
               </div>
-              <div className="flex items-start justify-center gap-3">
+              <div className="flex items-start gap-3">
                 <Clock className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
                 <div className="space-y-0.5 text-left">
                   {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
                     <p key={days}>
-                      <span className="text-stone-300">{days}:</span> {time}
+                      <span className="text-stone-300">{hoursLabel(days, lang)}:</span> {hoursLabel(time, lang)}
                     </p>
                   ))}
                 </div>
@@ -97,16 +128,30 @@ export const Footer = () => {
             </address>
           </div>
 
-          {/* Navegación — alineada a la derecha */}
-          <div className="space-y-5 md:text-right md:flex md:flex-col md:items-end">
-            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">Navegación</p>
+          {/* Tratamientos — enlaces internos a cada categoría */}
+          <div className="space-y-5">
+            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">{t.treatments}</p>
             <ul className="text-base space-y-2.5">
-              {NAV_LINKS.map(({ label, href }) => (
-                <li key={href}>
-                  <a href={href} className="flex items-center gap-2 group hover:text-gold-400 transition-colors justify-end">
+              {LANDINGS.filter((l) => l.kind === 'category').map((l) => (
+                <li key={l.key}>
+                  <Link to={landingPath(l, lang)} className="hover:text-gold-400 transition-colors">
+                    {l.label[lang]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Navegación — alineada a la derecha */}
+          <div className="space-y-5 lg:text-right lg:flex lg:flex-col lg:items-end">
+            <p className="text-stone-100 text-base font-medium uppercase tracking-widest">{t.nav}</p>
+            <ul className="text-base space-y-2.5">
+              {t.links.map(({ label, to }) => (
+                <li key={to}>
+                  <Link to={to} className="flex items-center gap-2 group hover:text-gold-400 transition-colors lg:justify-end">
                     {label}
                     <span className="w-3 h-px bg-stone-600 group-hover:w-5 group-hover:bg-gold-400 transition-all duration-200" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -116,10 +161,10 @@ export const Footer = () => {
         {/* Línea inferior */}
         <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-stone-500">
-            © {year} Centro AestheticA. Todos los derechos reservados.
+            © {year} Estudio AestheticA. {t.rights}
           </p>
           <ul className="flex flex-wrap gap-5">
-            {LEGAL_LINKS.map(({ label, to }) => (
+            {LEGAL_LINKS[lang].map(({ label, to }) => (
               <li key={to}>
                 <Link to={to} className="text-sm text-stone-500 hover:text-gold-400 transition-colors">
                   {label}

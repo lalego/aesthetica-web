@@ -1,4 +1,4 @@
-# Arquitectura del proyecto — Clínica AestheticA
+# Arquitectura del proyecto — Estudio AestheticA
 
 ## Visión general
 

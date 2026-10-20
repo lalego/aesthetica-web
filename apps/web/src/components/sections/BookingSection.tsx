@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -7,37 +8,124 @@ import { cn } from '@/lib/utils'
 import { useTreatments } from '@/hooks/useTreatments'
 import { useAvailableSlots } from '@/hooks/useAvailableSlots'
 import { submitBooking } from '@/services/bookingService'
+import { useLang, type Lang } from '@/i18n'
+import { localizeTreatment } from '@/content/treatments-en'
+
+// ── Textos ────────────────────────────────────────────────────────────────────
+
+const COPY = {
+  es: {
+    errors: {
+      name: 'El nombre es obligatorio',
+      email: 'Introduce un email válido',
+      phoneMin: 'Mínimo 9 dígitos',
+      phoneFormat: 'Formato de teléfono no válido',
+      treatment: 'Selecciona un tratamiento',
+      date: 'Selecciona una fecha',
+      pastDate: 'La fecha no puede ser en el pasado',
+      time: 'Selecciona una hora',
+      gdpr: 'Debes aceptar la política de privacidad para continuar',
+    },
+    title: ['Agenda tu', 'cita'],
+    intro: 'Rellena el formulario y te contactaremos en menos de 24 h para confirmar.',
+    successTitle: '¡Solicitud recibida!',
+    successText: 'Nos pondremos en contacto contigo en menos de 24 horas para confirmar tu cita.',
+    again: 'Hacer otra reserva',
+    name: 'Nombre completo',
+    namePh: 'María García',
+    email: 'Email',
+    emailPh: 'hola@ejemplo.es',
+    phone: 'Teléfono',
+    treatment: 'Tratamiento de interés',
+    treatmentPh: 'Selecciona un tratamiento…',
+    date: 'Fecha preferida',
+    time: 'Hora disponible',
+    searching: 'Buscando huecos…',
+    noSlots: 'No hay huecos libres este día, prueba con otra fecha.',
+    notes: 'Notas o consultas (opcional)',
+    notesPh: '¿Tienes alguna duda o preferencia horaria?',
+    gdpr: [
+      'He leído y acepto la ',
+      'Política de privacidad',
+      '. Consiento el tratamiento de mis datos para gestionar mi cita, de conformidad con el RGPD (UE) 2016/679 y la LOPDGDD.',
+    ],
+    sending: 'Enviando…',
+    submit: 'Solicitar cita',
+  },
+  en: {
+    errors: {
+      name: 'Name is required',
+      email: 'Enter a valid email',
+      phoneMin: 'At least 9 digits',
+      phoneFormat: 'Invalid phone number format',
+      treatment: 'Choose a treatment',
+      date: 'Choose a date',
+      pastDate: 'The date cannot be in the past',
+      time: 'Choose a time',
+      gdpr: 'You must accept the privacy policy to continue',
+    },
+    title: ['Book your', 'appointment'],
+    intro: 'Fill in the form and we will contact you within 24 hours to confirm.',
+    successTitle: 'Request received!',
+    successText: 'We will contact you within 24 hours to confirm your appointment.',
+    again: 'Make another booking',
+    name: 'Full name',
+    namePh: 'Jane Smith',
+    email: 'Email',
+    emailPh: 'hello@example.com',
+    phone: 'Phone',
+    treatment: 'Treatment',
+    treatmentPh: 'Choose a treatment…',
+    date: 'Preferred date',
+    time: 'Available time',
+    searching: 'Looking for available times…',
+    noSlots: 'No times available on this day, please try another date.',
+    notes: 'Notes or questions (optional)',
+    notesPh: 'Any questions or preferred times?',
+    gdpr: [
+      'I have read and accept the ',
+      'Privacy policy',
+      ' (in Spanish). I consent to the processing of my data to manage my appointment, in accordance with the GDPR (Regulation (EU) 2016/679, RGPD) and the Spanish LOPDGDD.',
+    ],
+    sending: 'Sending…',
+    submit: 'Request appointment',
+  },
+}
 
 // ── Schema de validación ─────────────────────────────────────────────────────
 
-const bookingSchema = z.object({
-  name: z.string().min(2, 'El nombre es obligatorio'),
-  email: z.string().email('Introduce un email válido'),
-  phone: z
-    .string()
-    .min(9, 'Mínimo 9 dígitos')
-    .regex(/^[+\d\s()-]{9,}$/, 'Formato de teléfono no válido'),
-  treatment_id: z.string().min(1, 'Selecciona un tratamiento'),
-  preferred_date: z
-    .string()
-    .min(1, 'Selecciona una fecha')
-    .refine((d) => new Date(d) >= new Date(new Date().toDateString()), {
-      message: 'La fecha no puede ser en el pasado',
+const makeBookingSchema = (e: (typeof COPY)[Lang]['errors']) =>
+  z.object({
+    name: z.string().min(2, e.name),
+    email: z.string().email(e.email),
+    phone: z
+      .string()
+      .min(9, e.phoneMin)
+      .regex(/^[+\d\s()-]{9,}$/, e.phoneFormat),
+    treatment_id: z.string().min(1, e.treatment),
+    preferred_date: z
+      .string()
+      .min(1, e.date)
+      .refine((d) => new Date(d) >= new Date(new Date().toDateString()), {
+        message: e.pastDate,
+      }),
+    scheduled_at: z.string().min(1, e.time),
+    notes: z.string().optional(),
+    gdpr_consent: z.literal(true, {
+      errorMap: () => ({ message: e.gdpr }),
     }),
-  scheduled_at: z.string().min(1, 'Selecciona una hora'),
-  notes: z.string().optional(),
-  gdpr_consent: z.literal(true, {
-    errorMap: () => ({ message: 'Debes aceptar la política de privacidad para continuar' }),
-  }),
-})
+  })
 
-type BookingSchema = z.infer<typeof bookingSchema>
+type BookingSchema = z.infer<ReturnType<typeof makeBookingSchema>>
 
 // ── Componente ────────────────────────────────────────────────────────────────
 
 export const BookingSection = () => {
+  const lang = useLang()
+  const t = COPY[lang]
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const { data: treatments = [] } = useTreatments()
+  const schema = useMemo(() => makeBookingSchema(t.errors), [t])
 
   const {
     register,
@@ -47,7 +135,7 @@ export const BookingSection = () => {
     setValue,
     formState: { errors },
   } = useForm<BookingSchema>({
-    resolver: zodResolver(bookingSchema),
+    resolver: zodResolver(schema),
     defaultValues: { scheduled_at: '' },
   })
 
@@ -75,7 +163,9 @@ export const BookingSection = () => {
     }
   }
 
-  const today = new Date().toISOString().split('T')[0]
+  // En el cliente y no al renderizar: el HTML prerenderizado llevaría la fecha del build.
+  const [today, setToday] = useState<string>()
+  useEffect(() => setToday(new Date().toISOString().split('T')[0]), [])
 
   return (
     <section id="agendar" className="bg-white py-20">
@@ -83,51 +173,47 @@ export const BookingSection = () => {
         {/* Encabezado */}
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            Agenda tu <span className="font-serif italic text-gold-400">cita</span>
+            {t.title[0]} <span className="font-serif italic text-gold-400">{t.title[1]}</span>
           </h2>
-          <p className="text-neutral-600">
-            Rellena el formulario y te contactaremos en menos de 24 h para confirmar.
-          </p>
+          <p className="text-neutral-600">{t.intro}</p>
         </div>
 
         {/* Estado de éxito */}
         {status === 'success' ? (
           <div className="text-center py-16 space-y-4">
             <CheckCircle className="w-14 h-14 text-gold-400 mx-auto" />
-            <h3 className="text-xl font-light text-neutral-800">¡Solicitud recibida!</h3>
-            <p className="text-neutral-500 max-w-sm mx-auto">
-              Nos pondremos en contacto contigo en menos de 24 horas para confirmar tu cita.
-            </p>
+            <h3 className="text-xl font-light text-neutral-800">{t.successTitle}</h3>
+            <p className="text-neutral-500 max-w-sm mx-auto">{t.successText}</p>
             <button
               onClick={() => setStatus('idle')}
               className="mt-4 text-base text-neutral-400 hover:text-neutral-700 underline transition-colors"
             >
-              Hacer otra reserva
+              {t.again}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
             {/* Nombre */}
-            <Field label="Nombre completo" error={errors.name?.message}>
+            <Field label={t.name} error={errors.name?.message}>
               <input
                 {...register('name')}
                 type="text"
-                placeholder="María García"
+                placeholder={t.namePh}
                 className={inputClass(!!errors.name)}
               />
             </Field>
 
             {/* Email + Teléfono */}
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="Email" error={errors.email?.message}>
+              <Field label={t.email} error={errors.email?.message}>
                 <input
                   {...register('email')}
                   type="email"
-                  placeholder="hola@ejemplo.es"
+                  placeholder={t.emailPh}
                   className={inputClass(!!errors.email)}
                 />
               </Field>
-              <Field label="Teléfono" error={errors.phone?.message}>
+              <Field label={t.phone} error={errors.phone?.message}>
                 <input
                   {...register('phone')}
                   type="tel"
@@ -138,23 +224,23 @@ export const BookingSection = () => {
             </div>
 
             {/* Tratamiento */}
-            <Field label="Tratamiento de interés" error={errors.treatment_id?.message}>
+            <Field label={t.treatment} error={errors.treatment_id?.message}>
               <select
                 {...register('treatment_id')}
                 className={inputClass(!!errors.treatment_id)}
                 defaultValue=""
               >
-                <option value="" disabled>Selecciona un tratamiento…</option>
-                {treatments.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                <option value="" disabled>{t.treatmentPh}</option>
+                {treatments.map((tr) => (
+                  <option key={tr.id} value={tr.id}>
+                    {localizeTreatment(tr, lang).name}
                   </option>
                 ))}
               </select>
             </Field>
 
             {/* Fecha */}
-            <Field label="Fecha preferida" error={errors.preferred_date?.message}>
+            <Field label={t.date} error={errors.preferred_date?.message}>
               <input
                 {...register('preferred_date')}
                 type="date"
@@ -165,13 +251,13 @@ export const BookingSection = () => {
 
             {/* Hora disponible */}
             {treatmentId && preferredDate && (
-              <Field label="Hora disponible" error={errors.scheduled_at?.message}>
+              <Field label={t.time} error={errors.scheduled_at?.message}>
                 {slotsLoading ? (
-                  <p className="text-base text-neutral-500">Buscando huecos…</p>
+                  <p className="text-base text-neutral-500">{t.searching}</p>
                 ) : slots && slots.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {slots.map((iso) => {
-                      const label = new Date(iso).toLocaleTimeString('es-ES', {
+                      const label = new Date(iso).toLocaleTimeString(lang === 'es' ? 'es-ES' : 'en-GB', {
                         hour: '2-digit',
                         minute: '2-digit',
                         timeZone: 'Europe/Madrid',
@@ -195,19 +281,17 @@ export const BookingSection = () => {
                     })}
                   </div>
                 ) : (
-                  <p className="text-base text-neutral-500">
-                    No hay huecos libres este día, prueba con otra fecha.
-                  </p>
+                  <p className="text-base text-neutral-500">{t.noSlots}</p>
                 )}
               </Field>
             )}
 
             {/* Notas */}
-            <Field label="Notas o consultas (opcional)" error={errors.notes?.message}>
+            <Field label={t.notes} error={errors.notes?.message}>
               <textarea
                 {...register('notes')}
                 rows={3}
-                placeholder="¿Tienes alguna duda o preferencia horaria?"
+                placeholder={t.notesPh}
                 className={cn(inputClass(false), 'resize-none')}
               />
             </Field>
@@ -221,12 +305,11 @@ export const BookingSection = () => {
                   className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-gold-400 focus:ring-gold-300"
                 />
                 <span className="text-base text-neutral-600 leading-snug">
-                  He leído y acepto la{' '}
-                  <a href="#privacidad" className="underline hover:text-neutral-900">
-                    Política de privacidad
-                  </a>
-                  . Consiento el tratamiento de mis datos para gestionar mi cita, de
-                  conformidad con el RGPD (UE) 2016/679 y la LOPDGDD.
+                  {t.gdpr[0]}
+                  <Link to="/privacidad" target="_blank" className="underline hover:text-neutral-900">
+                    {t.gdpr[1]}
+                  </Link>
+                  {t.gdpr[2]}
                 </span>
               </label>
               {errors.gdpr_consent && (
@@ -243,10 +326,10 @@ export const BookingSection = () => {
               {status === 'loading' ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Enviando…
+                  {t.sending}
                 </>
               ) : (
-                'Solicitar cita'
+                t.submit
               )}
             </button>
           </form>

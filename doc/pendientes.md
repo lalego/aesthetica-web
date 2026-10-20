@@ -20,6 +20,18 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 - [ ] Filtro por año o trimestre en `/facturas`, y exportación CSV para el gestor (base, IVA, total).
 - [ ] Automatizar el envío al gestor. Hoy se hace a mano: se suben los PDFs a Dropbox y luego se le manda un correo. Falta decidir cómo hacerlo (botón en `/facturas`, cron trimestral…). Los PDFs no se guardan, así que habría que generarlos con `renderInvoicePdf()`.
 
+## SEO de la web
+
+- [x] Prerender, páginas de tratamientos en castellano e inglés, metadatos, JSON-LD `BeautySalon`, sitemap, robots e imágenes WebP (2026-10-20)
+- [ ] Cambiar en el panel (`/tratamientos`) las descripciones que hablan de agujas o de lenguaje médico: Carboxiterapia ("Microinyecciones de CO₂"), Mesoterapia corporal ("Microinyecciones…"), Microneedling ("Microagujas…") y Peeling Dermatology ("Peeling médico…"). Decidir también si se renombran Microneedling y Mesoterapia, porque los nombres ya implican aguja. Después, redesplegar la web para que el HTML recoja el cambio.
+- [ ] Unificar las cifras: el Hero dice "+1.200 clientes · 31 tratamientos" y "Quiénes somos" dice "+800 · 15+".
+- [ ] Revisar los textos de `apps/web/src/content/landings.ts` con Alena (número de sesiones, aparatos, precios "desde"). Están redactados con información general, no con la del estudio.
+- [ ] Google Search Console: verificar el dominio (registro DNS en Cloudflare) y enviar `https://aestheticavanzada.com/sitemap.xml`.
+- [ ] Google Business Profile: poner `https://aestheticavanzada.com` como web, revisar que el nombre, la dirección y el teléfono coincidan con `clinic.ts` y añadir los servicios con enlace a su página.
+- [ ] Rich Results Test (https://search.google.com/test/rich-results) sobre la portada y una página de tratamiento, tras el despliegue.
+- [ ] Rendimiento: el JS pesa ~160 KB comprimido, sobre todo `@supabase/supabase-js`. Se podría cargar el formulario de reserva y Supabase bajo demanda, o llamar a las RPC con `fetch`. También se podrían alojar las fuentes en el propio dominio en vez de usar Google Fonts.
+- [ ] Hacer un deploy hook de Cloudflare Pages para redesplegar cuando cambien los tratamientos en el panel.
+
 ## Entorno y producto
 
 - [x] Arreglar ESLint en `apps/admin` (2026-10-18, con `packageExtensions` en `pnpm-workspace.yaml`)

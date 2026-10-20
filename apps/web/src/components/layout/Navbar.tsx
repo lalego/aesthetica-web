@@ -1,19 +1,53 @@
 import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CLINIC } from '@/config/clinic'
+import { PATHS, bookingHref, usePage, type Lang } from '@/i18n'
 
-const NAV_LINKS = [
-  { label: 'Tratamientos', href: '#tratamientos' },
-  { label: 'Quiénes somos', href: '#nosotros' },
-  { label: 'Contacto', href: '#contacto' },
-]
+const NAV = {
+  es: {
+    links: [
+      { label: 'Tratamientos', to: PATHS.treatments.es },
+      { label: 'Quiénes somos', to: PATHS.about.es },
+      { label: 'Contacto', to: PATHS.contact.es },
+    ],
+    book: 'Agendar cita',
+    open: 'Abrir menú',
+    close: 'Cerrar menú',
+    switchLabel: 'English version',
+  },
+  en: {
+    links: [
+      { label: 'Treatments', to: PATHS.treatments.en },
+      { label: 'About us', to: PATHS.about.en },
+      { label: 'Contact', to: PATHS.contact.en },
+    ],
+    book: 'Book now',
+    open: 'Open menu',
+    close: 'Close menu',
+    switchLabel: 'Versión en castellano',
+  },
+}
 
-const BOOKING_HREF = '#agendar'
+/** Botón de reserva: baja al formulario si está en la página; si no, va a la portada. */
+const useBookingClick = (lang: Lang) => {
+  const navigate = useNavigate()
+  return (e: React.MouseEvent) => {
+    e.preventDefault()
+    const form = document.getElementById('agendar')
+    if (form) form.scrollIntoView({ behavior: 'smooth' })
+    else navigate(bookingHref(lang))
+  }
+}
 
 export const Navbar = () => {
+  const { lang, altPath } = usePage()
+  const t = NAV[lang]
+  const other: Lang = lang === 'es' ? 'en' : 'es'
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const onBook = useBookingClick(lang)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -21,10 +55,16 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleNavClick = (href: string) => {
-    setMenuOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const langSwitch = (
+    <Link
+      to={altPath ?? PATHS.home[other]}
+      hrefLang={other}
+      aria-label={t.switchLabel}
+      className="text-sm font-medium uppercase tracking-widest text-neutral-500 hover:text-gold-500 transition-colors"
+    >
+      {other}
+    </Link>
+  )
 
   return (
     <header
@@ -40,40 +80,39 @@ export const Navbar = () => {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           className="md:hidden p-2 text-neutral-700 z-10"
-          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={menuOpen ? t.close : t.open}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
 
         {/* Logo — centrado en móvil (absolute), izquierda en desktop (static) */}
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+        <Link
+          to={PATHS.home[lang]}
           className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
         >
           <img
             src="/aesthetica.png"
-            alt="Centro AestheticA"
+            alt="AestheticA — Estética Avanzada"
+            width={545}
+            height={313}
             className="h-28 w-auto mix-blend-multiply"
           />
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={href}>
-              <button
-                onClick={() => handleNavClick(href)}
-                className="text-lg text-neutral-600 hover:text-gold-500 transition-colors"
-              >
+          {t.links.map(({ label, to }) => (
+            <li key={to}>
+              <Link to={to} className="text-lg text-neutral-600 hover:text-gold-500 transition-colors">
                 {label}
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3">
+          {langSwitch}
           <a
             href={CLINIC.contact.phone_href}
             className="inline-flex items-center gap-2 border border-gold-300 text-gold-500 text-lg px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
@@ -81,16 +120,17 @@ export const Navbar = () => {
             <Phone className="w-4 h-4" />
             {CLINIC.contact.phone.replace('+34 ', '')}
           </a>
-          <button
-            onClick={() => handleNavClick(BOOKING_HREF)}
+          <a
+            href={bookingHref(lang)}
+            onClick={onBook}
             className="inline-flex items-center bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
           >
-            Agendar cita
-          </button>
+            {t.book}
+          </a>
         </div>
 
-        {/* Espaciador móvil derecha para equilibrar el hamburger izquierdo */}
-        <div className="md:hidden w-10 h-10" aria-hidden="true" />
+        {/* Selector de idioma en móvil, a la derecha para equilibrar el hamburger */}
+        <div className="md:hidden w-10 h-10 flex items-center justify-center">{langSwitch}</div>
       </nav>
 
       {/* Botones fijos bajo el logo — móvil, siempre visibles */}
@@ -102,25 +142,27 @@ export const Navbar = () => {
           <Phone className="w-4 h-4" />
           {CLINIC.contact.phone.replace('+34 ', '')}
         </a>
-        <button
-          onClick={() => handleNavClick(BOOKING_HREF)}
+        <a
+          href={bookingHref(lang)}
+          onClick={onBook}
           className="bg-gold-400 text-white text-sm px-4 py-2 rounded-full hover:bg-gold-500 transition-colors"
         >
-          Agendar cita
-        </button>
+          {t.book}
+        </a>
       </div>
 
       {/* Mobile menu — solo links de navegación */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-4 flex flex-col gap-1">
-          {NAV_LINKS.map(({ label, href }) => (
-            <button
-              key={href}
-              onClick={() => handleNavClick(href)}
+          {t.links.map(({ label, to }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setMenuOpen(false)}
               className="text-left text-base text-neutral-700 hover:text-gold-500 py-3 border-b border-neutral-100 transition-colors"
             >
               {label}
-            </button>
+            </Link>
           ))}
         </div>
       )}

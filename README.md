@@ -1,6 +1,6 @@
 # AestheticA
 
-Monorepo de las aplicaciones de Clínica AestheticA. Usa pnpm workspaces para los paquetes y Turborepo para ejecutar tareas en paralelo.
+Monorepo de las aplicaciones de Estudio AestheticA. Usa pnpm workspaces para los paquetes y Turborepo para ejecutar tareas en paralelo.
 
 ## Aplicaciones
 

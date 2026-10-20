@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import type { Treatment } from '@/types'
 
-// Servicios reales de Clínica AestheticA (fuente: Booksy)
+// Servicios reales de Estudio AestheticA (fuente: Booksy)
 export const MOCK_TREATMENTS: Treatment[] = [
   // ── ESTÉTICA FACIAL ──────────────────────────────────────────────────────
   {
@@ -408,7 +408,7 @@ export const MOCK_TREATMENTS: Treatment[] = [
     id: 'b6',
     name: 'Tarjeta de Regalo',
     category: 'bienestar',
-    description: 'Regala una experiencia única en Clínica AestheticA a quien más quieras.',
+    description: 'Regala una experiencia única en Estudio AestheticA a quien más quieras.',
     duration_min: 60,
     price_eur: 60,
     is_active: true,

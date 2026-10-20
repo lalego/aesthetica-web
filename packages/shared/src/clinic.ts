@@ -28,9 +28,19 @@ export const CLINIC = {
     embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3081.5!2d-0.3699511!3d39.460555!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd60498e46207ae1%3A0xc9ea27b0cef8f594!2sAestheticA!5e0!3m2!1ses!2ses!4v1',
   },
 
+  geo: { latitude: 39.4604317, longitude: -0.3698608 },
+
+  website: 'https://aestheticavanzada.com',
+
   hours: [
     { days: 'Lun – Vie', time: '10:00 – 20:00' },
     { days: 'Sábado',    time: '10:00 – 18:00' },
     { days: 'Domingo',   time: 'Cerrado' },
+  ],
+
+  // Mismo horario que `hours`, en el formato de schema.org (JSON-LD).
+  opening_hours: [
+    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '10:00', closes: '20:00' },
+    { days: ['Saturday'], opens: '10:00', closes: '18:00' },
   ],
 } as const

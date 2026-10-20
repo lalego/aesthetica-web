@@ -1,4 +1,4 @@
--- Clínica AestheticA — esquema Supabase
+-- Estudio AestheticA — esquema Supabase
 -- Ejecutar completo en el SQL Editor de Supabase (proyecto nuevo, en orden).
 -- Fuente de verdad para las tablas descritas en CLAUDE.md: treatments, patients,
 -- specialists, appointments, treatment_history — todas con RLS habilitado.
@@ -353,7 +353,7 @@ insert into storage.buckets (id, name, public)
 values ('invoice-templates', 'invoice-templates', false)
 on conflict (id) do nothing;
 
--- ── Seed: tratamientos reales de Clínica AestheticA (fuente: Booksy) ───────
+-- ── Seed: tratamientos reales de Estudio AestheticA (fuente: Booksy) ───────
 -- Mismos datos que MOCK_TREATMENTS en apps/web/src/services/treatmentService.ts,
 -- para que el paso de mock -> Supabase sea transparente (mismos ids/nombres/precios).
 
@@ -394,7 +394,7 @@ insert into treatments (id, name, category, description, duration_min, price_eur
   ('b3', 'Pack Belleza para Novias — Premium', 'bienestar', 'Versión premium del pack nupcial con tratamientos exclusivos de mayor profundidad.', 90, 699, true, null),
   ('b4', 'Momento de Bienestar para Dos', 'bienestar', 'Experiencia de relajación compartida, ideal para regalar o disfrutar en pareja.', 45, 99, true, null),
   ('b5', 'Ritual de Relax para Dos', 'bienestar', 'Ritual de bienestar extendido para dos personas con masaje y tratamiento facial.', 105, 199, true, null),
-  ('b6', 'Tarjeta de Regalo', 'bienestar', 'Regala una experiencia única en Clínica AestheticA a quien más quieras.', 60, 60, true, null)
+  ('b6', 'Tarjeta de Regalo', 'bienestar', 'Regala una experiencia única en Estudio AestheticA a quien más quieras.', 60, 60, true, null)
 on conflict (id) do nothing;
 
 -- ── Seed: servicios de PdfFormFiller (inactivos, solo para facturar) ──────

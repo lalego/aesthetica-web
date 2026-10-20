@@ -1,35 +1,41 @@
 import { useState } from 'react'
-import { Clock, ChevronRight } from 'lucide-react'
 import { useTreatments } from '@/hooks/useTreatments'
 import type { TreatmentCategory } from '@/types'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/i18n'
+import { TreatmentCard } from '@/components/TreatmentCard'
+import { CATEGORY_LABELS } from '@/content/pages'
 
 type FilterOption = TreatmentCategory | 'todos'
 
-const FILTERS: { label: string; value: FilterOption }[] = [
-  { label: 'Todos',      value: 'todos' },
-  { label: 'Facial',     value: 'facial' },
-  { label: 'Corporal',   value: 'corporal' },
-  { label: 'Láser',      value: 'laser' },
-  { label: 'Capilar',    value: 'capilar' },
-  { label: 'Bienestar',  value: 'bienestar' },
-]
+const FILTERS: FilterOption[] = ['todos', 'facial', 'corporal', 'laser', 'capilar', 'bienestar']
 
-const CATEGORY_COLORS: Record<TreatmentCategory, string> = {
-  facial:    'bg-gold-100 text-gold-600',
-  corporal:  'bg-stone-100 text-stone-600',
-  laser:     'bg-violet-50 text-violet-600',
-  capilar:   'bg-teal-50 text-teal-600',
-  bienestar: 'bg-amber-50 text-amber-700',
+const COPY = {
+  es: {
+    title: ['Nuestros', 'tratamientos'],
+    intro: 'Protocolos personalizados diseñados para resultados naturales y duraderos.',
+    all: 'Todos',
+    error: 'No se pudieron cargar los tratamientos. Inténtalo más tarde.',
+    empty: 'No hay tratamientos en esta categoría todavía.',
+  },
+  en: {
+    title: ['Our', 'treatments'],
+    intro: 'Personalised protocols designed for natural, long-lasting results.',
+    all: 'All',
+    error: 'Treatments could not be loaded. Please try again later.',
+    empty: 'There are no treatments in this category yet.',
+  },
 }
 
 export const TreatmentsSection = () => {
+  const lang = useLang()
+  const t = COPY[lang]
   const [active, setActive] = useState<FilterOption>('todos')
   const { data: treatments = [], isLoading, isError } = useTreatments()
 
   const filtered = active === 'todos'
     ? treatments
-    : treatments.filter((t) => t.category === active)
+    : treatments.filter((tr) => tr.category === active)
 
   return (
     <section id="tratamientos" className="bg-neutral-50 py-20">
@@ -37,17 +43,14 @@ export const TreatmentsSection = () => {
         {/* Encabezado */}
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            Nuestros <span className="font-serif italic text-gold-400">tratamientos</span>
+            {t.title[0]} <span className="font-serif italic text-gold-400">{t.title[1]}</span>
           </h2>
-          <p className="text-neutral-600 max-w-xl mx-auto">
-            Protocolos personalizados diseñados para resultados
-            naturales y duraderos.
-          </p>
+          <p className="text-neutral-600 max-w-xl mx-auto">{t.intro}</p>
         </div>
 
         {/* Filtros de categoría */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {FILTERS.map(({ label, value }) => (
+          {FILTERS.map((value) => (
             <button
               key={value}
               onClick={() => setActive(value)}
@@ -58,7 +61,7 @@ export const TreatmentsSection = () => {
                   : 'bg-white text-neutral-600 border border-neutral-200 hover:border-gold-300 hover:text-gold-500'
               )}
             >
-              {label}
+              {value === 'todos' ? t.all : CATEGORY_LABELS[value][lang]}
             </button>
           ))}
         </div>
@@ -78,72 +81,21 @@ export const TreatmentsSection = () => {
         )}
 
         {isError && (
-          <p className="text-center text-neutral-500 py-12">
-            No se pudieron cargar los tratamientos. Inténtalo más tarde.
-          </p>
+          <p className="text-center text-neutral-500 py-12">{t.error}</p>
         )}
 
         {/* Grid de tarjetas */}
         {!isLoading && !isError && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((treatment) => (
-              <article
-                key={treatment.id}
-                className="bg-white rounded-2xl p-6 border border-neutral-100 hover:shadow-md transition-shadow duration-300 flex flex-col"
-              >
-                {/* Badge de categoría */}
-                <span className={cn(
-                  'self-start text-sm font-medium px-4 py-1.5 rounded-full capitalize mb-4',
-                  CATEGORY_COLORS[treatment.category]
-                )}>
-                  {treatment.category}
-                </span>
-
-                <h3 className="text-xl font-medium text-neutral-800 mb-2">
-                  {treatment.name}
-                </h3>
-
-                {treatment.description && (
-                  <p className="text-sm text-neutral-500 leading-relaxed flex-1 mb-4">
-                    {treatment.description}
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between pt-4 border-t border-neutral-50">
-                  <div className="flex items-center gap-1.5 text-neutral-400 text-base">
-                    <Clock className="w-4 h-4" />
-                    <span>{treatment.duration_min} min</span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    {treatment.price_eur && (
-                      <span className="text-neutral-800 font-medium text-base">
-                        {treatment.price_eur.toLocaleString('es-ES', {
-                          style: 'currency',
-                          currency: 'EUR',
-                          maximumFractionDigits: 0,
-                        })}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="text-gold-400 hover:text-gold-600 transition-colors"
-                      aria-label={`Agendar ${treatment.name}`}
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </article>
+              <TreatmentCard key={treatment.id} treatment={treatment} />
             ))}
           </div>
         )}
 
         {/* Sin resultados */}
         {!isLoading && !isError && filtered.length === 0 && (
-          <p className="text-center text-neutral-400 py-12">
-            No hay tratamientos en esta categoría todavía.
-          </p>
+          <p className="text-center text-neutral-400 py-12">{t.empty}</p>
         )}
       </div>
     </section>

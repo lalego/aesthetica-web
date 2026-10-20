@@ -1,0 +1,7 @@
+# Cloudflare Pages: los ficheros de /assets llevan hash en el nombre, así que
+# se pueden cachear para siempre. Las imágenes de /img, un mes.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/img/*
+  Cache-Control: public, max-age=2592000

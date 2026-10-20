@@ -1,5 +1,25 @@
 import { MapPin, Phone, Instagram, Clock, Facebook } from 'lucide-react'
 import { CLINIC } from '@/config/clinic'
+import { hoursLabel, useLang } from '@/i18n'
+
+const COPY = {
+  es: {
+    title: 'Visítanos',
+    intro: `Estamos en ${CLINIC.address.district}, ${CLINIC.address.city}. Agenda tu evaluación sin compromiso.`,
+    address: 'Dirección',
+    phone: 'Teléfono',
+    hours: 'Horarios',
+    map: 'Ubicación',
+  },
+  en: {
+    title: 'Visit us',
+    intro: `We are in ${CLINIC.address.district}, Valencia. Book your no-obligation assessment.`,
+    address: 'Address',
+    phone: 'Phone',
+    hours: 'Opening hours',
+    map: 'Location',
+  },
+}
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
@@ -8,16 +28,17 @@ const WhatsAppIcon = () => (
 )
 
 export const ContactSection = () => {
+  const lang = useLang()
+  const t = COPY[lang]
+
   return (
     <section id="contacto" className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-light text-neutral-800 mb-4">
-            Visítanos
+            {t.title}
           </h2>
-          <p className="text-neutral-600 max-w-xl mx-auto">
-            Estamos en Ruzafa, València. Agenda tu evaluación sin compromiso.
-          </p>
+          <p className="text-neutral-600 max-w-xl mx-auto">{t.intro}</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
@@ -26,7 +47,7 @@ export const ContactSection = () => {
             <div className="flex gap-4">
               <MapPin className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="font-medium text-neutral-800 mb-1">Dirección</h3>
+                <h3 className="font-medium text-neutral-800 mb-1">{t.address}</h3>
                 <a
                   href={CLINIC.maps.href}
                   target="_blank"
@@ -43,7 +64,7 @@ export const ContactSection = () => {
             <div className="flex gap-4">
               <Phone className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="font-medium text-neutral-800 mb-1">Teléfono</h3>
+                <h3 className="font-medium text-neutral-800 mb-1">{t.phone}</h3>
                 <a href={CLINIC.contact.phone_href} className="text-neutral-600 hover:text-gold-500 transition-colors">
                   {CLINIC.contact.phone}
                 </a>
@@ -54,10 +75,10 @@ export const ContactSection = () => {
             <div className="flex gap-4">
               <Clock className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="font-medium text-neutral-800 mb-1">Horarios</h3>
+                <h3 className="font-medium text-neutral-800 mb-1">{t.hours}</h3>
                 {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
                   <p key={days} className="text-neutral-600 text-sm">
-                    <span className="font-medium">{days}:</span> {time}
+                    <span className="font-medium">{hoursLabel(days, lang)}:</span> {hoursLabel(time, lang)}
                   </p>
                 ))}
               </div>
@@ -104,7 +125,7 @@ export const ContactSection = () => {
               style={{ border: 0 }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title={`Ubicación ${CLINIC.name} — ${CLINIC.address.district}, ${CLINIC.address.city}`}
+              title={`${t.map} ${CLINIC.name} — ${CLINIC.address.district}, ${CLINIC.address.city}`}
             />
           </div>
         </div>
