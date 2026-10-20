@@ -12,6 +12,7 @@ Dónde está cada cosa (una sola fuente por tema):
 | Tablas, RLS y RPC | [docs/DATABASE.md](docs/DATABASE.md) (el SQL de verdad es `supabase/schema.sql`) |
 | Variables de entorno, Supabase local y comandos | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) |
 | Tareas pendientes | [doc/pendientes.md](doc/pendientes.md) (al cerrar una, márcala allí) |
+| Versiones y novedades | [CHANGELOG.md](CHANGELOG.md) (al terminar algo visible, apúntalo en "Sin publicar") |
 | Qué pasó y por qué (no son instrucciones) | [doc/historial.md](doc/historial.md) |
 | Particularidades de esta máquina (Node, Docker) | `CLAUDE.local.md` (no versionado) |
 
