@@ -37,3 +37,13 @@ Llevaba ~1 mes roto desde la migración a monorepo. El sitio seguía sirviendo e
 ## 2026-10-18 — Reorganización de la documentación
 
 `CLAUDE.md` mezclaba estado actual, historia y tareas, y contradecía al código: decía que no había tests, que no había UI de usuarios y que no había Supabase CLI. Se separó en `CLAUDE.md` (lo vigente), `docs/` (referencia técnica), `doc/pendientes.md`, este archivo y `CLAUDE.local.md` (lo de esta máquina).
+
+## 2026-10-20 — SEO de la web y cambio de "Clínica" a "Estudio"
+
+- El encargo pedía Next.js (`metadata`, `sitemap.js`), pero la web es Vite. Se prefirió prerenderizar en el build en vez de migrar, porque da el mismo HTML para Google, se queda en Cloudflare Pages sin adaptador (OpenNext) y no obliga a reescribir. Se hizo a mano (Vite SSR + `scripts/prerender.mjs`) para no añadir dependencias.
+- Antes había una sola URL, el `<div id="root">` llegaba vacío y `_redirects` devolvía la portada con 200 en cualquier ruta. Ni WhatsApp ni Instagram mostraban vista previa.
+- Decisiones con el usuario: solo estética (sin personal sanitario), así que el schema es `BeautySalon` y no `MedicalBusiness`, y los tratamientos son sin aguja. Idiomas castellano e inglés (traducción de Claude). Los tratamientos estrella (Hydroface Plus, Hollywood Peeling, fotorejuvenecimiento, radiofrecuencia y presoterapia, además de la depilación láser como categoría) se eligieron sin datos de volumen de búsqueda.
+- No se usa `aggregateRating` con las 66 reseñas de Google Business Profile: Google no muestra estrellas que un negocio publica sobre sí mismo.
+- El usuario pidió llamar al negocio "Estudio" en vez de "Clínica" en todas partes. En España, "clínica" suele implicar un centro sanitario registrado. Se mantuvo "centro de estética" en algunos textos porque es una búsqueda habitual.
+- Las imágenes se convirtieron a WebP una sola vez con `sharp`, fuera del repo. Los JPEG originales siguen en `public/`, porque `hero-clinic.jpeg` se usa en el JSON-LD.
+- Lo que falta (revisar textos, descripciones con agujas en la base de datos, Search Console, peso del JS) está en `pendientes.md`.
