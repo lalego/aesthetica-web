@@ -14,7 +14,8 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 
 ## Sin publicar
 
-_Nada todavía._
+### Novedades
+- La versión se ve en el pie del menú del panel, con un enlace a estas novedades.
 
 ## 1.0.0 — 2026-10-20
 

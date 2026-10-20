@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Calendar, Users, Sparkles, FileText, LogOut, UserCog } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/auth-actions'
+import { APP_VERSION, CHANGELOG_URL } from '@/lib/version'
 
 const NAV_ITEMS = [
   { href: '/citas',         label: 'Citas',          icon: Calendar  },
@@ -56,6 +57,14 @@ export function AppSidebar({ userEmail }: AppSidebarProps) {
             Cerrar sesión
           </button>
         </form>
+        <a
+          href={CHANGELOG_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block px-3 pt-2 text-xs text-muted-foreground hover:text-sidebar-foreground"
+        >
+          v{APP_VERSION} · Novedades
+        </a>
       </div>
     </aside>
   )
