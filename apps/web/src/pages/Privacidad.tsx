@@ -12,7 +12,7 @@ export const Privacidad = () => {
         </Link>
 
         <h1 className="text-3xl font-light text-neutral-800 mb-2">Política de Privacidad</h1>
-        <p className="text-sm text-neutral-400 mb-10">Última actualización: junio 2025</p>
+        <p className="text-sm text-neutral-400 mb-10">Última actualización: octubre 2026</p>
 
         <div className="space-y-8 text-neutral-600 leading-relaxed">
 

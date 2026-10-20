@@ -17,6 +17,9 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 ### Novedades
 - La versión se ve en el pie del menú del panel, con un enlace a estas novedades.
 
+### Cambios
+- El email de contacto de la web y de las páginas legales pasa a ser **info@aestheticavanzada.com**, y el aviso legal cita el dominio `aestheticavanzada.com`.
+
 ## 1.0.0 — 2026-10-20
 
 La web pasa a estar preparada para Google y para clientes que no hablan castellano.

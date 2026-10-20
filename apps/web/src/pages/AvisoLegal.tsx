@@ -12,7 +12,7 @@ export const AvisoLegal = () => {
         </Link>
 
         <h1 className="text-3xl font-light text-neutral-800 mb-2">Aviso Legal</h1>
-        <p className="text-sm text-neutral-400 mb-10">Última actualización: junio 2025</p>
+        <p className="text-sm text-neutral-400 mb-10">Última actualización: octubre 2026</p>
 
         <div className="prose prose-neutral max-w-none space-y-8 text-neutral-600 leading-relaxed">
 
@@ -30,7 +30,7 @@ export const AvisoLegal = () => {
 
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-neutral-800">2. Objeto y ámbito de aplicación</h2>
-            <p>El presente Aviso Legal regula el acceso y uso del sitio web <strong>aesthetica-web.pages.dev</strong> (en adelante, "el Sitio Web"), titularidad de Alena Martseniuk, que ofrece información sobre los servicios de estética avanzada de Centro AestheticA.</p>
+            <p>El presente Aviso Legal regula el acceso y uso del sitio web <strong>{new URL(CLINIC.website).host}</strong> (en adelante, "el Sitio Web"), titularidad de Alena Martseniuk, que ofrece información sobre los servicios de estética avanzada de Centro AestheticA.</p>
             <p>El acceso al Sitio Web implica la aceptación plena y sin reservas de las presentes condiciones.</p>
           </section>
 
