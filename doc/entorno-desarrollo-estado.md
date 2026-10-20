@@ -35,19 +35,13 @@ Contexto: en este equipo no hay permisos de admin, así que no se pudo instalar 
 - `node_modules` se había creado antes de `hoist=false` (`ERR_PNPM_HOIST_PATTERN_DIFF`); se regeneró con `pnpm install` (~4 min).
 - ESLint de `apps/admin` falla con `Cannot find module 'next/dist/compiled/babel/eslint-parser'` (consecuencia de `hoist=false`). Arreglado el 2026-10-18 (ver `historial.md`).
 
-## Pendiente
+## Pendiente (cerrado el 2026-10-20)
 
-- [ ] Rellenar `apps/web/.env.local`, `apps/admin/.env.local` **y las variables de entorno reales de Supabase en Cloudflare Pages/Vercel** (siguen todas con placeholders; el mock fallback funciona en local pero no hay datos reales en ningún entorno).
-- [ ] Verificar `apps/admin` (Next.js) arranca correctamente en local — todavía no se ha probado (solo se ha comprobado `apps/web`).
-- [ ] Confirmar si `apps/admin` está realmente conectado a un proyecto de Vercel: no se encontró ninguna GitHub App de Vercel instalada en `lalego/aesthetica-web` (solo está la de Cloudflare Workers and Pages), así que es posible que el despliegue de admin en Vercel **no exista todavía** o esté en otra cuenta/organización.
-- [ ] Decidir si hace falta `pnpm approve-builds` para `esbuild`/`unrs-resolver` (de momento no ha hecho falta).
+- [x] Variables de Supabase. **Producción:** Cloudflare Pages y Vercel tienen las reales; la web publicada saca los precios de la base de datos y el panel lee las facturas. **Local:** `apps/admin/.env.local` y `apps/web/.env.local` apuntan al Supabase local (`http://127.0.0.1:54321`, claves de demo). `NEXTAUTH_SECRET` ya no se usa.
+- [x] `apps/admin` arranca en local (`next dev`, puerto 3000).
+- [x] `apps/admin` está conectado a Vercel: proyecto `aesthetica-web-admin` (team `aesthetica1`), que despliega en cada push a `main`.
+- [x] `pnpm approve-builds` para `esbuild`/`unrs-resolver`: no hace falta. Los builds de web y admin funcionan en local, en Cloudflare y en Vercel.
 
 ## Cómo continuar
 
-```cmd
-call D:\tools\env-node18.bat
-cd C:\wpi\aesthetica-web
-pnpm dev                                  :: todos los apps
-pnpm dev --filter=@aesthetica/web         :: solo landing
-pnpm dev --filter=@aesthetica/admin       :: solo admin
-```
+Este documento es histórico: describe la primera puesta en marcha en otra máquina (`D:\tools` y `C:\wpi` ya no existen). Lo vigente está en `docs/DEVELOPMENT.md` (comandos, variables y Supabase local) y, para esta máquina, en `CLAUDE.local.md`.
