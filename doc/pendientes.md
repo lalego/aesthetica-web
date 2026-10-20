@@ -6,11 +6,11 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 
 - [x] Commit de los cambios de facturación (4cbef38, d570df1)
 - [x] Probar en local (2026-10-18): Supabase local con schema, plantilla e histórico. `/facturas` muestra las 42 y el PDF sale bien.
-- [ ] Ejecutar `supabase/migrations/20261017_facturas.sql` en el SQL Editor de producción
-- [ ] Ejecutar `supabase/migrations/20261017_servicios_pdfformfiller.sql`. Tiene que ir antes de la importación, porque las líneas antiguas apuntan a estos tratamientos.
-- [ ] Subir `PdfFormFiller/src/main/resources/formulario.pdf` a Storage → bucket `invoice-templates` → `formulario.pdf`
-- [ ] Ejecutar `PdfFormFiller/dev/migracion-aesthetica-web/import-facturas-historicas.sql` (la comprobación del final debe dar 42 facturas)
-- [ ] Push a `main` (a 2026-10-18, `main` va 6 commits por delante de `origin/main`). Esto despliega en Vercel, así que conviene hacerlo después de los pasos de base de datos.
+- [x] Ejecutar `supabase/migrations/20261017_facturas.sql` en el SQL Editor de producción (2026-10-20)
+- [x] (2026-10-20) Ejecutar `supabase/migrations/20261017_servicios_pdfformfiller.sql`. Tiene que ir antes de la importación, porque las líneas antiguas apuntan a estos tratamientos.
+- [x] (2026-10-20) Subir `PdfFormFiller/src/main/resources/formulario.pdf` a Storage → bucket `invoice-templates` → `formulario.pdf`
+- [x] Ejecutar `PdfFormFiller/dev/migracion-aesthetica-web/import-facturas-historicas.sql` (2026-10-20: 42 facturas, seq 10–51, 3533,00 €; la siguiente es la 0052)
+- [x] Push a `main` (2026-10-20, después de los pasos de base de datos)
 - [ ] Probar en producción: el listado tiene 42 facturas, se descarga una antigua y se emite una nueva (debe salir `…-0052-2026`), tanto desde `/facturas` como desde "Facturar" en una cita completada.
 
 ## Mejoras de facturación
@@ -33,6 +33,9 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 - [ ] Hacer un deploy hook de Cloudflare Pages para redesplegar cuando cambien los tratamientos en el panel.
 
 ## Entorno y producto
+
+- [ ] Evitar que Supabase Free pause el proyecto por inactividad (estaba pausado el 2026-10-20): tarea programada que haga una consulta cada pocos días (GitHub Actions o Cron Trigger de Cloudflare), o pasar a Pro.
+- [ ] `BookingSection` muestra "¡Solicitud recibida!" aunque `submitBooking` falle (el `catch` pone `success`). Mientras Supabase estuvo pausado, las reservas se perdían sin aviso. Debe mostrar un error con el teléfono y WhatsApp.
 
 - [x] Arreglar ESLint en `apps/admin` (2026-10-18, con `packageExtensions` en `pnpm-workspace.yaml`)
 - [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)
