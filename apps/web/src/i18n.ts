@@ -21,12 +21,16 @@ export const PageContext = createContext<PageContextValue>({ lang: 'es' })
 export const usePage = () => useContext(PageContext)
 export const useLang = () => useContext(PageContext).lang
 
-/** Rutas fijas por idioma. Las de tratamientos están en `content/landings.ts`. */
+/**
+ * Rutas fijas por idioma. Las de tratamientos están en `content/landings.ts`.
+ * El ucraniano usa el código de idioma `uk` (ISO 639-1, el que pide hreflang)
+ * pero se sirve en `/ua` (el país), para que nadie lo confunda con Reino Unido.
+ */
 export const PATHS = {
-  home:       { es: '/',               en: '/en',            uk: '/uk' },
-  treatments: { es: '/tratamientos',   en: '/en/treatments', uk: '/uk/treatments' },
-  about:      { es: '/sobre-nosotros', en: '/en/about',      uk: '/uk/about' },
-  contact:    { es: '/contacto',       en: '/en/contact',    uk: '/uk/contact' },
+  home:       { es: '/',               en: '/en',            uk: '/ua' },
+  treatments: { es: '/tratamientos',   en: '/en/treatments', uk: '/ua/treatments' },
+  about:      { es: '/sobre-nosotros', en: '/en/about',      uk: '/ua/about' },
+  contact:    { es: '/contacto',       en: '/en/contact',    uk: '/ua/contact' },
 } as const satisfies Record<string, Record<Lang, string>>
 
 /** Enlace al formulario de reserva, que está en la portada de cada idioma. */

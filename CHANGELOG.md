@@ -15,7 +15,7 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 ## Sin publicar
 
 ### Novedades
-- **Versión en ucraniano** en `/uk`: todas las páginas, los tratamientos y el formulario de reserva. El menú muestra las banderas de los otros dos idiomas.
+- **Versión en ucraniano** en `/ua`: todas las páginas, los tratamientos y el formulario de reserva. El menú muestra las banderas de los otros dos idiomas.
 
 ### Cambios
 - Los precios se muestran con el símbolo € en todos los idiomas.

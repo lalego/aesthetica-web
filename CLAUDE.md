@@ -22,7 +22,7 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 **Estudio AestheticA**, estudio de estética avanzada en Ruzafa (València). Es un monorepo pnpm + Turborepo:
 
-- `apps/web`: web pública (Vite + React 18) en castellano (`/`), inglés (`/en`) y ucraniano (`/uk`), con páginas de tratamientos, reserva de citas y páginas legales. Se prerenderiza a un HTML estático por página y se despliega en Cloudflare Pages.
+- `apps/web`: web pública (Vite + React 18) en castellano (`/`), inglés (`/en`) y ucraniano (`/ua`), con páginas de tratamientos, reserva de citas y páginas legales. Se prerenderiza a un HTML estático por página y se despliega en Cloudflare Pages.
 - `apps/admin`: panel interno (Next.js 16 + React 19) con citas, pacientes, tratamientos, facturas y usuarios. Se despliega en Vercel.
 - `packages/shared`: `CLINIC` (datos de la clínica) y tipos compartidos. Los datos de la clínica se editan **solo** en `packages/shared/src/clinic.ts`.
 
@@ -65,9 +65,9 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 **SEO de la web (prerender):**
 - `src/routes.tsx` es la única lista de páginas. De ahí salen el router, el `<head>` de cada página (título, descripción, canonical, hreflang y JSON-LD, en `src/seo/head.ts`), el HTML estático y `sitemap.xml`. Una página nueva se añade ahí, no en `App.tsx`.
-- `pnpm build` ejecuta `vite build`, después `vite build --ssr src/entry-server.tsx` y por último `scripts/prerender.mjs`. Este escribe `<ruta>.html`, que Cloudflare sirve sin extensión ni barra final (es la URL canónica), y `404.html`. No hay `_redirects`: un `/* /index.html 200` devolvería 200 en las URLs que no existen.
+- `pnpm build` ejecuta `vite build`, después `vite build --ssr src/entry-server.tsx` y por último `scripts/prerender.mjs`. Este escribe `<ruta>.html`, que Cloudflare sirve sin extensión ni barra final (es la URL canónica), y `404.html`. `_redirects` solo lleva redirecciones concretas (`/uk` → `/ua`); nunca un `/* /index.html 200`, que devolvería 200 en las URLs que no existen.
 - Los tratamientos se leen de Supabase al hacer el build. Si cambian en el panel, el navegador los actualiza, pero el HTML que lee Google no cambia hasta el siguiente despliegue.
-- Textos: `src/content/landings.ts` (páginas de tratamientos, `match` decide qué tratamientos lista), `src/content/pages.ts` (resto de páginas) y `src/content/treatments-i18n.ts` (nombres en inglés y ucraniano por id, porque la tabla solo los tiene en castellano). Los componentes guardan sus textos en objetos `{ es, en, uk }` y usan `useLang()`. Los idiomas salen de `LANGS` en `src/i18n.ts`: `uk` es el código ISO del ucraniano (no Reino Unido) y es el que exige `hreflang`. En ucraniano, las rutas de tratamientos reutilizan el *slug* inglés para no tener URLs en cirílico.
+- Textos: `src/content/landings.ts` (páginas de tratamientos, `match` decide qué tratamientos lista), `src/content/pages.ts` (resto de páginas) y `src/content/treatments-i18n.ts` (nombres en inglés y ucraniano por id, porque la tabla solo los tiene en castellano). Los componentes guardan sus textos en objetos `{ es, en, uk }` y usan `useLang()`. Los idiomas salen de `LANGS` en `src/i18n.ts`: `uk` es el código ISO del ucraniano (no Reino Unido) y es el que exige `hreflang`, pero sus rutas van en `/ua` (`PATHS` en `i18n.ts`). En ucraniano, las rutas de tratamientos reutilizan el *slug* inglés para no tener URLs en cirílico.
 - Es un estudio de estética, no un centro sanitario: el schema es `BeautySalon` (nunca `MedicalBusiness`), sin lenguaje médico y sin tratamientos con aguja. No se pone `aggregateRating` con las reseñas de Google.
 - El HTML prerenderizado y el primer render del cliente deben coincidir: nada que dependa de la fecha o de `window` en el render (usa `useEffect`, como `today` en `BookingSection`).
 

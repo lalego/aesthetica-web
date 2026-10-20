@@ -1,0 +1,4 @@
+# Las páginas en ucraniano estuvieron unos minutos en /uk (2026-10-20) antes de
+# pasar a /ua. Solo redirecciones: sin regla /* para no tapar la 404.
+/uk     /ua         301
+/uk/*   /ua/:splat  301
