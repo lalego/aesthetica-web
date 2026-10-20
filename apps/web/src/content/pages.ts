@@ -1,5 +1,31 @@
 import { CLINIC } from '@/config/clinic'
+import type { Lang } from '@/i18n'
 import type { TreatmentCategory } from '@/types'
+
+// ─────────────────────────────────────────────────────────────────
+//  EDITA AQUÍ — cifras del Hero, de "Quiénes somos" y de la
+//  descripción de /sobre-nosotros. Solo números: el formato
+//  (+1.200 / 1,200+) lo pone formatStat() según el idioma.
+// ─────────────────────────────────────────────────────────────────
+export const STATS = {
+  years: 25,
+  clients: 1200,
+  treatments: 31,
+}
+
+/** "+1.200" en castellano, "1,200+" en inglés; sin "+" si `plus` es false. */
+export const formatStat = (n: number, lang: Lang, plus = true) => {
+  const num = String(n).replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'es' ? '.' : ',')
+  if (!plus) return num
+  return lang === 'es' ? `+${num}` : `${num}+`
+}
+
+/** Las tres cifras con su etiqueta, para Hero y "Quiénes somos". */
+export const statsFor = (lang: Lang, labels: [string, string, string]) => [
+  { value: formatStat(STATS.years, lang), label: labels[0] },
+  { value: formatStat(STATS.clients, lang), label: labels[1] },
+  { value: formatStat(STATS.treatments, lang, false), label: labels[2] },
+]
 
 // ─────────────────────────────────────────────────────────────────
 //  EDITA AQUÍ — título (≤ 60 caracteres), descripción (≤ 155) y H1
@@ -39,12 +65,12 @@ export const HUB_PAGE = {
 export const ABOUT_PAGE = {
   es: {
     title: 'Sobre Nosotros: Alena Martseniuk | AestheticA Valencia',
-    description: 'Conoce a Alena Martseniuk, fundadora del estudio de estética avanzada AestheticA en Ruzafa, Valencia. Más de 25 años de experiencia.',
+    description: `Conoce a Alena Martseniuk, fundadora del estudio de estética avanzada AestheticA en Ruzafa, Valencia. Más de ${STATS.years} años de experiencia.`,
     h1: 'Alena Martseniuk y el estudio AestheticA',
   },
   en: {
     title: 'About Us: Alena Martseniuk | AestheticA Valencia',
-    description: 'Meet Alena Martseniuk, founder of the AestheticA advanced aesthetics studio in Ruzafa, Valencia. Over 25 years of experience.',
+    description: `Meet Alena Martseniuk, founder of the AestheticA advanced aesthetics studio in Ruzafa, Valencia. Over ${STATS.years} years of experience.`,
     h1: 'Alena Martseniuk and the AestheticA studio',
   },
 }

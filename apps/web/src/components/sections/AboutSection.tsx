@@ -1,5 +1,6 @@
 import { Sparkles, UserCheck, BadgeCheck } from 'lucide-react'
 import { useLang } from '@/i18n'
+import { statsFor } from '@/content/pages'
 
 const LANGUAGES = [
   { code: 'es', label: 'Español' },
@@ -20,11 +21,7 @@ const ABOUT = {
       'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada cliente en su proceso, desde la primera consulta hasta el resultado final.',
     ],
     imgAlt: 'Alena Martseniuk durante un tratamiento láser en el estudio AestheticA',
-    stats: [
-      { value: '+25', label: 'Años de experiencia' },
-      { value: '+1.200', label: 'Clientes satisfechos' },
-      { value: '31', label: 'Tratamientos disponibles' },
-    ],
+    stats: statsFor('es', ['Años de experiencia', 'Clientes satisfechos', 'Tratamientos disponibles']),
     valuesTitle: 'Nuestra filosofía',
     values: [
       {
@@ -64,11 +61,7 @@ const ABOUT = {
       'With cutting-edge technology and a warm, honest approach, Alena guides every client through the process, from the first consultation to the final result.',
     ],
     imgAlt: 'Alena Martseniuk performing a laser treatment at the AestheticA studio',
-    stats: [
-      { value: '25+', label: 'Years of experience' },
-      { value: '1,200+', label: 'Happy clients' },
-      { value: '31', label: 'Treatments available' },
-    ],
+    stats: statsFor('en', ['Years of experience', 'Happy clients', 'Treatments available']),
     valuesTitle: 'Our philosophy',
     values: [
       {

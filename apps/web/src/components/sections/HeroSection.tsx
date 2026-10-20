@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { PATHS, useLang } from '@/i18n'
+import { statsFor } from '@/content/pages'
 
 interface HeroSectionProps {
   onBookingClick?: () => void
@@ -14,11 +15,7 @@ const HERO = {
     text: 'Tratamientos personalizados con tecnología de vanguardia y una especialista dedicada a tu bienestar y resultados naturales.',
     book: 'Agendar cita',
     see: 'Ver tratamientos',
-    stats: [
-      { value: '+25', label: 'Años de experiencia' },
-      { value: '+1.200', label: 'Clientes satisfechos' },
-      { value: '31', label: 'Tratamientos' },
-    ],
+    stats: statsFor('es', ['Años de experiencia', 'Clientes satisfechos', 'Tratamientos']),
     imgAlt: 'Estudio AestheticA en la calle Centelles, Ruzafa, València',
     badge: ['Próxima disponibilidad', 'Esta semana · Ruzafa'],
   },
@@ -28,11 +25,7 @@ const HERO = {
     text: 'Personalised treatments with cutting-edge technology and a specialist devoted to your wellbeing and natural-looking results.',
     book: 'Book now',
     see: 'See treatments',
-    stats: [
-      { value: '25+', label: 'Years of experience' },
-      { value: '1,200+', label: 'Happy clients' },
-      { value: '31', label: 'Treatments' },
-    ],
+    stats: statsFor('en', ['Years of experience', 'Happy clients', 'Treatments']),
     imgAlt: 'AestheticA studio on Carrer de Centelles, Ruzafa, Valencia',
     badge: ['Next availability', 'This week · Ruzafa'],
   },
