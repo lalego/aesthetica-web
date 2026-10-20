@@ -4,6 +4,7 @@ import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CLINIC } from '@/config/clinic'
 import { PATHS, bookingHref, usePage, type Lang } from '@/i18n'
+import { LangFlag } from '@/components/LangFlag'
 
 const NAV = {
   es: {
@@ -60,9 +61,10 @@ export const Navbar = () => {
       to={altPath ?? PATHS.home[other]}
       hrefLang={other}
       aria-label={t.switchLabel}
-      className="text-sm font-medium uppercase tracking-widest text-neutral-500 hover:text-gold-500 transition-colors"
+      title={t.switchLabel}
+      className="inline-flex rounded-sm ring-1 ring-neutral-200 opacity-80 hover:opacity-100 hover:ring-gold-300 transition"
     >
-      {other}
+      <LangFlag lang={other} className="block h-4 w-6 rounded-sm" />
     </Link>
   )
 
@@ -100,30 +102,31 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-5 lg:gap-8">
           {t.links.map(({ label, to }) => (
             <li key={to}>
-              <Link to={to} className="text-lg text-neutral-600 hover:text-gold-500 transition-colors">
+              <Link to={to} className="whitespace-nowrap text-lg text-neutral-600 hover:text-gold-500 transition-colors">
                 {label}
               </Link>
             </li>
           ))}
         </ul>
 
-        {/* Desktop CTAs */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Desktop CTAs — en tablet el teléfono es solo el icono para que quepa todo en una línea */}
+        <div className="hidden md:flex items-center gap-3 pl-4">
           {langSwitch}
           <a
             href={CLINIC.contact.phone_href}
-            className="inline-flex items-center gap-2 border border-gold-300 text-gold-500 text-lg px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
+            aria-label={CLINIC.contact.phone}
+            className="inline-flex items-center gap-2 whitespace-nowrap border border-gold-300 text-gold-500 text-lg px-3.5 lg:px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
           >
             <Phone className="w-4 h-4" />
-            {CLINIC.contact.phone.replace('+34 ', '')}
+            <span className="hidden lg:inline">{CLINIC.contact.phone.replace('+34 ', '')}</span>
           </a>
           <a
             href={bookingHref(lang)}
             onClick={onBook}
-            className="inline-flex items-center bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
+            className="inline-flex items-center whitespace-nowrap bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
           >
             {t.book}
           </a>

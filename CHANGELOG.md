@@ -14,7 +14,9 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 
 ## Sin publicar
 
-_Nada todavía._
+### Cambios
+- El selector de idioma del menú es una bandera (Reino Unido / España) en lugar de "EN" / "ES".
+- En tablet, el menú cabe en una línea: el botón de teléfono muestra solo el icono hasta pantallas grandes.
 
 ## 1.1.0 — 2026-10-20
 
