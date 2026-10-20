@@ -26,6 +26,14 @@ const COPY = {
     seeAll: 'See all treatments in',
     faq: 'Frequently asked questions',
   },
+  uk: {
+    book: 'Записатися',
+    whatsapp: 'Запитати у WhatsApp',
+    prices: 'Ціни та тривалість',
+    related: 'Схожі процедури',
+    seeAll: 'Усі процедури в категорії',
+    faq: 'Часті запитання',
+  },
 }
 
 interface LandingPageProps {

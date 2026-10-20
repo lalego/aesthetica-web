@@ -10,8 +10,8 @@ import { useAvailableSlots } from '@/hooks/useAvailableSlots'
 import { isSlotTakenError, submitBooking } from '@/services/bookingService'
 import { useQueryClient } from '@tanstack/react-query'
 import { CLINIC } from '@/config/clinic'
-import { useLang, type Lang } from '@/i18n'
-import { localizeTreatment } from '@/content/treatments-en'
+import { LOCALES, useLang, type Lang } from '@/i18n'
+import { localizeTreatment } from '@/content/treatments-i18n'
 
 // ── Textos ────────────────────────────────────────────────────────────────────
 
@@ -99,6 +99,48 @@ const COPY = {
     failTitle: 'We could not register your request.',
     failText: 'It may be a temporary issue. Please try again in a few minutes or book directly:',
     call: 'Call',
+  },
+  uk: {
+    errors: {
+      name: 'Вкажіть ім’я',
+      email: 'Вкажіть правильний email',
+      phoneMin: 'Щонайменше 9 цифр',
+      phoneFormat: 'Неправильний формат телефону',
+      treatment: 'Оберіть процедуру',
+      date: 'Оберіть дату',
+      pastDate: 'Дата не може бути в минулому',
+      time: 'Оберіть час',
+      gdpr: 'Щоб продовжити, потрібно погодитися з політикою конфіденційності',
+    },
+    title: ['Запишіться', 'на прийом'],
+    intro: 'Заповніть форму, і ми зв’яжемося з вами протягом 24 годин, щоб підтвердити запис.',
+    successTitle: 'Заявку отримано!',
+    successText: 'Ми зв’яжемося з вами протягом 24 годин, щоб підтвердити запис.',
+    again: 'Зробити ще один запис',
+    name: 'Ім’я та прізвище',
+    namePh: 'Олена Коваленко',
+    email: 'Email',
+    emailPh: 'hello@example.com',
+    phone: 'Телефон',
+    treatment: 'Процедура',
+    treatmentPh: 'Оберіть процедуру…',
+    date: 'Бажана дата',
+    time: 'Вільний час',
+    searching: 'Шукаємо вільний час…',
+    noSlots: 'На цей день немає вільного часу, спробуйте іншу дату.',
+    notes: 'Примітки чи запитання (необов’язково)',
+    notesPh: 'Маєте запитання або бажаний час?',
+    gdpr: [
+      'Я ознайомилася/ознайомився та погоджуюся з ',
+      'Політикою конфіденційності',
+      ' (іспанською). Даю згоду на обробку моїх даних для запису на прийом відповідно до GDPR (Регламент (ЄС) 2016/679, RGPD) та іспанського закону LOPDGDD.',
+    ],
+    sending: 'Надсилаємо…',
+    submit: 'Надіслати заявку',
+    slotTaken: 'Цей час щойно зайняли. Оберіть інший вільний час і надішліть ще раз.',
+    failTitle: 'Не вдалося зареєструвати вашу заявку.',
+    failText: 'Можливо, це тимчасова проблема. Спробуйте ще раз за кілька хвилин або запишіться напряму:',
+    call: 'Зателефонувати',
   },
 } satisfies Record<Lang, { errors: BookingErrors } & Record<string, unknown>>
 
@@ -262,7 +304,7 @@ export const BookingSection = () => {
                 ) : slots && slots.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {slots.map((iso) => {
-                      const label = new Date(iso).toLocaleTimeString(lang === 'es' ? 'es-ES' : 'en-GB', {
+                      const label = new Date(iso).toLocaleTimeString(LOCALES[lang], {
                         hour: '2-digit',
                         minute: '2-digit',
                         timeZone: 'Europe/Madrid',

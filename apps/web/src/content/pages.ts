@@ -5,7 +5,7 @@ import type { TreatmentCategory } from '@/types'
 // ─────────────────────────────────────────────────────────────────
 //  EDITA AQUÍ — cifras del Hero, de "Quiénes somos" y de la
 //  descripción de /sobre-nosotros. Solo números: el formato
-//  (+1.200 / 1,200+) lo pone formatStat() según el idioma.
+//  (+1.200 / 1,200+ / 1 200+) lo pone formatStat() según el idioma.
 // ─────────────────────────────────────────────────────────────────
 export const STATS = {
   years: 25,
@@ -13,9 +13,12 @@ export const STATS = {
   treatments: 31,
 }
 
-/** "+1.200" en castellano, "1,200+" en inglés; sin "+" si `plus` es false. */
+// Separador de miles: el ucraniano usa un espacio (no separable).
+const THOUSANDS: Record<Lang, string> = { es: '.', en: ',', uk: ' ' }
+
+/** "+1.200" en castellano, "1,200+" en inglés y "1 200+" en ucraniano; sin "+" si `plus` es false. */
 export const formatStat = (n: number, lang: Lang, plus = true) => {
-  const num = String(n).replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'es' ? '.' : ',')
+  const num = String(n).replace(/\B(?=(\d{3})+(?!\d))/g, THOUSANDS[lang])
   if (!plus) return num
   return lang === 'es' ? `+${num}` : `${num}+`
 }
@@ -41,6 +44,10 @@ export const HOME_PAGE = {
     title: 'Beauty & Aesthetics Studio in Ruzafa, Valencia | AestheticA',
     description: 'Advanced aesthetics studio in Ruzafa, Valencia: facials, diode laser hair removal, body treatments and massage. Book your appointment online.',
   },
+  uk: {
+    title: 'Студія естетики в Руссафі, Валенсія | AestheticA',
+    description: 'Студія естетичної косметології в Руссафі, Валенсія: догляд за обличчям, діодна лазерна епіляція, процедури для тіла та масаж. Онлайн-запис.',
+  },
 }
 
 export const HUB_PAGE = {
@@ -60,6 +67,14 @@ export const HUB_PAGE = {
       'All our treatments with prices and duration. Pick a category or book straight away: the first step is always a personalised assessment at the studio.',
     ],
   },
+  uk: {
+    title: 'Косметологічні процедури у Валенсії (Руссафа) | AestheticA',
+    description: 'Догляд за обличчям, діодна лазерна епіляція, процедури для тіла, масаж і пакети для наречених у нашій студії в Руссафі, Валенсія. Ціни та онлайн-запис.',
+    h1: 'Процедури естетичної косметології у Валенсії',
+    intro: [
+      'Усі наші процедури з цінами та тривалістю. Оберіть категорію або запишіться одразу: першим кроком завжди є індивідуальна консультація в студії.',
+    ],
+  },
 }
 
 export const ABOUT_PAGE = {
@@ -72,6 +87,11 @@ export const ABOUT_PAGE = {
     title: 'About Us: Alena Martseniuk | AestheticA Valencia',
     description: `Meet Alena Martseniuk, founder of the AestheticA advanced aesthetics studio in Ruzafa, Valencia. Over ${STATS.years} years of experience.`,
     h1: 'Alena Martseniuk and the AestheticA studio',
+  },
+  uk: {
+    title: 'Про нас: Альона Марценюк | AestheticA Валенсія',
+    description: `Знайомтеся з Альоною Марценюк, засновницею студії естетичної косметології AestheticA в Руссафі, Валенсія. Понад ${STATS.years} років досвіду.`,
+    h1: 'Альона Марценюк і студія AestheticA',
   },
 }
 
@@ -92,13 +112,21 @@ export const CONTACT_PAGE = {
       `You will find us at ${CLINIC.address.full}, a few minutes from Ruzafa Market. Call us, message us on WhatsApp or book online.`,
     ],
   },
+  uk: {
+    title: 'Контакти та як дістатися | AestheticA Руссафа, Валенсія',
+    description: `Студія естетики за адресою ${CLINIC.address.street}, Руссафа, Валенсія. Телефон ${CLINIC.contact.phone}, WhatsApp і графік роботи.`,
+    h1: 'Контакти: студія естетики в Руссафі',
+    intro: [
+      `Ми знаходимося за адресою ${CLINIC.address.full}, за кілька хвилин від ринку Руссафи. Зателефонуйте, напишіть у WhatsApp або запишіться онлайн.`,
+    ],
+  },
 }
 
-export const CATEGORY_LABELS: Record<TreatmentCategory, { es: string; en: string }> = {
-  facial:    { es: 'Facial',    en: 'Facial' },
-  corporal:  { es: 'Corporal',  en: 'Body' },
-  laser:     { es: 'Láser',     en: 'Laser' },
-  capilar:   { es: 'Capilar',   en: 'Hair' },
-  bienestar: { es: 'Bienestar', en: 'Wellness' },
+export const CATEGORY_LABELS: Record<TreatmentCategory, Record<Lang, string>> = {
+  facial:    { es: 'Facial',    en: 'Facial',   uk: 'Обличчя' },
+  corporal:  { es: 'Corporal',  en: 'Body',     uk: 'Тіло' },
+  laser:     { es: 'Láser',     en: 'Laser',    uk: 'Лазер' },
+  capilar:   { es: 'Capilar',   en: 'Hair',     uk: 'Волосся' },
+  bienestar: { es: 'Bienestar', en: 'Wellness', uk: 'Релакс' },
 }
 // ─────────────────────────────────────────────────────────────────

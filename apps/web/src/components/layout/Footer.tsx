@@ -16,6 +16,11 @@ const LEGAL_LINKS = {
     { label: 'Privacy policy', to: '/privacidad' },
     { label: 'Cookie policy', to: '/politica-cookies' },
   ],
+  uk: [
+    { label: 'Правова інформація (ісп.)', to: '/aviso-legal' },
+    { label: 'Політика конфіденційності (ісп.)', to: '/privacidad' },
+    { label: 'Політика cookies (ісп.)', to: '/politica-cookies' },
+  ],
 }
 
 const FOOTER = {
@@ -44,6 +49,19 @@ const FOOTER = {
       { label: 'Contact', to: PATHS.contact.en },
     ],
     rights: 'All rights reserved.',
+  },
+  uk: {
+    tagline: 'Студія естетичної косметології в Руссафі, Валенсія. Індивідуальні процедури з передовими технологіями.',
+    contact: 'Контакти',
+    treatments: 'Процедури',
+    nav: 'Навігація',
+    links: [
+      { label: 'Усі процедури', to: PATHS.treatments.uk },
+      { label: 'Про нас', to: PATHS.about.uk },
+      { label: 'Записатися', to: bookingHref('uk') },
+      { label: 'Контакти', to: PATHS.contact.uk },
+    ],
+    rights: 'Усі права захищені.',
   },
 }
 

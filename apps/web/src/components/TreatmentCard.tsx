@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom'
 import { Clock, ChevronRight } from 'lucide-react'
 import type { Treatment, TreatmentCategory } from '@/types'
 import { cn } from '@/lib/utils'
-import { useLang } from '@/i18n'
-import { localizeTreatment } from '@/content/treatments-en'
+import { LOCALES, useLang, type Lang } from '@/i18n'
+import { localizeTreatment } from '@/content/treatments-i18n'
 import { landingForTreatment, landingPath } from '@/content/landings'
 import { CATEGORY_LABELS } from '@/content/pages'
+
+const MINUTES: Record<Lang, string> = { es: 'min', en: 'min', uk: 'хв' }
 
 const CATEGORY_COLORS: Record<TreatmentCategory, string> = {
   facial:    'bg-gold-100 text-gold-600',
@@ -54,15 +56,16 @@ export const TreatmentCard = ({ treatment: raw, linkToLanding = true }: Treatmen
       <div className="flex items-center justify-between pt-4 border-t border-neutral-50 mt-auto">
         <div className="flex items-center gap-1.5 text-neutral-400 text-base">
           <Clock className="w-4 h-4" />
-          <span>{treatment.duration_min} min</span>
+          <span>{treatment.duration_min} {MINUTES[lang]}</span>
         </div>
 
         <div className="flex items-center gap-3">
           {treatment.price_eur && (
             <span className="text-neutral-800 font-medium text-base">
-              {treatment.price_eur.toLocaleString(lang === 'es' ? 'es-ES' : 'en-GB', {
+              {treatment.price_eur.toLocaleString(LOCALES[lang], {
                 style: 'currency',
                 currency: 'EUR',
+                currencyDisplay: 'narrowSymbol',
                 maximumFractionDigits: 0,
               })}
             </span>

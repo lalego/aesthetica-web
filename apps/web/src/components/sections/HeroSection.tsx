@@ -29,6 +29,16 @@ const HERO = {
     imgAlt: 'AestheticA studio on Carrer de Centelles, Ruzafa, Valencia',
     badge: ['Next availability', 'This week · Ruzafa'],
   },
+  uk: {
+    h1: 'Студія естетичної косметології в Руссафі, Валенсія',
+    slogan: ['Підкресліть свою', 'природну красу', 'з упевненістю'],
+    text: 'Індивідуальні процедури з передовими технологіями та фахівчиня, яка дбає про ваше самопочуття й природний результат.',
+    book: 'Записатися',
+    see: 'Усі процедури',
+    stats: statsFor('uk', ['Років досвіду', 'Задоволених клієнтів', 'Процедур']),
+    imgAlt: 'Студія AestheticA на вулиці Сентельєс, Руссафа, Валенсія',
+    badge: ['Найближчий вільний час', 'Цього тижня · Руссафа'],
+  },
 }
 
 export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {

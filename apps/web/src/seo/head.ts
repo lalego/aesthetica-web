@@ -1,19 +1,20 @@
 import { CLINIC } from '@/config/clinic'
-import type { Lang } from '@/i18n'
+import { LANGS, type Lang } from '@/i18n'
 import type { Treatment } from '@/types'
 
 export const SITE_URL = CLINIC.website
 export const SITE_NAME = 'AestheticA — Estética Avanzada'
 const OG_IMAGE = `${SITE_URL}/img/og-aesthetica.jpg`
 const BUSINESS_ID = `${SITE_URL}/#business`
+const OG_LOCALES: Record<Lang, string> = { es: 'es_ES', en: 'en_GB', uk: 'uk_UA' }
 
 export interface PageMeta {
   path: string
   lang: Lang
   title: string
   description: string
-  /** Ruta equivalente en el otro idioma (hreflang). */
-  altPath?: string
+  /** La misma página en cada idioma (hreflang). */
+  alternates?: Record<Lang, string>
   noindex?: boolean
   jsonLd: object[]
 }
@@ -39,18 +40,13 @@ export const headTags = (meta: PageMeta) => {
     `<meta property="og:description" content="${esc(meta.description)}">`,
     `<meta property="og:url" content="${url}">`,
     `<meta property="og:image" content="${OG_IMAGE}">`,
-    `<meta property="og:locale" content="${meta.lang === 'es' ? 'es_ES' : 'en_GB'}">`,
+    `<meta property="og:locale" content="${OG_LOCALES[meta.lang]}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
   ]
   if (meta.noindex) tags.push(`<meta name="robots" content="noindex">`)
-  if (meta.altPath) {
-    const es = meta.lang === 'es' ? meta.path : meta.altPath
-    const en = meta.lang === 'en' ? meta.path : meta.altPath
-    tags.push(
-      `<link rel="alternate" hreflang="es" href="${abs(es)}">`,
-      `<link rel="alternate" hreflang="en" href="${abs(en)}">`,
-      `<link rel="alternate" hreflang="x-default" href="${abs(es)}">`,
-    )
+  if (meta.alternates) {
+    for (const l of LANGS) tags.push(`<link rel="alternate" hreflang="${l}" href="${abs(meta.alternates[l])}">`)
+    tags.push(`<link rel="alternate" hreflang="x-default" href="${abs(meta.alternates.es)}">`)
   }
   for (const data of meta.jsonLd) {
     // `<` escapado para que un texto no pueda cerrar el <script>.
@@ -73,10 +69,11 @@ export const businessJsonLd = (lang: Lang) => ({
   '@id': BUSINESS_ID,
   name: 'AestheticA',
   alternateName: [SITE_NAME, 'Estudio AestheticA'],
-  description:
-    lang === 'es'
-      ? 'Estudio de estética avanzada en Ruzafa, Valencia: tratamientos faciales, depilación láser diodo, tratamientos corporales y masajes.'
-      : 'Advanced aesthetics studio in Ruzafa, Valencia: facials, diode laser hair removal, body treatments and massage.',
+  description: {
+    es: 'Estudio de estética avanzada en Ruzafa, Valencia: tratamientos faciales, depilación láser diodo, tratamientos corporales y masajes.',
+    en: 'Advanced aesthetics studio in Ruzafa, Valencia: facials, diode laser hair removal, body treatments and massage.',
+    uk: 'Студія естетичної косметології в районі Руссафа, Валенсія: догляд за обличчям, діодна лазерна епіляція, процедури для тіла та масаж.',
+  }[lang],
   url: `${SITE_URL}/`,
   logo: `${SITE_URL}/aesthetica.png`,
   image: [OG_IMAGE, `${SITE_URL}/hero-clinic.jpeg`],

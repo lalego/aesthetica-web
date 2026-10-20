@@ -19,6 +19,14 @@ const COPY = {
     hours: 'Opening hours',
     map: 'Location',
   },
+  uk: {
+    title: 'Завітайте до нас',
+    intro: 'Ми знаходимося в Руссафі, Валенсія. Запишіться на консультацію без зобов’язань.',
+    address: 'Адреса',
+    phone: 'Телефон',
+    hours: 'Графік роботи',
+    map: 'Розташування',
+  },
 }
 
 const WhatsAppIcon = () => (

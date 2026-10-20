@@ -7,11 +7,20 @@ interface LangFlagProps {
 }
 
 // Banderas en SVG y no emoji: Windows no dibuja los emoji de banderas (salen
-// las letras "GB"/"ES"). Las dos se recortan al mismo marco 3:2 con `slice`.
+// las letras "GB"/"ES"/"UA"). Todas se recortan al mismo marco 3:2 con `slice`.
 export const LangFlag = ({ lang, className }: LangFlagProps) => {
   // useId: el Navbar pinta el selector dos veces (móvil y escritorio) y los
   // clipPath necesitan ids únicos; useId da el mismo id en el prerender y al hidratar.
   const id = useId()
+
+  if (lang === 'uk') {
+    return (
+      <svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
+        <rect width="3" height="1" fill="#0057B7" />
+        <rect y="1" width="3" height="1" fill="#FFD700" />
+      </svg>
+    )
+  }
 
   if (lang === 'es') {
     return (

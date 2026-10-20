@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CLINIC } from '@/config/clinic'
-import { PATHS, bookingHref, usePage, type Lang } from '@/i18n'
+import { LANGS, LANG_NAMES, PATHS, bookingHref, usePage, type Lang } from '@/i18n'
 import { LangFlag } from '@/components/LangFlag'
 
 const NAV = {
@@ -16,7 +16,6 @@ const NAV = {
     book: 'Agendar cita',
     open: 'Abrir menú',
     close: 'Cerrar menú',
-    switchLabel: 'English version',
   },
   en: {
     links: [
@@ -27,7 +26,16 @@ const NAV = {
     book: 'Book now',
     open: 'Open menu',
     close: 'Close menu',
-    switchLabel: 'Versión en castellano',
+  },
+  uk: {
+    links: [
+      { label: 'Процедури', to: PATHS.treatments.uk },
+      { label: 'Про нас', to: PATHS.about.uk },
+      { label: 'Контакти', to: PATHS.contact.uk },
+    ],
+    book: 'Записатися',
+    open: 'Відкрити меню',
+    close: 'Закрити меню',
   },
 }
 
@@ -43,9 +51,9 @@ const useBookingClick = (lang: Lang) => {
 }
 
 export const Navbar = () => {
-  const { lang, altPath } = usePage()
+  const { lang, alternates } = usePage()
   const t = NAV[lang]
-  const other: Lang = lang === 'es' ? 'en' : 'es'
+  const others = LANGS.filter((l) => l !== lang)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const onBook = useBookingClick(lang)
@@ -56,16 +64,24 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Una bandera por cada otro idioma; lleva a la misma página en ese idioma
+  // (o a su portada si la página solo existe en castellano, como las legales).
   const langSwitch = (
-    <Link
-      to={altPath ?? PATHS.home[other]}
-      hrefLang={other}
-      aria-label={t.switchLabel}
-      title={t.switchLabel}
-      className="inline-flex rounded-sm ring-1 ring-neutral-200 opacity-80 hover:opacity-100 hover:ring-gold-300 transition"
-    >
-      <LangFlag lang={other} className="block h-4 w-6 rounded-sm" />
-    </Link>
+    <div className="flex items-center gap-2">
+      {others.map((other: Lang) => (
+        <Link
+          key={other}
+          to={alternates?.[other] ?? PATHS.home[other]}
+          hrefLang={other}
+          lang={other}
+          aria-label={LANG_NAMES[other]}
+          title={LANG_NAMES[other]}
+          className="inline-flex rounded-sm ring-1 ring-neutral-200 opacity-80 hover:opacity-100 hover:ring-gold-300 transition"
+        >
+          <LangFlag lang={other} className="block h-4 w-6 rounded-sm" />
+        </Link>
+      ))}
+    </div>
   )
 
   return (
@@ -133,7 +149,7 @@ export const Navbar = () => {
         </div>
 
         {/* Selector de idioma en móvil, a la derecha para equilibrar el hamburger */}
-        <div className="md:hidden w-10 h-10 flex items-center justify-center">{langSwitch}</div>
+        <div className="md:hidden h-10 flex items-center">{langSwitch}</div>
       </nav>
 
       {/* Botones fijos bajo el logo — móvil, siempre visibles */}

@@ -23,7 +23,7 @@ const HeadSync = ({ route }: RouteShellProps) => {
 
 /** Da a cada página su idioma (`usePage`) y su <head>. */
 export const RouteShell = ({ route }: RouteShellProps) => (
-  <PageContext.Provider value={{ lang: route.lang, altPath: route.altPath }}>
+  <PageContext.Provider value={{ lang: route.lang, alternates: route.alternates }}>
     <HeadSync route={route} />
     {route.element}
   </PageContext.Provider>

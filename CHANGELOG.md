@@ -14,7 +14,11 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 
 ## Sin publicar
 
+### Novedades
+- **Versión en ucraniano** en `/uk`: todas las páginas, los tratamientos y el formulario de reserva. El menú muestra las banderas de los otros dos idiomas.
+
 ### Cambios
+- Los precios se muestran con el símbolo € en todos los idiomas.
 - El selector de idioma del menú es una bandera (Reino Unido / España) en lugar de "EN" / "ES".
 - En tablet, el menú cabe en una línea: el botón de teléfono muestra solo el icono hasta pantallas grandes.
 

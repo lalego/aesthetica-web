@@ -49,12 +49,8 @@ console.log(`[prerender] ${ROUTES.length} páginas + 404.html`)
 const abs = (path) => (path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`)
 const today = new Date().toISOString().slice(0, 10)
 const entries = ROUTES.filter((r) => r.sitemap).map((r) => {
-  const alternates = r.altPath
-    ? [
-        [r.lang, r.path],
-        [r.lang === 'es' ? 'en' : 'es', r.altPath],
-        ['x-default', r.lang === 'es' ? r.path : r.altPath],
-      ]
+  const alternates = r.alternates
+    ? [...Object.entries(r.alternates), ['x-default', r.alternates.es]]
         .map(([hl, p]) => `\n    <xhtml:link rel="alternate" hreflang="${hl}" href="${abs(p)}"/>`)
         .join('')
     : ''

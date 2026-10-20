@@ -25,6 +25,13 @@ const COPY = {
     error: 'Treatments could not be loaded. Please try again later.',
     empty: 'There are no treatments in this category yet.',
   },
+  uk: {
+    title: ['Наші', 'процедури'],
+    intro: 'Індивідуальні протоколи для природного та тривалого результату.',
+    all: 'Усі',
+    error: 'Не вдалося завантажити процедури. Спробуйте пізніше.',
+    empty: 'У цій категорії поки немає процедур.',
+  },
 }
 
 export const TreatmentsSection = () => {

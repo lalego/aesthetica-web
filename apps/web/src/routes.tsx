@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react'
 import type { Treatment } from '@/types'
-import { PATHS, type Lang } from '@/i18n'
+import { LANGS, PATHS, type Lang } from '@/i18n'
 import { LANDINGS, findLanding, landingPath, matchTreatments } from '@/content/landings'
-import { localizeTreatment } from '@/content/treatments-en'
+import { localizeTreatment } from '@/content/treatments-i18n'
 import {
   breadcrumbJsonLd, businessJsonLd, faqJsonLd, serviceJsonLd, type PageMeta,
 } from '@/seo/head'
@@ -26,7 +26,8 @@ import { PoliticaCookies } from '@/pages/PoliticaCookies'
 export interface AppRoute {
   path: string
   lang: Lang
-  altPath?: string
+  /** La misma página en cada idioma (incluido el propio). Vacío si solo existe en uno. */
+  alternates?: Record<Lang, string>
   element: ReactElement
   meta: (treatments: Treatment[]) => PageMeta
   /** Se incluye en sitemap.xml. */
@@ -34,44 +35,47 @@ export interface AppRoute {
 }
 
 const CRUMB_LABELS = {
-  home: { es: 'Inicio', en: 'Home' },
-  treatments: { es: 'Tratamientos', en: 'Treatments' },
-  about: { es: 'Sobre nosotros', en: 'About us' },
-  contact: { es: 'Contacto', en: 'Contact' },
-}
+  home: { es: 'Inicio', en: 'Home', uk: 'Головна' },
+  treatments: { es: 'Tratamientos', en: 'Treatments', uk: 'Процедури' },
+  about: { es: 'Sobre nosotros', en: 'About us', uk: 'Про нас' },
+  contact: { es: 'Contacto', en: 'Contact', uk: 'Контакти' },
+} satisfies Record<string, Record<Lang, string>>
 
-const other = (lang: Lang): Lang => (lang === 'es' ? 'en' : 'es')
 const crumb = (key: keyof typeof CRUMB_LABELS, lang: Lang): Crumb => ({
   name: CRUMB_LABELS[key][lang],
   path: PATHS[key][lang],
 })
 
+/** La ruta de una página en los tres idiomas, a partir de una función por idioma. */
+const allLangs = (pathFor: (lang: Lang) => string) =>
+  Object.fromEntries(LANGS.map((l) => [l, pathFor(l)])) as Record<Lang, string>
+
 const buildRoutes = (): AppRoute[] => {
   const routes: AppRoute[] = []
 
-  for (const lang of ['es', 'en'] as const) {
-    const alt = other(lang)
-
+  for (const lang of LANGS) {
+    const home = allLangs((l) => PATHS.home[l])
     routes.push({
-      path: PATHS.home[lang],
+      path: home[lang],
       lang,
-      altPath: PATHS.home[alt],
+      alternates: home,
       element: <Home />,
       meta: () => ({
-        path: PATHS.home[lang], lang, altPath: PATHS.home[alt], ...HOME_PAGE[lang],
+        path: home[lang], lang, alternates: home, ...HOME_PAGE[lang],
         jsonLd: [businessJsonLd(lang)],
       }),
       sitemap: true,
     })
 
+    const hub = allLangs((l) => PATHS.treatments[l])
     const hubCrumbs = [crumb('home', lang), crumb('treatments', lang)]
     routes.push({
-      path: PATHS.treatments[lang],
+      path: hub[lang],
       lang,
-      altPath: PATHS.treatments[alt],
+      alternates: hub,
       element: <TreatmentsHub crumbs={hubCrumbs} />,
       meta: () => ({
-        path: PATHS.treatments[lang], lang, altPath: PATHS.treatments[alt],
+        path: hub[lang], lang, alternates: hub,
         title: HUB_PAGE[lang].title, description: HUB_PAGE[lang].description,
         jsonLd: [breadcrumbJsonLd(hubCrumbs)],
       }),
@@ -79,7 +83,8 @@ const buildRoutes = (): AppRoute[] => {
     })
 
     for (const landing of LANDINGS) {
-      const path = landingPath(landing, lang)
+      const alternates = allLangs((l) => landingPath(landing, l))
+      const path = alternates[lang]
       const parent = landing.parent ? findLanding(landing.parent) : undefined
       const crumbs: Crumb[] = [
         ...hubCrumbs,
@@ -90,10 +95,10 @@ const buildRoutes = (): AppRoute[] => {
       routes.push({
         path,
         lang,
-        altPath: landingPath(landing, alt),
+        alternates,
         element: <LandingPage landing={landing} crumbs={crumbs} />,
         meta: (treatments) => ({
-          path, lang, altPath: landingPath(landing, alt),
+          path, lang, alternates,
           title: copy.title, description: copy.description,
           jsonLd: [
             breadcrumbJsonLd(crumbs),
@@ -110,28 +115,30 @@ const buildRoutes = (): AppRoute[] => {
       })
     }
 
+    const about = allLangs((l) => PATHS.about[l])
     const aboutCrumbs = [crumb('home', lang), crumb('about', lang)]
     routes.push({
-      path: PATHS.about[lang],
+      path: about[lang],
       lang,
-      altPath: PATHS.about[alt],
+      alternates: about,
       element: <AboutPage crumbs={aboutCrumbs} />,
       meta: () => ({
-        path: PATHS.about[lang], lang, altPath: PATHS.about[alt],
+        path: about[lang], lang, alternates: about,
         title: ABOUT_PAGE[lang].title, description: ABOUT_PAGE[lang].description,
         jsonLd: [breadcrumbJsonLd(aboutCrumbs)],
       }),
       sitemap: true,
     })
 
+    const contact = allLangs((l) => PATHS.contact[l])
     const contactCrumbs = [crumb('home', lang), crumb('contact', lang)]
     routes.push({
-      path: PATHS.contact[lang],
+      path: contact[lang],
       lang,
-      altPath: PATHS.contact[alt],
+      alternates: contact,
       element: <ContactPage crumbs={contactCrumbs} />,
       meta: () => ({
-        path: PATHS.contact[lang], lang, altPath: PATHS.contact[alt],
+        path: contact[lang], lang, alternates: contact,
         title: CONTACT_PAGE[lang].title, description: CONTACT_PAGE[lang].description,
         jsonLd: [breadcrumbJsonLd(contactCrumbs), businessJsonLd(lang)],
       }),
