@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { submitBooking, type BookingFormData } from './bookingService'
+import { isSlotTakenError, submitBooking, type BookingFormData } from './bookingService'
 
 const { rpc } = vi.hoisted(() => ({ rpc: vi.fn() }))
 
@@ -44,5 +44,18 @@ describe('submitBooking', () => {
     rpc.mockResolvedValue({ error })
 
     await expect(submitBooking(booking)).rejects.toBe(error)
+  })
+})
+
+describe('isSlotTakenError', () => {
+  it('reconoce el error de hueco ocupado de submit_booking()', () => {
+    // Forma en que llega un PostgrestError de supabase-js.
+    expect(isSlotTakenError({ message: 'Ese hueco ya no está disponible, elige otro.', code: 'P0001' })).toBe(true)
+  })
+
+  it('no confunde otros errores con un hueco ocupado', () => {
+    expect(isSlotTakenError(new TypeError('Failed to fetch'))).toBe(false)
+    expect(isSlotTakenError({ message: 'treatment_id inválido o inactivo: x' })).toBe(false)
+    expect(isSlotTakenError(null)).toBe(false)
   })
 })

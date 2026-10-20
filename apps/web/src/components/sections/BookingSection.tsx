@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { AlertCircle, CheckCircle, Loader2, MessageCircle, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTreatments } from '@/hooks/useTreatments'
 import { useAvailableSlots } from '@/hooks/useAvailableSlots'
-import { submitBooking } from '@/services/bookingService'
+import { isSlotTakenError, submitBooking } from '@/services/bookingService'
+import { useQueryClient } from '@tanstack/react-query'
+import { CLINIC } from '@/config/clinic'
 import { useLang, type Lang } from '@/i18n'
 import { localizeTreatment } from '@/content/treatments-en'
 
@@ -51,6 +53,10 @@ const COPY = {
     ],
     sending: 'Enviando…',
     submit: 'Solicitar cita',
+    slotTaken: 'Esa hora se acaba de ocupar. Elige otra de las disponibles y vuelve a enviar.',
+    failTitle: 'No hemos podido registrar tu solicitud.',
+    failText: 'Puede ser un problema puntual. Vuelve a intentarlo en unos minutos o pide tu cita directamente:',
+    call: 'Llamar',
   },
   en: {
     errors: {
@@ -89,6 +95,10 @@ const COPY = {
     ],
     sending: 'Sending…',
     submit: 'Request appointment',
+    slotTaken: 'That time has just been taken. Please choose another available time and send again.',
+    failTitle: 'We could not register your request.',
+    failText: 'It may be a temporary issue. Please try again in a few minutes or book directly:',
+    call: 'Call',
   },
 }
 
@@ -123,7 +133,8 @@ type BookingSchema = z.infer<ReturnType<typeof makeBookingSchema>>
 export const BookingSection = () => {
   const lang = useLang()
   const t = COPY[lang]
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'slot_taken'>('idle')
+  const queryClient = useQueryClient()
   const { data: treatments = [] } = useTreatments()
   const schema = useMemo(() => makeBookingSchema(t.errors), [t])
 
@@ -158,8 +169,16 @@ export const BookingSection = () => {
       reset()
     } catch (err) {
       console.error('[BookingSection]', err)
-      // Mostramos éxito igualmente si Supabase no está configurado
-      setStatus('success')
+      // Nunca se muestra éxito si no se guardó: con Supabase pausado, las
+      // reservas se perdían sin que nadie se enterase. Los datos del formulario
+      // se conservan para reintentar.
+      if (isSlotTakenError(err)) {
+        setValue('scheduled_at', '')
+        await queryClient.invalidateQueries(['slots'])
+        setStatus('slot_taken')
+      } else {
+        setStatus('error')
+      }
     }
   }
 
@@ -316,6 +335,42 @@ export const BookingSection = () => {
                 <p className="text-sm text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
               )}
             </div>
+
+            {/* Error de envío: el hueco se ocupó o no se pudo guardar */}
+            {status === 'slot_taken' && (
+              <p role="alert" className="flex items-start gap-2 rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-base text-neutral-700">
+                <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-gold-500" />
+                {t.slotTaken}
+              </p>
+            )}
+            {status === 'error' && (
+              <div role="alert" className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-4 space-y-3 text-base text-neutral-700">
+                <p className="flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-gold-500" />
+                  <span>
+                    <strong className="font-medium text-neutral-800">{t.failTitle}</strong> {t.failText}
+                  </span>
+                </p>
+                <div className="flex flex-wrap gap-2 pl-7">
+                  <a
+                    href={CLINIC.contact.phone_href}
+                    className="inline-flex items-center gap-2 rounded-full border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    {t.call} {CLINIC.contact.phone}
+                  </a>
+                  <a
+                    href={CLINIC.contact.whatsapp_href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+            )}
 
             {/* Submit */}
             <button

@@ -35,7 +35,7 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 ## Entorno y producto
 
 - [x] Evitar que Supabase Free pause el proyecto por inactividad (2026-10-20): Cron Job diario de Vercel a `/api/keepalive`. Pendiente opcional: crear `CRON_SECRET` en Vercel.
-- [ ] `BookingSection` muestra "¡Solicitud recibida!" aunque `submitBooking` falle (el `catch` pone `success`). Mientras Supabase estuvo pausado, las reservas se perdían sin aviso. Debe mostrar un error con el teléfono y WhatsApp.
+- [x] (2026-10-20) El formulario de reserva ya no muestra éxito si falla el envío: avisa con teléfono y WhatsApp y, si el hueco se ha ocupado, pide otra hora y recarga los huecos.
 
 - [x] Arreglar ESLint en `apps/admin` (2026-10-18, con `packageExtensions` en `pnpm-workspace.yaml`)
 - [x] Commit de las pruebas Vitest y de la documentación de `docs/` (2026-10-18)

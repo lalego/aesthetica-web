@@ -29,3 +29,14 @@ export const submitBooking = async (data: BookingFormData): Promise<void> => {
 
   if (error) throw error
 }
+
+// Mensaje del `raise exception` de submit_booking() cuando el hueco se ha
+// ocupado entre que se cargaron los huecos libres y se envió el formulario.
+const SLOT_TAKEN_MESSAGE = 'Ese hueco ya no está disponible'
+
+/** El envío falló porque otra persona reservó esa hora antes (no es un fallo del sistema). */
+export const isSlotTakenError = (err: unknown): boolean =>
+  typeof err === 'object' &&
+  err !== null &&
+  'message' in err &&
+  String(err.message).includes(SLOT_TAKEN_MESSAGE)
