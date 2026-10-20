@@ -65,4 +65,4 @@ Todo en la cuenta de Cloudflare `Lalego@gmail.com`.
 - [x] **Perfil de Empresa en Google** (ficha de Maps): la web `https://aestheticavanzada.com` ya está en "Website" (2026-10-19).
 - [ ] En esa misma ficha: añadir el enlace de reservas `https://aestheticavanzada.com/#agendar` (Edit profile → Contact → Appointment links, o el botón Bookings; depende de la categoría del negocio) y dar acceso a `aestheticavanzada@gmail.com` (Business Profile settings → People and access).
 - [ ] Más direcciones si hacen falta (`citas@`, `privacidad@`…): una regla nueva en Email Routing → Routing rules, y añadirla en "Enviar como" si se quiere responder desde ella.
-- [ ] Subir a GitHub los commits locales pendientes: el despliegue de Pages solo se dispara con un push a `main`.
+- [x] (2026-10-20) Subir a GitHub los commits locales pendientes: el despliegue de Pages solo se dispara con un push a `main`.
