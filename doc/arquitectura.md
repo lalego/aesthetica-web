@@ -224,17 +224,19 @@ Además hizo falta un `.npmrc` con `hoist=false` en la raíz para evitar que pnp
 
 ### Pendiente
 
-- [ ] Variables de entorno reales de Supabase (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`) — siguen en placeholder en local y en Cloudflare Pages.
-- [ ] Confirmar que `apps/admin` tiene un proyecto Vercel real conectado (no se encontró GitHub App de Vercel instalada en el repo).
+- [x] (2026-10-20) Variables de entorno reales de Supabase: Cloudflare Pages y Vercel tienen las de producción, y los `.env.local` de web y admin apuntan al Supabase local.
+- [x] (2026-10-20) `apps/admin` está conectado a Vercel: proyecto `aesthetica-web-admin` (team `aesthetica1`), que despliega en cada push a `main`.
 - [x] Módulos de `apps/admin` (Citas, Pacientes, Tratamientos, Usuarios, Facturación) conectados a Supabase real con auth de staff. No se usan API Routes sino Server Components + Server Actions (más un Route Handler para el PDF de facturas) — ver CLAUDE.md.
 
 ---
 
 ## Roadmap
 
+Lo publicado en cada versión está en [`CHANGELOG.md`](../CHANGELOG.md).
+
 | Fase | Contenido |
 |---|---|
-| ✅ Fase 1 | Landing pública (web) — desplegada en Cloudflare Pages, auto-deploy verificado (2026-08-21) |
-| 🔄 Fase 2 | Panel admin (Next.js, scaffolding + shadcn/ui listo) + Supabase real + Auth staff — módulos aún placeholder |
+| ✅ Fase 1 | Landing pública (web), desplegada en Cloudflare Pages con auto-deploy verificado (2026-08-21). Ampliada en la v1.0.0 (2026-10-20) con páginas de tratamientos, versión en inglés y SEO. |
+| ✅ Fase 2 | Panel admin con Supabase real y acceso del personal: citas, pacientes, tratamientos, usuarios, agenda y facturación (v0.3.0 a v0.5.0). |
 | ⬜ Fase 3 | App móvil Expo (Android) + packages/ui NativeWind |
-| ⬜ Fase 4 | Dominio personalizado, panel pacientes, notificaciones |
+| 🔄 Fase 4 | ✅ Dominio personalizado `aestheticavanzada.com` y correo `info@` (2026-10-19). ⬜ Panel de pacientes y notificaciones. |
