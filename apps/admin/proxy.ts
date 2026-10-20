@@ -55,5 +55,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  // api/keepalive: la llama el cron de Vercel sin sesión (ver su route.ts).
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/keepalive).*)'],
 }

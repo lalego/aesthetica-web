@@ -72,6 +72,7 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 ## Supabase
 
 - **Producción:** proyecto `aesthetica` (org `aesthetica-clinic`), `https://vhcmpglvmpwfwblexhcs.supabase.co`. En Authentication → URL Configuration, Site URL = `https://aesthetica-web-admin.vercel.app`, y Redirect URLs incluye `http://localhost:3000/**`. No ejecutes SQL ni migraciones en remoto sin que lo pida el usuario.
+- **Pausa del plan Free:** Supabase pausa el proyecto tras ~7 días sin actividad, y entonces la web no puede guardar reservas. Lo evita el Cron Job de Vercel (`apps/admin/vercel.json`), que llama cada día a `/api/keepalive` (una consulta con la anon key). Si vuelve a pausarse, revisa en Vercel → Logs que el cron responda 200.
 - **Local:** Supabase CLI con `npx supabase@2.121.0` y la lista `-x` recortada de `docs/DEVELOPMENT.md` (solo Postgres, API, Auth y Storage). `supabase/config.toml` carga `schema.sql` como seed y tiene las migraciones desactivadas, porque fallarían sobre una base nueva. No hay Studio: los datos se ven con DBeaver (`localhost:54322`, `postgres`/`postgres`). No hay servidor de correo, así que los usuarios se crean con `POST /auth/v1/admin/users` y `email_confirm: true`.
 - `db reset` lo borra todo. Después hay que volver a subir la plantilla al bucket, reimportar el histórico (`docker exec -i supabase_db_aesthetica-web psql -U postgres < import-facturas-historicas.sql`) y crear el usuario de staff.
 
