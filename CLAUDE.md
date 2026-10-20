@@ -30,6 +30,7 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 `pnpm dev | build | lint | test` desde la raíz. Para una sola app, `--filter=@aesthetica/web` o `--filter=@aesthetica/admin`. `pnpm test` ejecuta Vitest (pruebas unitarias de web y admin con Supabase simulado). No sustituye a probar contra Postgres.
 
+- Si un cambio en `apps/admin/app/globals.css` (sobre todo en `@theme`) no se aplica ni reiniciando `next dev`, es la caché persistente de Turbopack. Para el servidor, borra `apps/admin/.next/dev/cache` y vuelve a arrancarlo.
 - Para comprobar tipos del admin: `apps/admin/node_modules/.bin/tsc --noEmit -p apps/admin` (ignora el error de `.next/dev/types/validator.ts`, que sale de tipos generados antiguos).
 - `.npmrc` → `hoist=false` es necesario: sin él se mezclan `@types/react` 18 (web) y 19 (admin) y falla `tsc` en web. Como efecto secundario, un paquete que haga `require` de algo que no declara como dependencia falla al cargarse. Esos casos se arreglan con `packageExtensions` en `pnpm-workspace.yaml` (como ya se hizo con `eslint-config-next` → `next`), nunca quitando `hoist=false`.
 
@@ -60,7 +61,7 @@ No copies aquí árboles de ficheros ni listas de comandos que ya estén en `doc
 
 **UI del admin:** el CLI de shadcn no se usa aquí. Los componentes de `components/ui/` están escritos a mano con el estilo `radix-nova` y el paquete unificado `radix-ui` (`import { Dialog } from "radix-ui"` → `Dialog.Root`). Para añadir uno, copia ese patrón.
 
-**Estilo:** Tailwind con `cn()` (`@/lib/utils`), Inter y Playfair Display, paleta rose + neutral. Iconos solo de `lucide-react`. TypeScript strict, props con interfaces explícitas. En la web: React Query v4 para datos asíncronos y react-hook-form + zod para formularios (no hay librería de estado global). El contenido de las secciones está en objetos al principio de cada archivo (`ABOUT` en `AboutSection.tsx`, `MOCK_TREATMENTS` en `treatmentService.ts`, que se usa solo si Supabase falla).
+**Estilo:** Tailwind con `cn()` (`@/lib/utils`), Inter y Playfair Display, paleta dorada + neutros: `gold` en `apps/web/tailwind.config.js`, que el admin replica como variables `--gold-*` en `app/globals.css`. Iconos solo de `lucide-react`. TypeScript strict, props con interfaces explícitas. En la web: React Query v4 para datos asíncronos y react-hook-form + zod para formularios (no hay librería de estado global). El contenido de las secciones está en objetos al principio de cada archivo (`ABOUT` en `AboutSection.tsx`, `MOCK_TREATMENTS` en `treatmentService.ts`, que se usa solo si Supabase falla).
 
 **SEO de la web (prerender):**
 - `src/routes.tsx` es la única lista de páginas. De ahí salen el router, el `<head>` de cada página (título, descripción, canonical, hreflang y JSON-LD, en `src/seo/head.ts`), el HTML estático y `sitemap.xml`. Una página nueva se añade ahí, no en `App.tsx`.
