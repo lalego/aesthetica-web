@@ -24,7 +24,7 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 
 - [x] Prerender, páginas de tratamientos en castellano e inglés, metadatos, JSON-LD `BeautySalon`, sitemap, robots e imágenes WebP (2026-10-20)
 - [ ] Cambiar en el panel (`/tratamientos`) las descripciones que hablan de agujas o de lenguaje médico: Carboxiterapia ("Microinyecciones de CO₂"), Mesoterapia corporal ("Microinyecciones…"), Microneedling ("Microagujas…") y Peeling Dermatology ("Peeling médico…"). Decidir también si se renombran Microneedling y Mesoterapia, porque los nombres ya implican aguja. Después, redesplegar la web para que el HTML recoja el cambio.
-- [ ] Unificar las cifras: el Hero dice "+1.200 clientes · 31 tratamientos" y "Quiénes somos" dice "+800 · 15+".
+- [x] (2026-10-20) Unificar las cifras: +1.200 clientes y 31 tratamientos en el Hero y en "Quiénes somos".
 - [ ] Revisar los textos de `apps/web/src/content/landings.ts` con Alena (número de sesiones, aparatos, precios "desde"). Están redactados con información general, no con la del estudio.
 - [ ] Google Search Console: verificar el dominio (registro DNS en Cloudflare) y enviar `https://aestheticavanzada.com/sitemap.xml`.
 - [ ] Google Business Profile: poner `https://aestheticavanzada.com` como web, revisar que el nombre, la dirección y el teléfono coincidan con `clinic.ts` y añadir los servicios con enlace a su página.

@@ -22,8 +22,8 @@ const ABOUT = {
     imgAlt: 'Alena Martseniuk durante un tratamiento láser en el estudio AestheticA',
     stats: [
       { value: '+25', label: 'Años de experiencia' },
-      { value: '+800', label: 'Clientes satisfechos' },
-      { value: '15+', label: 'Tratamientos disponibles' },
+      { value: '+1.200', label: 'Clientes satisfechos' },
+      { value: '31', label: 'Tratamientos disponibles' },
     ],
     valuesTitle: 'Nuestra filosofía',
     values: [
@@ -66,8 +66,8 @@ const ABOUT = {
     imgAlt: 'Alena Martseniuk performing a laser treatment at the AestheticA studio',
     stats: [
       { value: '25+', label: 'Years of experience' },
-      { value: '800+', label: 'Happy clients' },
-      { value: '15+', label: 'Treatments available' },
+      { value: '1,200+', label: 'Happy clients' },
+      { value: '31', label: 'Treatments available' },
     ],
     valuesTitle: 'Our philosophy',
     values: [
