@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import type { Resolver } from 'react-hook-form'
 import type { BookingErrors, BookingSchema } from './bookingValidation'
-import { AlertCircle, CheckCircle, Loader2, MessageCircle, Phone } from 'lucide-react'
+import { AlertCircle, CalendarDays, Check, CheckCircle, ChevronLeft, ChevronRight, Clock3, Loader2, MessageCircle, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTreatments } from '@/hooks/useTreatments'
 import { useAvailableSlots } from '@/hooks/useAvailableSlots'
@@ -30,6 +30,15 @@ const COPY = {
     },
     title: ['Agenda tu', 'cita'],
     intro: 'Rellena el formulario y te contactaremos en menos de 24 h para confirmar.',
+    steps: ['Tratamiento', 'Día y hora', 'Tus datos'],
+    chooseTreatment: '¿Qué tratamiento te interesa?',
+    chooseDateTime: 'Selecciona un día y una hora disponible.',
+    yourDetails: 'Déjanos tus datos para solicitar la cita.',
+    bookingSummary: 'Resumen de tu cita',
+    continue: 'Continuar',
+    back: 'Volver',
+    duration: 'min',
+    priceFrom: 'Desde',
     successTitle: '¡Solicitud recibida!',
     successText: 'Nos pondremos en contacto contigo en menos de 24 horas para confirmar tu cita.',
     again: 'Hacer otra reserva',
@@ -72,6 +81,15 @@ const COPY = {
     },
     title: ['Book your', 'appointment'],
     intro: 'Fill in the form and we will contact you within 24 hours to confirm.',
+    steps: ['Treatment', 'Date & time', 'Your details'],
+    chooseTreatment: 'Which treatment are you interested in?',
+    chooseDateTime: 'Choose an available day and time.',
+    yourDetails: 'Leave your details to request an appointment.',
+    bookingSummary: 'Appointment summary',
+    continue: 'Continue',
+    back: 'Back',
+    duration: 'min',
+    priceFrom: 'From',
     successTitle: 'Request received!',
     successText: 'We will contact you within 24 hours to confirm your appointment.',
     again: 'Make another booking',
@@ -114,6 +132,15 @@ const COPY = {
     },
     title: ['Запишіться', 'на прийом'],
     intro: 'Заповніть форму, і ми зв’яжемося з вами протягом 24 годин, щоб підтвердити запис.',
+    steps: ['Процедура', 'Дата й час', 'Ваші дані'],
+    chooseTreatment: 'Яка процедура вас цікавить?',
+    chooseDateTime: 'Оберіть доступні дату та час.',
+    yourDetails: 'Залиште контактні дані, щоб записатися.',
+    bookingSummary: 'Підсумок запису',
+    continue: 'Продовжити',
+    back: 'Назад',
+    duration: 'хв',
+    priceFrom: 'Від',
     successTitle: 'Заявку отримано!',
     successText: 'Ми зв’яжемося з вами протягом 24 годин, щоб підтвердити запис.',
     again: 'Зробити ще один запис',
@@ -162,6 +189,8 @@ export const BookingSection = () => {
   const lang = useLang()
   const t = COPY[lang]
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'slot_taken'>('idle')
+  const [step, setStep] = useState(0)
+  const [category, setCategory] = useState<string | null>(null)
   const queryClient = useQueryClient()
   const { data: treatments = [] } = useTreatments()
   const resolver = useMemo(() => lazyResolver(t.errors), [t])
@@ -172,6 +201,7 @@ export const BookingSection = () => {
     reset,
     watch,
     setValue,
+    trigger,
     formState: { errors },
   } = useForm<BookingSchema>({
     resolver,
@@ -181,6 +211,21 @@ export const BookingSection = () => {
   const treatmentId = watch('treatment_id')
   const preferredDate = watch('preferred_date')
   const scheduledAt = watch('scheduled_at')
+  const selectedTreatment = treatments.find((treatment) => treatment.id === treatmentId)
+  const categoryOptions = [
+    { id: 'facial', es: 'Facial', en: 'Facial', uk: 'Обличчя' },
+    { id: 'corporal', es: 'Corporal', en: 'Body', uk: 'Тіло' },
+    { id: 'laser', es: 'Depilación láser', en: 'Laser hair removal', uk: 'Лазерна епіляція' },
+    { id: 'capilar', es: 'Capilar', en: 'Hair', uk: 'Волосся' },
+    { id: 'bienestar', es: 'Bienestar', en: 'Wellness', uk: 'Велнес' },
+  ] as const
+
+  const continueStep = async () => {
+    const valid = step === 0
+      ? await trigger('treatment_id')
+      : await trigger(['preferred_date', 'scheduled_at'])
+    if (valid) setStep((current) => current + 1)
+  }
 
   const { data: slots, isLoading: slotsLoading } = useAvailableSlots(preferredDate, treatmentId)
 
@@ -194,6 +239,8 @@ export const BookingSection = () => {
     try {
       await submitBooking(data)
       setStatus('success')
+      setStep(0)
+      setCategory(null)
       reset()
     } catch (err) {
       console.error('[BookingSection]', err)
@@ -201,6 +248,7 @@ export const BookingSection = () => {
       // reservas se perdían sin que nadie se enterase. Los datos del formulario
       // se conservan para reintentar.
       if (isSlotTakenError(err)) {
+        setStep(1)
         setValue('scheduled_at', '')
         await queryClient.invalidateQueries(['slots'])
         setStatus('slot_taken')
@@ -240,6 +288,80 @@ export const BookingSection = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} onFocus={() => void loadValidation()} noValidate className="space-y-5">
+            <ol className="mb-8 flex items-center" aria-label={t.steps.join(' · ')}>
+              {t.steps.map((label, index) => (
+                <li key={label} className="flex flex-1 items-center last:flex-none">
+                  <div className="flex min-w-0 flex-col items-center gap-2">
+                    <span className={cn('flex h-10 w-10 items-center justify-center rounded-full border text-sm transition-colors', index < step ? 'border-gold-500 bg-gold-500 text-white' : index === step ? 'border-gold-500 bg-white text-gold-600 ring-4 ring-gold-100' : 'border-cream-300 bg-white text-neutral-400')}>
+                      {index < step ? <Check className="h-4 w-4" /> : index + 1}
+                    </span>
+                    <span className={cn('text-center text-xs sm:text-sm', index <= step ? 'text-neutral-800' : 'text-neutral-400')}>{label}</span>
+                  </div>
+                  {index < t.steps.length - 1 && <span className={cn('mx-2 mb-6 h-px flex-1 sm:mx-4', index < step ? 'bg-gold-400' : 'bg-cream-300')} />}
+                </li>
+              ))}
+            </ol>
+
+            <div className="text-center">
+              <h3 className="font-serif text-xl text-neutral-900">
+                {step === 0 ? t.chooseTreatment : step === 1 ? t.chooseDateTime : t.yourDetails}
+              </h3>
+              {step === 1 && selectedTreatment && <p className="mt-1 text-sm text-neutral-600">{localizeTreatment(selectedTreatment, lang).name} · {selectedTreatment.duration_min} {t.duration}</p>}
+            </div>
+
+            {step === 0 && (
+              <div>
+                <input type="hidden" {...register('treatment_id')} />
+                <div className="mb-4 flex flex-wrap justify-center gap-2">
+                  {categoryOptions.map((item) => (
+                    <button key={item.id} type="button" onClick={() => { setCategory(item.id); if (selectedTreatment?.category !== item.id) setValue('treatment_id', '', { shouldValidate: true }) }} className={cn('rounded-full border px-4 py-2 text-sm transition-colors', category === item.id ? 'border-gold-500 bg-gold-500 text-white' : 'border-cream-300 bg-white text-neutral-700 hover:border-gold-400')}>
+                      {item[lang]}
+                    </button>
+                  ))}
+                </div>
+                {category ? <div className="grid gap-2 sm:grid-cols-2">
+                  {treatments.filter((treatment) => treatment.category === category).map((tr) => {
+                    const selected = treatmentId === tr.id
+                    return (
+                      <button key={tr.id} type="button" onClick={() => setValue('treatment_id', tr.id, { shouldValidate: true })} className={cn('flex min-h-16 items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors', selected ? 'border-gold-500 bg-gold-50' : 'border-cream-300 bg-white hover:border-gold-400')}>
+                        <span className="min-w-0"><span className="block text-sm font-medium text-neutral-900">{localizeTreatment(tr, lang).name}</span><span className="mt-1 block text-xs text-neutral-500">{tr.duration_min} {t.duration}{tr.price_eur != null ? ` · ${t.priceFrom} ${tr.price_eur} €` : ''}</span></span>
+                        {selected ? <Check className="h-5 w-5 shrink-0 text-gold-600" /> : <ChevronRight className="h-5 w-5 shrink-0 text-neutral-400" />}
+                      </button>
+                    )
+                  })}
+                </div> : <p className="py-8 text-center text-sm text-neutral-500">{t.chooseTreatment}</p>}
+                {errors.treatment_id && <p role="alert" className="mt-2 text-center text-sm text-red-700">{errors.treatment_id.message}</p>}
+              </div>
+            )}
+
+            {step === 1 && (
+              <div className="space-y-5">
+                <Field label={t.date} error={errors.preferred_date?.message}>
+                  <input {...register('preferred_date')} type="date" min={today} className={inputClass(!!errors.preferred_date)} />
+                </Field>
+                {treatmentId && preferredDate && (
+                  <Field label={t.time} error={errors.scheduled_at?.message}>
+                    {slotsLoading ? <p className="text-base text-neutral-600">{t.searching}</p> : slots && slots.length > 0 ? (
+                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                        {slots.map((iso) => {
+                          const label = new Date(iso).toLocaleTimeString(LOCALES[lang], { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' })
+                          const selected = scheduledAt === iso
+                          return <button key={iso} type="button" onClick={() => setValue('scheduled_at', iso, { shouldValidate: true })} className={cn('rounded-xl border px-3 py-2.5 text-sm transition-colors', selected ? 'border-gold-500 bg-gold-500 text-white' : 'border-cream-300 bg-white text-neutral-800 hover:border-gold-400')}>{label}</button>
+                        })}
+                      </div>
+                    ) : <p className="text-base text-neutral-600">{t.noSlots}</p>}
+                  </Field>
+                )}
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-5">
+                <div className="rounded-2xl border border-cream-300 bg-white p-4">
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wider text-gold-600">{t.bookingSummary}</p>
+                  <p className="font-medium text-neutral-900">{selectedTreatment ? localizeTreatment(selectedTreatment, lang).name : ''}</p>
+                  <p className="mt-1 flex items-center gap-2 text-sm text-neutral-600"><CalendarDays className="h-4 w-4" />{preferredDate} <Clock3 className="ml-2 h-4 w-4" />{scheduledAt ? new Date(scheduledAt).toLocaleTimeString(LOCALES[lang], { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }) : ''}</p>
+                </div>
             {/* Nombre */}
             <Field label={t.name} error={errors.name?.message}>
               <input
@@ -269,69 +391,6 @@ export const BookingSection = () => {
                 />
               </Field>
             </div>
-
-            {/* Tratamiento */}
-            <Field label={t.treatment} error={errors.treatment_id?.message}>
-              <select
-                {...register('treatment_id')}
-                className={inputClass(!!errors.treatment_id)}
-                defaultValue=""
-              >
-                <option value="" disabled>{t.treatmentPh}</option>
-                {treatments.map((tr) => (
-                  <option key={tr.id} value={tr.id}>
-                    {localizeTreatment(tr, lang).name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            {/* Fecha */}
-            <Field label={t.date} error={errors.preferred_date?.message}>
-              <input
-                {...register('preferred_date')}
-                type="date"
-                min={today}
-                className={inputClass(!!errors.preferred_date)}
-              />
-            </Field>
-
-            {/* Hora disponible */}
-            {treatmentId && preferredDate && (
-              <Field label={t.time} error={errors.scheduled_at?.message}>
-                {slotsLoading ? (
-                  <p className="text-base text-neutral-500">{t.searching}</p>
-                ) : slots && slots.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {slots.map((iso) => {
-                      const label = new Date(iso).toLocaleTimeString(LOCALES[lang], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        timeZone: 'Europe/Madrid',
-                      })
-                      const selected = scheduledAt === iso
-                      return (
-                        <button
-                          key={iso}
-                          type="button"
-                          onClick={() => setValue('scheduled_at', iso, { shouldValidate: true })}
-                          className={cn(
-                            'rounded-full border px-4 py-1.5 text-sm transition-colors',
-                            selected
-                              ? 'border-gold-400 bg-gold-400 text-white'
-                              : 'border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-gold-300'
-                          )}
-                        >
-                          {label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-base text-neutral-500">{t.noSlots}</p>
-                )}
-              </Field>
-            )}
 
             {/* Notas */}
             <Field label={t.notes} error={errors.notes?.message}>
@@ -363,6 +422,8 @@ export const BookingSection = () => {
                 <p className="text-sm text-gold-400 pl-7">{errors.gdpr_consent.message}</p>
               )}
             </div>
+              </div>
+            )}
 
             {/* Error de envío: el hueco se ocupó o no se pudo guardar */}
             {status === 'slot_taken' && (
@@ -400,21 +461,16 @@ export const BookingSection = () => {
               </div>
             )}
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={status === 'loading' || !scheduledAt}
-              className="w-full bg-gold-400 text-white py-3 rounded-full hover:bg-gold-500 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-md shadow-gold-200"
-            >
-              {status === 'loading' ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  {t.sending}
-                </>
+            <div className="flex gap-3 pt-3">
+              {step > 0 && <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex items-center justify-center gap-2 rounded-full border border-cream-300 px-5 py-3 text-sm text-neutral-700 hover:border-gold-400"><ChevronLeft className="h-4 w-4" />{t.back}</button>}
+              {step < 2 ? (
+                <button type="button" onClick={() => void continueStep()} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600"><span>{t.continue}</span><ChevronRight className="h-4 w-4" /></button>
               ) : (
-                t.submit
+                <button type="submit" disabled={status === 'loading'} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600">
+                  {status === 'loading' ? <><Loader2 className="h-4 w-4 animate-spin" />{t.sending}</> : t.submit}
+                </button>
               )}
-            </button>
+            </div>
           </form>
         )}
       </div>
