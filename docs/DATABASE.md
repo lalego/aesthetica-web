@@ -57,6 +57,8 @@ La plantilla de factura usa el bucket privado invoice-templates. schema.sql crea
 - Crea una cita pending y repite la comprobación de solapamiento antes de escribir. El esquema no muestra un bloqueo o constraint de exclusión que serialice dos llamadas concurrentes al mismo hueco; no des por garantizada esa carrera solo por la segunda comprobación.
 - Es el único camino de escritura esperado para la reserva pública. No concedas acceso directo a las tablas privadas para reemplazarlo.
 
+Después del INSERT, el trigger `appointments_notify_new_booking` encola una petición con `pg_net` al endpoint privado del panel. La URL y el secreto compartido se leen de Supabase Vault (`booking_notification_url` y `booking_notification_secret`). La función es `SECURITY DEFINER`, no está expuesta a PostgREST y su ejecución se revoca a `PUBLIC`, `anon` y `authenticated`. Un fallo de encolado no revierte una cita; se registra un aviso genérico en los logs de Postgres.
+
 ### create_invoice(p_series text, p_issued_on date, p_patient_id uuid, p_appointment_id uuid, p_customer_name text, p_customer_tax_id text, p_customer_address text, p_customer_postal_code text, p_payment_method text, p_observations text, p_items jsonb) → uuid
 
 - Asigna una secuencia global bajo advisory transaction lock y genera el número con serie, secuencia y año de emisión.
@@ -77,4 +79,5 @@ La plantilla de factura usa el bucket privado invoice-templates. schema.sql crea
 - Los permisos efectivos de service_role sobre create_invoice en cada entorno.
 - Las políticas del bucket y la configuración efectiva de Storage remota.
 - Si la base remota coincide con el esquema y las migraciones del repositorio.
+- Las notificaciones requieren configurar los secretos indicados en `doc/notificaciones-reservas.md` antes de recibir avisos.
 - El uso en producción de specialists y treatment_history; aparecen en el esquema, pero no se confirmó un flujo de UI activo para ellos.

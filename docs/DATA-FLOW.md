@@ -6,7 +6,7 @@
 2. React Router elige Home o una página legal. Home ensambla las secciones de la landing.
 3. TreatmentsSection consume useTreatments(); el hook usa React Query y fetchTreatments() consulta treatments activos en Supabase. Ante error devuelve MOCK_TREATMENTS local.
 4. BookingSection recoge datos y consentimiento explícito. Para mostrar huecos, useAvailableSlots(date, treatmentId) llama a fetchAvailableSlots(), que invoca get_available_slots.
-5. Al enviar, bookingService.submitBooking() llama a submit_booking RPC con los campos de reserva. La función de base de datos realiza el alta relacionada y valida de nuevo la disponibilidad para evitar una carrera entre reservas. El error RPC se propaga al formulario.
+5. Al enviar, bookingService.submitBooking() llama a submit_booking RPC con los campos de reserva. La función de base de datos realiza el alta relacionada y valida de nuevo la disponibilidad. Un trigger encola una notificación para el endpoint privado de Vercel, que consulta los datos del servidor y envía correo y WhatsApp. El error RPC se propaga al formulario.
 
 ~~~mermaid
 sequenceDiagram
@@ -16,6 +16,9 @@ sequenceDiagram
     participant Servicio as Servicios web
     participant Supabase
     participant DB as Postgres / RPC
+    participant Hook as pg_net
+    participant API as Endpoint privado Vercel
+    participant Canales as Resend + WhatsApp Cloud API
 
     Cliente->>Formulario: Selecciona tratamiento y fecha
     Formulario->>Hook: date + treatmentId
@@ -28,6 +31,9 @@ sequenceDiagram
     Servicio->>Supabase: submit_booking(datos)
     Supabase->>DB: Valida hueco y crea reserva
     DB-->>Formulario: Resultado o error
+    DB->>Hook: Encola appointment_id tras INSERT
+    Hook->>API: POST autenticado
+    API->>Canales: Email y plantilla WhatsApp
     Formulario-->>Cliente: Confirmación o mensaje de error
 ~~~
 

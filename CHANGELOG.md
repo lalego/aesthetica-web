@@ -15,6 +15,7 @@ Novedades de cada versión de la web pública (`aestheticavanzada.com`) y del pa
 ## Sin publicar
 
 ### Novedades
+- Avisos de nuevas reservas por correo (Resend) y WhatsApp (Cloud API), pendientes de configurar las credenciales y activar la migración en producción.
 - **Versión en ucraniano** en `/ua`: todas las páginas, los tratamientos y el formulario de reserva. El menú muestra las banderas de los otros dos idiomas.
 
 ### Cambios

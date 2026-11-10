@@ -35,6 +35,8 @@ Lista única de tareas abiertas. Cuando cierres una, márcala con la fecha.
 
 ## Entorno y producto
 
+- [ ] Activar notificaciones de reservas en producción: configurar Resend y WhatsApp Cloud API, variables de Vercel, ejecutar `supabase/migrations/20261101_notificaciones_reservas.sql` y guardar la URL/clave compartida en Vault (ver `doc/notificaciones-reservas.md`).
+
 - [x] Evitar que Supabase Free pause el proyecto por inactividad (2026-10-20): Cron Job diario de Vercel a `/api/keepalive`. Pendiente opcional: crear `CRON_SECRET` en Vercel.
 - [x] (2026-10-20) El formulario de reserva ya no muestra éxito si falla el envío: avisa con teléfono y WhatsApp y, si el hueco se ha ocupado, pide otra hora y recarga los huecos.
 
