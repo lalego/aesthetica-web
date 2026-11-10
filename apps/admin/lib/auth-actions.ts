@@ -23,7 +23,7 @@ export async function login(
     return { error: 'Email o contraseña incorrectos.' }
   }
 
-  redirect('/citas')
+  redirect('/inicio')
 }
 
 export async function signOut() {
@@ -62,5 +62,5 @@ export async function setInitialPassword(
     return { error: 'No se pudo guardar la contraseña. Inténtalo de nuevo.' }
   }
 
-  redirect('/citas')
+  redirect('/inicio')
 }

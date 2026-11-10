@@ -57,7 +57,7 @@ describe('auth server actions', () => {
     mocks.signInWithPassword.mockResolvedValueOnce({ error: null })
     await expect(
       login(undefined, form({ email: ' staff@example.test ', password: 'correct' }))
-    ).rejects.toThrow('REDIRECT:/citas')
+    ).rejects.toThrow('REDIRECT:/inicio')
     expect(mocks.signInWithPassword).toHaveBeenLastCalledWith({
       email: 'staff@example.test',
       password: 'correct',
@@ -77,7 +77,7 @@ describe('auth server actions', () => {
 
     await expect(
       setInitialPassword(undefined, form({ password: 'long-enough', confirmPassword: 'long-enough' }))
-    ).rejects.toThrow('REDIRECT:/citas')
+    ).rejects.toThrow('REDIRECT:/inicio')
     expect(mocks.updateUser).toHaveBeenCalledWith({ password: 'long-enough' })
   })
 })

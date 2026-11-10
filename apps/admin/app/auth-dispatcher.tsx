@@ -15,7 +15,7 @@ import { createClient } from '@/lib/supabase-browser'
 // fragmento a mano y llamar a setSession() explícitamente.
 // Decide a dónde mandar al usuario:
 // - viene de una invitación/recuperación → /set-password
-// - ya tiene sesión → /citas
+// - ya tiene sesión → /inicio
 // - nada de lo anterior → /login
 export function AuthDispatcher() {
   const router = useRouter()
@@ -36,13 +36,13 @@ export function AuthDispatcher() {
         })
 
         if (!error) {
-          router.replace(type === 'invite' || type === 'recovery' ? '/set-password' : '/citas')
+          router.replace(type === 'invite' || type === 'recovery' ? '/set-password' : '/inicio')
           return
         }
       }
 
       const { data } = await supabase.auth.getSession()
-      router.replace(data.session ? '/citas' : '/login')
+      router.replace(data.session ? '/inicio' : '/login')
     }
 
     dispatch()

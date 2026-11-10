@@ -47,7 +47,7 @@ export async function proxy(request: NextRequest) {
 
   if (isAuthenticated && isLoginPath) {
     const url = request.nextUrl.clone()
-    url.pathname = '/citas'
+    url.pathname = '/inicio'
     return NextResponse.redirect(url)
   }
 
