@@ -38,11 +38,14 @@ function DialogOverlay({
 function DialogContent({
   className,
   children,
+  hideOverlay = false,
+  hideClose = false,
+  inline = false,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
-  return (
-    <DialogPortal>
-      <DialogOverlay />
+}: React.ComponentProps<typeof DialogPrimitive.Content> & { hideOverlay?: boolean; hideClose?: boolean; inline?: boolean }) {
+  const content = (
+    <>
+      {!hideOverlay && <DialogOverlay />}
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
@@ -53,13 +56,14 @@ function DialogContent({
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute top-4 right-4 rounded-md opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-3 focus-visible:ring-ring/50">
+        {!hideClose && <DialogPrimitive.Close className="absolute top-4 right-4 rounded-md opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-3 focus-visible:ring-ring/50">
           <X className="size-4" />
           <span className="sr-only">Cerrar</span>
-        </DialogPrimitive.Close>
+        </DialogPrimitive.Close>}
       </DialogPrimitive.Content>
-    </DialogPortal>
+    </>
   )
+  return inline ? content : <DialogPortal>{content}</DialogPortal>
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {

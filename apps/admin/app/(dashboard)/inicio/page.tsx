@@ -42,6 +42,7 @@ interface UpcomingAppointment {
   status: AppointmentStatus
   patients: { full_name: string } | null
   treatments: { name: string } | null
+  treatment_variants: { name: string; price_eur: number } | null
 }
 
 interface RecentInvoice {
@@ -59,13 +60,30 @@ export default async function InicioPage() {
   // Margen de un día hacia atrás: "hoy" se decide después en hora de Madrid.
   const since = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()
 
-  const [appointments, monthInvoices, patients, newPatients, recentInvoices] = await Promise.all([
-    supabaseAdmin
+  const loadAppointments = async () => {
+    const withVariants = await supabaseAdmin
+      .from('appointments')
+      .select('id, scheduled_at, status, patients(full_name), treatments(name), treatment_variants(name, price_eur)')
+      .gte('scheduled_at', since)
+      .neq('status', 'cancelled')
+      .order('scheduled_at', { ascending: true })
+    if (!withVariants.error) return withVariants
+
+    // Permite abrir el panel antes de aplicar la migración de variantes.
+    const legacy = await supabaseAdmin
       .from('appointments')
       .select('id, scheduled_at, status, patients(full_name), treatments(name)')
       .gte('scheduled_at', since)
       .neq('status', 'cancelled')
-      .order('scheduled_at', { ascending: true }),
+      .order('scheduled_at', { ascending: true })
+    return {
+      ...legacy,
+      data: legacy.data?.map((appointment) => ({ ...appointment, treatment_variants: null })) ?? null,
+    }
+  }
+
+  const [appointments, monthInvoices, patients, newPatients, recentInvoices] = await Promise.all([
+    loadAppointments(),
     supabaseAdmin.from('invoices').select('total').gte('issued_on', monthStart),
     supabaseAdmin.from('patients').select('id', { count: 'exact', head: true }),
     supabaseAdmin
@@ -143,7 +161,7 @@ export default async function InicioPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-medium">{appointment.patients?.full_name ?? '—'}</div>
-                    <div className="truncate text-xs text-muted-foreground">{appointment.treatments?.name ?? '—'}</div>
+                    <div className="truncate text-xs text-muted-foreground">{appointment.treatments?.name ?? '—'}{appointment.treatment_variants ? ` · ${appointment.treatment_variants.name}` : ''}</div>
                   </div>
                   <Badge variant={STATUS_BADGE[appointment.status]}>{STATUS_LABELS[appointment.status]}</Badge>
                 </li>

@@ -43,6 +43,7 @@ export interface AppointmentRow {
     postal_code: string | null
   } | null
   treatments: { name: string } | null
+  treatment_variants: { name: string; price_eur: number } | null
   // invoices.appointment_id es unique: PostgREST lo devuelve como objeto, pero
   // según la versión puede llegar como array de 0–1 elementos.
   invoices: AppointmentInvoice | AppointmentInvoice[] | null
@@ -142,7 +143,7 @@ function AppointmentRowItem({ appointment, treatments }: AppointmentRowItemProps
           {appointment.patients?.phone ? ` · ${appointment.patients.phone}` : ''}
         </div>
       </TableCell>
-      <TableCell>{appointment.treatments?.name ?? '—'}</TableCell>
+      <TableCell>{appointment.treatments?.name ?? '—'}{appointment.treatment_variants && <div className="text-xs text-muted-foreground">{appointment.treatment_variants.name}</div>}</TableCell>
       <TableCell className="max-w-56 truncate text-muted-foreground">
         {appointment.notes ?? '—'}
       </TableCell>
@@ -180,6 +181,7 @@ function AppointmentRowItem({ appointment, treatments }: AppointmentRowItemProps
               id: appointment.id,
               patientId: appointment.patient_id,
               treatmentId: appointment.treatment_id,
+              variant: appointment.treatment_variants,
               date: madridDate.format(new Date(appointment.scheduled_at)),
             }}
           />

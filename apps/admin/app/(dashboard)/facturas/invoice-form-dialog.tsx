@@ -52,6 +52,7 @@ export interface InvoiceAppointmentPreset {
   id: string
   patientId: string
   treatmentId: string
+  variant?: { name: string; price_eur: number } | null
   date: string // YYYY-MM-DD
 }
 
@@ -84,12 +85,12 @@ function todayInMadrid() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid' }).format(new Date())
 }
 
-function lineFromTreatment(treatment: BillingTreatment | undefined): LineState {
+function lineFromTreatment(treatment: BillingTreatment | undefined, variant?: InvoiceAppointmentPreset['variant']): LineState {
   if (!treatment) return emptyLine()
   return {
     treatmentId: treatment.id,
-    description: treatment.name,
-    amount: treatment.price_eur != null ? String(treatment.price_eur) : '',
+    description: variant ? `${treatment.name} · ${variant.name}` : treatment.name,
+    amount: variant ? String(variant.price_eur) : treatment.price_eur != null ? String(treatment.price_eur) : '',
   }
 }
 
@@ -110,7 +111,7 @@ export function InvoiceFormDialog({ patients, treatments, appointment }: Invoice
   const [series, setSeries] = useState<InvoiceSeries>(
     presetTreatment ? seriesForCategory(presetTreatment.category) : 'F'
   )
-  const [lines, setLines] = useState<LineState[]>([lineFromTreatment(presetTreatment)])
+  const [lines, setLines] = useState<LineState[]>([lineFromTreatment(presetTreatment, appointment?.variant)])
   const [paymentMethod, setPaymentMethod] = useState('')
   const [observations, setObservations] = useState('')
 

@@ -152,7 +152,7 @@ export function WeekCalendar({ appointments }: { appointments: AppointmentRow[] 
                       {timeFormatter.format(new Date(appointment.scheduled_at))}{' '}
                       {appointment.patients?.full_name ?? '—'}
                     </div>
-                    <div className="truncate opacity-80">{appointment.treatments?.name ?? '—'}</div>
+                    <div className="truncate opacity-80">{appointment.treatments?.name ?? '—'}{appointment.treatment_variants ? ` · ${appointment.treatment_variants.name}` : ''}</div>
                   </button>
                 ))}
               </div>
@@ -174,7 +174,7 @@ export function WeekCalendar({ appointments }: { appointments: AppointmentRow[] 
             scheduledAt: selected.scheduled_at,
             status: selected.status,
             patientName: selected.patients?.full_name ?? '—',
-            treatmentName: selected.treatments?.name ?? '—',
+            treatmentName: [selected.treatments?.name ?? '—', selected.treatment_variants?.name].filter(Boolean).join(' · '),
           }}
         />
       )}

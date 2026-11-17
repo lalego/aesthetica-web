@@ -26,10 +26,12 @@ export async function POST(request: Request) {
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(appointmentId)) {
     return json({ error: 'Invalid appointment_id' }, 400)
   }
-  const expected = createHmac('sha256', secret).update(`${timestamp}.${appointmentId}`).digest()
-  let supplied: Buffer
+  const expected = new Uint8Array(
+    createHmac('sha256', secret).update(`${timestamp}.${appointmentId}`).digest(),
+  )
+  let supplied: Uint8Array<ArrayBuffer>
   try {
-    supplied = Buffer.from(signature, 'hex')
+    supplied = new Uint8Array(Buffer.from(signature, 'hex'))
   } catch {
     return json({ error: 'Unauthorized' }, 401)
   }
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
   })
   const { data, error } = await supabase
     .from('appointments')
-    .select('id, scheduled_at, patients(full_name, email, phone), treatments(name)')
+    .select('id, scheduled_at, patients(full_name, email, phone), treatments(name), treatment_variants(name)')
     .eq('id', appointmentId)
     .single()
 
@@ -61,7 +63,9 @@ export async function POST(request: Request) {
 
   const patient = Array.isArray(data.patients) ? data.patients[0] : data.patients
   const treatment = Array.isArray(data.treatments) ? data.treatments[0] : data.treatments
+  const variant = Array.isArray(data.treatment_variants) ? data.treatment_variants[0] : data.treatment_variants
   if (!patient || !treatment) return json({ error: 'Appointment details are incomplete' }, 422)
+  const treatmentLabel = variant ? `${treatment.name} · ${variant.name}` : treatment.name
 
   const date = new Intl.DateTimeFormat('es-ES', {
     dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Madrid',
@@ -69,7 +73,7 @@ export async function POST(request: Request) {
   const message = [
     'Nueva solicitud de cita — Estudio AestheticA',
     `Cliente: ${patient.full_name}`,
-    `Tratamiento: ${treatment.name}`,
+    `Tratamiento: ${treatmentLabel}`,
     `Fecha: ${date}`,
     `Teléfono: ${patient.phone ?? 'No indicado'}`,
     `Email: ${patient.email ?? 'No indicado'}`,
@@ -77,7 +81,7 @@ export async function POST(request: Request) {
 
   const outcomes = await Promise.allSettled([
     sendEmail(message, patient.full_name, recipient),
-    sendWhatsApp(patient.full_name, treatment.name, date, patient.phone ?? ''),
+    sendWhatsApp(patient.full_name, treatmentLabel, date, patient.phone ?? ''),
   ])
   const failed = outcomes.filter((result) => result.status === 'rejected')
   if (failed.length) {
