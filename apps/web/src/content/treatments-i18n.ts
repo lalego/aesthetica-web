@@ -8,7 +8,7 @@ import type { Treatment } from '@/types'
 //  y /uk sale en castellano.
 // ─────────────────────────────────────────────────────────────────
 const EN: Record<string, { name: string; description: string }> = {
-  f1:  { name: 'Classic Facial', description: 'Deep cleansing with extraction of impurities for fresh, balanced skin.' },
+  f1:  { name: 'High-End Facial Cleanse', description: 'A complete facial cleanse with exfoliation, pore preparation, toner, an alginate mask and finishing cream.' },
   f2:  { name: 'Hydroface Plus — Advanced Deep Cleansing', description: 'Advanced facial with hydrodermabrasion for renewed, radiant skin.' },
   f3:  { name: 'Diamond-Tip Microdermabrasion', description: 'Mechanical exfoliation that removes dead skin cells and boosts cell renewal.' },
   f4:  { name: "Men's Facial with Microdermabrasion", description: "Cleansing facial adapted to men's skin, with microdermabrasion." },
@@ -24,6 +24,7 @@ const EN: Record<string, { name: string; description: string }> = {
   f14: { name: 'Enzyme Therapy', description: 'Gentle enzymatic exfoliation that purifies and renews the skin.' },
   f15: { name: 'Facial Carboxytherapy', description: 'CO₂ treatment to improve skin oxygenation and radiance.' },
   f16: { name: 'Eye Pressotherapy', description: 'Pressure massage for the eye area to reduce puffiness and bags.' },
+  f17: { name: 'Next-Generation IPL', description: 'Intense pulsed light for facial rejuvenation, pigmentation, redness, acne and wrinkles.' },
   c1:  { name: 'Premium Therapeutic Pressotherapy', description: 'Pressure drainage for tired legs and fluid retention.' },
   c2:  { name: 'Body and Eye Pressotherapy', description: 'Combined body and eye pressotherapy session.' },
   c3:  { name: 'Full-Body Massage (60 min)', description: 'Full-body massage to release tension and relax.' },
@@ -64,6 +65,7 @@ const UK: Record<string, { name: string; description: string }> = {
   f14: { name: 'Ензимотерапія', description: 'М’який ензимний пілінг, що очищає та оновлює шкіру.' },
   f15: { name: 'Карбокситерапія обличчя', description: 'Процедура з CO₂ для кращої оксигенації та сяйва шкіри.' },
   f16: { name: 'Пресотерапія для очей', description: 'Компресійний масаж зони навколо очей проти набряків і мішків.' },
+  f17: { name: 'IPL нового покоління', description: 'Інтенсивне імпульсне світло для омолодження обличчя, пігментації, почервоніння, акне та зморшок.' },
   c1:  { name: 'Терапевтична пресотерапія преміум', description: 'Компресійний дренаж для втомлених ніг і затримки рідини.' },
   c2:  { name: 'Пресотерапія для тіла та очей', description: 'Комбінований сеанс пресотерапії для тіла та зони очей.' },
   c3:  { name: 'Масаж всього тіла (60 хв)', description: 'Масаж всього тіла для зняття напруги та розслаблення.' },

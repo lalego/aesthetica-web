@@ -180,6 +180,17 @@ export const MOCK_TREATMENTS: Treatment[] = [
     image_url: null,
     created_at: '',
   },
+  {
+    id: 'f17',
+    name: 'IPL de Última Generación',
+    category: 'facial',
+    description: 'Tratamiento de luz pulsada para rejuvenecimiento facial, manchas, cuperosis, acné y arrugas. Bonos de cinco sesiones con descuento.',
+    duration_min: 90,
+    price_eur: 120,
+    is_active: true,
+    image_url: null,
+    created_at: '',
+  },
   // ── ESTÉTICA CORPORAL ─────────────────────────────────────────────────────
   {
     id: 'c1',
@@ -417,16 +428,83 @@ export const MOCK_TREATMENTS: Treatment[] = [
   },
 ]
 
+// Bonos y precios alternativos publicados en Booksy. También sirven como
+// catálogo de respaldo si Supabase no responde.
+const MOCK_VARIANTS: Record<string, Array<{ name: string; duration_min: number; price_eur: number }>> = {
+  f3: [{ name: 'Precio promocional', duration_min: 60, price_eur: 54 }, { name: 'Precio habitual', duration_min: 60, price_eur: 60 }],
+  f6: [{ name: '1 sesión', duration_min: 50, price_eur: 110 }, { name: 'Bono 3 sesiones', duration_min: 90, price_eur: 295 }, { name: 'Bono 5 sesiones', duration_min: 90, price_eur: 465 }],
+  f7: [{ name: '1 sesión', duration_min: 30, price_eur: 120 }, { name: 'Bono 3 sesiones', duration_min: 90, price_eur: 300 }],
+  f17: [
+    { name: 'Rejuvenecimiento · 1 sesión', duration_min: 90, price_eur: 120 }, { name: 'Rejuvenecimiento · 5 sesiones', duration_min: 90, price_eur: 480 },
+    { name: 'Manchas · 1 sesión', duration_min: 90, price_eur: 130 }, { name: 'Manchas · 5 sesiones', duration_min: 90, price_eur: 520 },
+    { name: 'Vascular/cuperosis · 1 sesión', duration_min: 90, price_eur: 140 }, { name: 'Vascular/cuperosis · 5 sesiones', duration_min: 90, price_eur: 560 },
+    { name: 'Acné/piel grasa · 1 sesión', duration_min: 90, price_eur: 110 }, { name: 'Acné/piel grasa · 5 sesiones', duration_min: 90, price_eur: 440 },
+    { name: 'Arrugas y estrías · 1 sesión', duration_min: 90, price_eur: 150 }, { name: 'Arrugas y estrías · 5 sesiones', duration_min: 90, price_eur: 600 },
+  ],
+  f8: [{ name: '1 sesión', duration_min: 30, price_eur: 70 }, { name: 'Bono 6 sesiones', duration_min: 75, price_eur: 378 }],
+  f9: [{ name: '1 sesión', duration_min: 30, price_eur: 75 }, { name: 'Bono 8 sesiones', duration_min: 30, price_eur: 405 }],
+  f12: [{ name: '1 sesión', duration_min: 30, price_eur: 150 }, { name: 'Bono 3 sesiones', duration_min: 75, price_eur: 350 }],
+  f13: [{ name: '1 sesión', duration_min: 30, price_eur: 90 }, { name: 'Bono 3 sesiones', duration_min: 90, price_eur: 250 }],
+  f14: [{ name: '1 sesión', duration_min: 30, price_eur: 69 }, { name: 'Bono 3 sesiones', duration_min: 90, price_eur: 180 }],
+  f15: [{ name: '1 sesión', duration_min: 30, price_eur: 55 }, { name: 'Bono 3 sesiones', duration_min: 30, price_eur: 140 }],
+  c1: [{ name: '1 sesión', duration_min: 30, price_eur: 29 }, { name: 'Bono 5 sesiones', duration_min: 30, price_eur: 119 }, { name: 'Bono 10 sesiones', duration_min: 30, price_eur: 209 }],
+  c3: [{ name: '1 hora', duration_min: 60, price_eur: 70 }, { name: '1 hora 30 min', duration_min: 90, price_eur: 80 }],
+  c6: [{ name: '1 sesión estándar', duration_min: 60, price_eur: 50 }, { name: 'Bono 5 sesiones estándar', duration_min: 60, price_eur: 240 }, { name: 'Bono 10 sesiones estándar', duration_min: 60, price_eur: 380 }],
+  c7: [{ name: '1 sesión premium', duration_min: 90, price_eur: 60 }, { name: 'Bono 5 sesiones premium', duration_min: 90, price_eur: 300 }, { name: 'Bono 10 sesiones premium', duration_min: 90, price_eur: 480 }],
+  c8: [{ name: '1 sesión', duration_min: 80, price_eur: 80 }, { name: 'Bono 5 sesiones', duration_min: 80, price_eur: 350 }, { name: 'Bono 10 sesiones', duration_min: 80, price_eur: 499 }],
+  c9: [{ name: '1 sesión', duration_min: 30, price_eur: 55 }, { name: 'Bono 3 sesiones', duration_min: 30, price_eur: 140 }, { name: 'Bono 5 sesiones', duration_min: 30, price_eur: 250 }],
+  c10: [{ name: 'Peeling corporal', duration_min: 75, price_eur: 50 }, { name: 'Peeling + masaje + mascarilla facial', duration_min: 90, price_eur: 69 }],
+  cap1: [{ name: 'Bono intensivo · 8 sesiones', duration_min: 90, price_eur: 750 }, { name: 'Bono completo · 12 sesiones', duration_min: 90, price_eur: 950 }],
+  b1: [{ name: 'Bono 3 sesiones', duration_min: 90, price_eur: 250 }, { name: 'Bono 5 sesiones', duration_min: 90, price_eur: 350 }],
+  b6: [{ name: 'Tarjeta regalo · 1 hora', duration_min: 60, price_eur: 80 }, { name: 'Tarjeta regalo · 1 hora 30 min', duration_min: 90, price_eur: 100 }],
+  l1: [
+    { name: 'Zona mini mujer', duration_min: 30, price_eur: 20 }, { name: 'Zona pequeña mujer', duration_min: 30, price_eur: 40 },
+    { name: 'Zona mediana mujer', duration_min: 30, price_eur: 60 }, { name: 'Zona grande mujer', duration_min: 30, price_eur: 80 },
+    { name: 'Cuerpo completo mujer', duration_min: 90, price_eur: 140 }, { name: 'Zona mini hombre', duration_min: 30, price_eur: 30 },
+    { name: 'Zona pequeña hombre', duration_min: 30, price_eur: 60 }, { name: 'Zona mediana hombre', duration_min: 30, price_eur: 90 },
+    { name: 'Zona grande hombre', duration_min: 30, price_eur: 120 }, { name: 'Cuerpo completo hombre', duration_min: 90, price_eur: 180 },
+  ],
+}
+
+const BOOKSY_BASE: Record<string, Partial<Pick<Treatment, 'name' | 'duration_min' | 'price_eur' | 'is_active'>>> = {
+  f1: { name: 'Higiene Facial Alta Cosmética', price_eur: 89 },
+  f2: { price_eur: 119 }, f3: { price_eur: 54 }, f4: { price_eur: 79 },
+  f5: { price_eur: 129 }, f6: { price_eur: 110 }, f7: { price_eur: 120 },
+  f8: { price_eur: 70 }, f9: { price_eur: 75 }, f10: { price_eur: 55 },
+  f11: { price_eur: 40.5 }, f12: { price_eur: 150 }, f13: { price_eur: 90 },
+  f14: { price_eur: 69 }, f15: { price_eur: 55 }, f16: { price_eur: 20 },
+  c1: { price_eur: 29 }, c2: { price_eur: 35 }, c3: { price_eur: 70 }, c4: { is_active: false },
+  c5: { duration_min: 50, price_eur: 65 }, c6: { price_eur: 50 }, c7: { price_eur: 60 },
+  c8: { price_eur: 80 }, c9: { price_eur: 55 }, c10: { price_eur: 50 },
+  l1: { price_eur: 20 }, l2: { price_eur: 890 }, l3: { price_eur: 1190 }, l4: { is_active: false },
+}
+
+for (const treatment of MOCK_TREATMENTS) {
+  Object.assign(treatment, BOOKSY_BASE[treatment.id] ?? {})
+  treatment.variants = (MOCK_VARIANTS[treatment.id] ?? []).map((variant, index) => ({
+    ...variant,
+    id: `mock-${treatment.id}-${index}`,
+    treatment_id: treatment.id,
+    is_active: true,
+  }))
+}
+
 export const fetchTreatments = async (): Promise<Treatment[]> => {
-  const { data, error } = await supabase.select<Treatment[]>(
+  const activeMocks = MOCK_TREATMENTS.filter((treatment) => treatment.is_active)
+  const withVariants = await supabase.select<Treatment[]>(
+    'treatments',
+    'select=*,variants:treatment_variants(*)&is_active=eq.true&order=category',
+  )
+
+  if (!withVariants.error) return withVariants.data ?? activeMocks
+
+  // Mantiene legible el catálogo si el despliegue de código precede a la migración.
+  const legacy = await supabase.select<Treatment[]>(
     'treatments',
     'select=*&is_active=eq.true&order=category',
   )
+  if (!legacy.error) return legacy.data ?? activeMocks
 
-  if (error) {
-    console.warn('[treatmentService] Supabase no disponible, usando mock data:', error.message)
-    return MOCK_TREATMENTS
-  }
-
-  return (data as Treatment[]) ?? MOCK_TREATMENTS
+  console.warn('[treatmentService] Supabase no disponible, usando mock data:', legacy.error.message)
+  return activeMocks
 }

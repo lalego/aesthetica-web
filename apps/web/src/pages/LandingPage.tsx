@@ -61,7 +61,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
               e.preventDefault()
               document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="bg-gold-400 text-white px-8 py-3.5 rounded-full hover:bg-gold-500 transition-colors flex items-center gap-2 group shadow-md shadow-gold-200"
+            className="bg-gold-400 text-white px-8 py-3.5 rounded-[15px] hover:bg-gold-500 transition-colors flex items-center gap-2 group shadow-md shadow-gold-200"
           >
             {t.book}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -70,7 +70,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
             href={CLINIC.contact.whatsapp_href}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-full hover:border-gold-300 hover:text-gold-500 transition-colors"
+            className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-[15px] hover:border-gold-300 hover:text-gold-500 transition-colors"
           >
             {t.whatsapp}
           </a>
@@ -112,7 +112,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
                   <li key={l.key}>
                     <Link
                       to={landingPath(l, lang)}
-                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
+                      className="inline-block px-5 py-2.5 rounded-[15px] border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
                     >
                       {l.label[lang]}
                     </Link>
@@ -122,7 +122,7 @@ export const LandingPage = ({ landing, crumbs }: LandingPageProps) => {
                   <li>
                     <Link
                       to={landingPath(parent, lang)}
-                      className="inline-block px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
+                      className="inline-block px-5 py-2.5 rounded-[15px] border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors"
                     >
                       {t.seeAll} {parent.label[lang].toLowerCase()}
                     </Link>

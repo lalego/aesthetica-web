@@ -20,6 +20,7 @@ describe('fetchAvailableSlots', () => {
     expect(rpc).toHaveBeenCalledWith('get_available_slots', {
       p_date: '2030-05-20',
       p_treatment_id: 'f1',
+      p_variant_id: null,
     })
   })
 

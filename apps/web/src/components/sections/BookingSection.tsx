@@ -191,6 +191,7 @@ export const BookingSection = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'slot_taken'>('idle')
   const [step, setStep] = useState(0)
   const [category, setCategory] = useState<string | null>(null)
+  const [variantError, setVariantError] = useState(false)
   const queryClient = useQueryClient()
   const { data: treatments = [] } = useTreatments()
   const resolver = useMemo(() => lazyResolver(t.errors), [t])
@@ -209,9 +210,12 @@ export const BookingSection = () => {
   })
 
   const treatmentId = watch('treatment_id')
+  const variantId = watch('variant_id')
   const preferredDate = watch('preferred_date')
   const scheduledAt = watch('scheduled_at')
   const selectedTreatment = treatments.find((treatment) => treatment.id === treatmentId)
+  const activeVariants = selectedTreatment?.variants?.filter((variant) => variant.is_active) ?? []
+  const selectedVariant = activeVariants.find((variant) => variant.id === variantId)
   const categoryOptions = [
     { id: 'facial', es: 'Facial', en: 'Facial', uk: 'Обличчя' },
     { id: 'corporal', es: 'Corporal', en: 'Body', uk: 'Тіло' },
@@ -224,15 +228,19 @@ export const BookingSection = () => {
     const valid = step === 0
       ? await trigger('treatment_id')
       : await trigger(['preferred_date', 'scheduled_at'])
+    if (valid && step === 0 && activeVariants.length > 0 && !selectedVariant) {
+      setVariantError(true)
+      return
+    }
     if (valid) setStep((current) => current + 1)
   }
 
-  const { data: slots, isLoading: slotsLoading } = useAvailableSlots(preferredDate, treatmentId)
+  const { data: slots, isLoading: slotsLoading } = useAvailableSlots(preferredDate, treatmentId, variantId)
 
   // Si cambian tratamiento o fecha, la hora elegida antes ya no vale.
   useEffect(() => {
     setValue('scheduled_at', '')
-  }, [treatmentId, preferredDate, setValue])
+  }, [treatmentId, variantId, preferredDate, setValue])
 
   const onSubmit = async (data: BookingSchema) => {
     setStatus('loading')
@@ -306,15 +314,16 @@ export const BookingSection = () => {
               <h3 className="font-serif text-xl text-neutral-900">
                 {step === 0 ? t.chooseTreatment : step === 1 ? t.chooseDateTime : t.yourDetails}
               </h3>
-              {step === 1 && selectedTreatment && <p className="mt-1 text-sm text-neutral-600">{localizeTreatment(selectedTreatment, lang).name} · {selectedTreatment.duration_min} {t.duration}</p>}
+              {step === 1 && selectedTreatment && <p className="mt-1 text-sm text-neutral-600">{localizeTreatment(selectedTreatment, lang).name} · {selectedVariant ? `${selectedVariant.name} · ${selectedVariant.duration_min} ${t.duration}` : `${selectedTreatment.duration_min} ${t.duration}`}</p>}
             </div>
 
             {step === 0 && (
               <div>
                 <input type="hidden" {...register('treatment_id')} />
+                <input type="hidden" {...register('variant_id')} />
                 <div className="mb-4 flex flex-wrap justify-center gap-2">
                   {categoryOptions.map((item) => (
-                    <button key={item.id} type="button" onClick={() => { setCategory(item.id); if (selectedTreatment?.category !== item.id) setValue('treatment_id', '', { shouldValidate: true }) }} className={cn('rounded-full border px-4 py-2 text-sm transition-colors', category === item.id ? 'border-gold-500 bg-gold-500 text-white' : 'border-cream-300 bg-white text-neutral-700 hover:border-gold-400')}>
+                    <button key={item.id} type="button" onClick={() => { setCategory(item.id); if (selectedTreatment?.category !== item.id) { setValue('treatment_id', '', { shouldValidate: true }); setValue('variant_id', ''); setVariantError(false) } }} className={cn('rounded-[15px] border px-4 py-2 text-sm transition-colors', category === item.id ? 'border-gold-500 bg-gold-500 text-white' : 'border-cream-300 bg-white text-neutral-700 hover:border-gold-400')}>
                       {item[lang]}
                     </button>
                   ))}
@@ -323,13 +332,15 @@ export const BookingSection = () => {
                   {treatments.filter((treatment) => treatment.category === category).map((tr) => {
                     const selected = treatmentId === tr.id
                     return (
-                      <button key={tr.id} type="button" onClick={() => setValue('treatment_id', tr.id, { shouldValidate: true })} className={cn('flex min-h-16 items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors', selected ? 'border-gold-500 bg-gold-50' : 'border-cream-300 bg-white hover:border-gold-400')}>
+                      <button key={tr.id} type="button" onClick={() => { setValue('treatment_id', tr.id, { shouldValidate: true }); const choices = tr.variants?.filter((variant) => variant.is_active) ?? []; setValue('variant_id', choices.length === 1 ? choices[0].id : ''); setVariantError(false) }} className={cn('flex min-h-16 items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors', selected ? 'border-gold-500 bg-gold-50' : 'border-cream-300 bg-white hover:border-gold-400')}>
                         <span className="min-w-0"><span className="block text-sm font-medium text-neutral-900">{localizeTreatment(tr, lang).name}</span><span className="mt-1 block text-xs text-neutral-500">{tr.duration_min} {t.duration}{tr.price_eur != null ? ` · ${t.priceFrom} ${tr.price_eur} €` : ''}</span></span>
                         {selected ? <Check className="h-5 w-5 shrink-0 text-gold-600" /> : <ChevronRight className="h-5 w-5 shrink-0 text-neutral-400" />}
                       </button>
                     )
                   })}
                 </div> : <p className="py-8 text-center text-sm text-neutral-500">{t.chooseTreatment}</p>}
+                {activeVariants.length > 0 && <div className="mt-4 space-y-2"><p className="text-sm font-medium text-neutral-800">Elige sesión o bono</p>{activeVariants.map((variant) => <button key={variant.id} type="button" onClick={() => { setValue('variant_id', variant.id, { shouldValidate: true }); setVariantError(false) }} className={cn('flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm', variantId === variant.id ? 'border-gold-500 bg-gold-50' : 'border-cream-300 bg-white')}><span>{variant.name} · {variant.duration_min} {t.duration}</span><strong>{variant.price_eur} €</strong></button>)}</div>}
+                {variantError && <p role="alert" className="mt-2 text-center text-sm text-red-700">Selecciona una sesión o un bono.</p>}
                 {errors.treatment_id && <p role="alert" className="mt-2 text-center text-sm text-red-700">{errors.treatment_id.message}</p>}
               </div>
             )}
@@ -360,6 +371,7 @@ export const BookingSection = () => {
                 <div className="rounded-2xl border border-cream-300 bg-white p-4">
                   <p className="mb-2 text-xs font-medium uppercase tracking-wider text-gold-600">{t.bookingSummary}</p>
                   <p className="font-medium text-neutral-900">{selectedTreatment ? localizeTreatment(selectedTreatment, lang).name : ''}</p>
+                  {selectedVariant && <p className="mt-1 text-sm text-neutral-600">{selectedVariant.name} · {selectedVariant.price_eur} €</p>}
                   <p className="mt-1 flex items-center gap-2 text-sm text-neutral-600"><CalendarDays className="h-4 w-4" />{preferredDate} <Clock3 className="ml-2 h-4 w-4" />{scheduledAt ? new Date(scheduledAt).toLocaleTimeString(LOCALES[lang], { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }) : ''}</p>
                 </div>
             {/* Nombre */}
@@ -443,7 +455,7 @@ export const BookingSection = () => {
                 <div className="flex flex-wrap gap-2 pl-7">
                   <a
                     href={CLINIC.contact.phone_href}
-                    className="inline-flex items-center gap-2 rounded-full border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
+                    className="inline-flex items-center gap-2 rounded-[15px] border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
                   >
                     <Phone className="w-4 h-4" />
                     {t.call} {CLINIC.contact.phone}
@@ -452,7 +464,7 @@ export const BookingSection = () => {
                     href={CLINIC.contact.whatsapp_href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
+                    className="inline-flex items-center gap-2 rounded-[15px] border border-gold-300 bg-white px-4 py-2 text-sm text-gold-600 hover:bg-gold-100 transition-colors"
                   >
                     <MessageCircle className="w-4 h-4" />
                     WhatsApp
@@ -462,11 +474,11 @@ export const BookingSection = () => {
             )}
 
             <div className="flex gap-3 pt-3">
-              {step > 0 && <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex items-center justify-center gap-2 rounded-full border border-cream-300 px-5 py-3 text-sm text-neutral-700 hover:border-gold-400"><ChevronLeft className="h-4 w-4" />{t.back}</button>}
+              {step > 0 && <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex items-center justify-center gap-2 rounded-[15px] border border-cream-300 px-5 py-3 text-sm text-neutral-700 hover:border-gold-400"><ChevronLeft className="h-4 w-4" />{t.back}</button>}
               {step < 2 ? (
-                <button type="button" onClick={() => void continueStep()} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600"><span>{t.continue}</span><ChevronRight className="h-4 w-4" /></button>
+                <button type="button" onClick={() => void continueStep()} className="flex flex-1 items-center justify-center gap-2 rounded-[15px] bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600"><span>{t.continue}</span><ChevronRight className="h-4 w-4" /></button>
               ) : (
-                <button type="submit" disabled={status === 'loading'} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600">
+                <button type="submit" disabled={status === 'loading'} className="flex flex-1 items-center justify-center gap-2 rounded-[15px] bg-gold-500 px-6 py-3 text-white shadow-md shadow-gold-200 transition-colors hover:bg-gold-600">
                   {status === 'loading' ? <><Loader2 className="h-4 w-4 animate-spin" />{t.sending}</> : t.submit}
                 </button>
               )}

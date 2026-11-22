@@ -27,6 +27,7 @@ const makeBookingSchema = (e: BookingErrors) =>
       .min(9, e.phoneMin)
       .regex(/^[+\d\s()-]{9,}$/, e.phoneFormat),
     treatment_id: z.string().min(1, e.treatment),
+    variant_id: z.string().optional(),
     preferred_date: z
       .string()
       .min(1, e.date)

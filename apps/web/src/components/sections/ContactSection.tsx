@@ -98,7 +98,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.instagram_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-[15px] border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <Instagram className="w-4 h-4" />
                 Instagram
@@ -107,7 +107,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.facebook_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-[15px] border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <Facebook className="w-4 h-4" />
                 Facebook
@@ -116,7 +116,7 @@ export const ContactSection = () => {
                 href={CLINIC.contact.whatsapp_href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-[15px] border border-neutral-200 text-neutral-600 hover:border-gold-300 hover:text-gold-500 transition-colors text-sm"
               >
                 <WhatsAppIcon />
                 WhatsApp

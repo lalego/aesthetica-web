@@ -5,6 +5,7 @@ export interface BookingFormData {
   email: string
   phone: string
   treatment_id: string
+  variant_id?: string | null
   preferred_date: string
   scheduled_at: string // ISO — hora exacta elegida entre los huecos libres
   notes?: string
@@ -22,6 +23,7 @@ export const submitBooking = async (data: BookingFormData): Promise<void> => {
     p_email: data.email,
     p_phone: data.phone,
     p_treatment_id: data.treatment_id,
+    p_variant_id: data.variant_id ?? null,
     p_scheduled_at: data.scheduled_at,
     p_notes: data.notes ?? null,
     p_gdpr_consent: data.gdpr_consent,

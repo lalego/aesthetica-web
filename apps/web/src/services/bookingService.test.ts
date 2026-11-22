@@ -33,6 +33,7 @@ describe('submitBooking', () => {
       p_email: booking.email,
       p_phone: booking.phone,
       p_treatment_id: booking.treatment_id,
+      p_variant_id: null,
       p_scheduled_at: booking.scheduled_at,
       p_notes: booking.notes,
       p_gdpr_consent: true,

@@ -53,7 +53,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
       <div className="relative max-w-6xl mx-auto px-6 pt-52 pb-16 lg:py-24 grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <div className="flex justify-center lg:justify-start">
-            <h1 className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-full">
+            <h1 className="inline-block text-gold-500 font-medium tracking-widest text-xs uppercase border border-gold-200 bg-gold-50 px-4 py-1.5 rounded-[15px]">
               {t.h1}
             </h1>
           </div>
@@ -69,14 +69,14 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
           <div className="flex flex-wrap gap-4 pt-2">
             <button
               onClick={onBookingClick}
-              className="bg-gold-400 text-white px-8 py-3.5 rounded-full hover:bg-gold-500 transition-all duration-300 flex items-center gap-2 group shadow-md shadow-gold-200"
+              className="bg-gold-400 text-white px-8 py-3.5 rounded-[15px] hover:bg-gold-500 transition-all duration-300 flex items-center gap-2 group shadow-md shadow-gold-200"
             >
               {t.book}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link
               to={PATHS.treatments[lang]}
-              className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-full hover:border-gold-300 hover:text-gold-500 transition-colors"
+              className="border border-neutral-300 text-neutral-600 px-8 py-3.5 rounded-[15px] hover:border-gold-300 hover:text-gold-500 transition-colors"
             >
               {t.see}
             </Link>

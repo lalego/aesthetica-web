@@ -134,7 +134,7 @@ export const Navbar = () => {
           <a
             href={CLINIC.contact.phone_href}
             aria-label={CLINIC.contact.phone}
-            className="inline-flex items-center gap-2 whitespace-nowrap border border-gold-300 text-gold-500 text-lg px-3.5 lg:px-5 py-3 rounded-full hover:bg-gold-50 transition-colors"
+            className="inline-flex items-center gap-2 whitespace-nowrap border border-gold-300 text-gold-500 text-lg px-3.5 lg:px-5 py-3 rounded-[15px] hover:bg-gold-50 transition-colors"
           >
             <Phone className="w-4 h-4" />
             <span className="hidden lg:inline">{CLINIC.contact.phone.replace('+34 ', '')}</span>
@@ -142,7 +142,7 @@ export const Navbar = () => {
           <a
             href={bookingHref(lang)}
             onClick={onBook}
-            className="inline-flex items-center whitespace-nowrap bg-gold-400 text-white text-lg px-6 py-3 rounded-full hover:bg-gold-500 transition-colors"
+            className="inline-flex items-center whitespace-nowrap bg-gold-400 text-white text-lg px-6 py-3 rounded-[15px] hover:bg-gold-500 transition-colors"
           >
             {t.book}
           </a>
@@ -155,7 +155,7 @@ export const Navbar = () => {
       <div className="md:hidden flex items-center gap-1.5 px-2 py-4 justify-center">
         <a
           href={CLINIC.contact.phone_href}
-          className="inline-flex items-center gap-1.5 whitespace-nowrap border border-gold-300 text-gold-500 text-xs px-2.5 py-2 rounded-full hover:bg-gold-50 transition-colors"
+          className="inline-flex items-center gap-1.5 whitespace-nowrap border border-gold-300 text-gold-500 text-xs px-2.5 py-2 rounded-[15px] hover:bg-gold-50 transition-colors"
         >
           <Phone className="w-3.5 h-3.5" />
           {CLINIC.contact.phone.replace('+34 ', '')}
@@ -163,7 +163,7 @@ export const Navbar = () => {
         <a
           href={bookingHref(lang)}
           onClick={onBook}
-          className="whitespace-nowrap bg-gold-400 text-white text-xs px-3 py-2 rounded-full hover:bg-gold-500 transition-colors"
+          className="whitespace-nowrap bg-gold-400 text-white text-xs px-3 py-2 rounded-[15px] hover:bg-gold-500 transition-colors"
         >
           {t.book}
         </a>

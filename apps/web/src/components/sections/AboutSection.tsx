@@ -229,7 +229,7 @@ export const AboutSection = () => {
                   {languages && (
                     <div className="flex flex-wrap justify-center gap-2 pt-1">
                       {languages.map(({ code, label }) => (
-                        <span key={code} className="inline-flex items-center gap-1.5 text-sm bg-neutral-50 border border-neutral-100 text-neutral-500 px-3 py-1.5 rounded-full">
+                        <span key={code} className="inline-flex items-center gap-1.5 text-sm bg-neutral-50 border border-neutral-100 text-neutral-500 px-3 py-1.5 rounded-[15px]">
                           <img
                             src={`https://flagcdn.com/20x15/${code}.png`}
                             alt=""

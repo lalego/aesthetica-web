@@ -72,7 +72,7 @@ export const Footer = () => {
 
   return (
     <footer className="bg-[#1c1410] text-stone-400">
-      <div className="h-px bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent" />
 
       <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -84,7 +84,7 @@ export const Footer = () => {
               <a
                 href={CLINIC.contact.instagram_href}
                 target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors"
+                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-300 hover:text-gold-300 transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="w-4 h-4" />
@@ -92,7 +92,7 @@ export const Footer = () => {
               <a
                 href={CLINIC.contact.facebook_href}
                 target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors"
+                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-300 hover:text-gold-300 transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="w-4 h-4" />
@@ -100,7 +100,7 @@ export const Footer = () => {
               <a
                 href={CLINIC.contact.whatsapp_href}
                 target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors"
+                className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center hover:border-gold-300 hover:text-gold-300 transition-colors"
                 aria-label="WhatsApp"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg">
@@ -115,26 +115,26 @@ export const Footer = () => {
             <p className="text-stone-100 text-base font-medium uppercase tracking-widest">{t.contact}</p>
             <address className="not-italic text-base space-y-3">
               <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
+                <MapPin className="w-4 h-4 mt-0.5 text-gold-300 shrink-0" />
                 <a href={CLINIC.maps.href} target="_blank" rel="noopener noreferrer" className="hover:text-stone-100 transition-colors leading-relaxed text-left">
                   {CLINIC.address.street}<br />
                   {CLINIC.address.district}, {CLINIC.address.zip} {CLINIC.address.city}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gold-400 shrink-0" />
+                <Phone className="w-4 h-4 text-gold-300 shrink-0" />
                 <a href={CLINIC.contact.phone_href} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gold-400 shrink-0" />
+                <Mail className="w-4 h-4 text-gold-300 shrink-0" />
                 <a href={`mailto:${CLINIC.contact.email}`} className="hover:text-stone-100 transition-colors">
                   {CLINIC.contact.email}
                 </a>
               </div>
               <div className="flex items-start gap-3">
-                <Clock className="w-4 h-4 mt-0.5 text-gold-400 shrink-0" />
+                <Clock className="w-4 h-4 mt-0.5 text-gold-300 shrink-0" />
                 <div className="space-y-0.5 text-left">
                   {CLINIC.hours.map(({ days, time }: { days: string; time: string }) => (
                     <p key={days}>
@@ -152,7 +152,7 @@ export const Footer = () => {
             <ul className="text-base space-y-2.5">
               {LANDINGS.filter((l) => l.kind === 'category').map((l) => (
                 <li key={l.key}>
-                  <Link to={landingPath(l, lang)} className="hover:text-gold-400 transition-colors">
+                  <Link to={landingPath(l, lang)} className="hover:text-gold-300 transition-colors">
                     {l.label[lang]}
                   </Link>
                 </li>
@@ -166,9 +166,9 @@ export const Footer = () => {
             <ul className="text-base space-y-2.5">
               {t.links.map(({ label, to }) => (
                 <li key={to}>
-                  <Link to={to} className="flex items-center gap-2 group hover:text-gold-400 transition-colors lg:justify-end">
+                  <Link to={to} className="flex items-center gap-2 group hover:text-gold-300 transition-colors lg:justify-end">
                     {label}
-                    <span className="w-3 h-px bg-stone-600 group-hover:w-5 group-hover:bg-gold-400 transition-all duration-200" />
+                    <span className="w-3 h-px bg-stone-600 group-hover:w-5 group-hover:bg-gold-300 transition-all duration-200" />
                   </Link>
                 </li>
               ))}
@@ -184,7 +184,7 @@ export const Footer = () => {
           <ul className="flex flex-wrap gap-5">
             {LEGAL_LINKS[lang].map(({ label, to }) => (
               <li key={to}>
-                <Link to={to} className="text-sm text-stone-500 hover:text-gold-400 transition-colors">
+                <Link to={to} className="text-sm text-stone-500 hover:text-gold-300 transition-colors">
                   {label}
                 </Link>
               </li>
