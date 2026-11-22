@@ -20,7 +20,7 @@ const ABOUT = {
       'AestheticA nació de la pasión y la visión de Alena Martseniuk, su fundadora. Un estudio con alma propia, donde cada tratamiento se diseña de forma personalizada para potenciar tu belleza natural con seguridad y rigor.',
       'Con tecnología de vanguardia y un trato cercano y honesto, Alena acompaña a cada cliente en su proceso, desde la primera consulta hasta el resultado final.',
     ],
-    imgAlt: 'Alena Martseniuk durante un tratamiento láser en el estudio AestheticA',
+    imgAlt: 'Cabina de tratamientos del estudio AestheticA en Ruzafa, València',
     stats: statsFor('es', ['Años de experiencia', 'Clientes satisfechos', 'Tratamientos disponibles']),
     valuesTitle: 'Nuestra filosofía',
     values: [
@@ -60,7 +60,7 @@ const ABOUT = {
       'AestheticA was born from the passion and vision of its founder, Alena Martseniuk. A studio with its own soul, where every treatment is tailored to enhance your natural beauty safely and rigorously.',
       'With cutting-edge technology and a warm, honest approach, Alena guides every client through the process, from the first consultation to the final result.',
     ],
-    imgAlt: 'Alena Martseniuk performing a laser treatment at the AestheticA studio',
+    imgAlt: 'Treatment room at the AestheticA studio in Ruzafa, Valencia',
     stats: statsFor('en', ['Years of experience', 'Happy clients', 'Treatments available']),
     valuesTitle: 'Our philosophy',
     values: [
@@ -100,7 +100,7 @@ const ABOUT = {
       'AestheticA народилася з пристрасті та бачення її засновниці Альони Марценюк. Це студія з власною душею, де кожна процедура підбирається індивідуально, щоб безпечно й ретельно підкреслити вашу природну красу.',
       'Завдяки передовим технологіям і щирому, уважному ставленню Альона супроводжує кожну клієнтку від першої консультації до кінцевого результату.',
     ],
-    imgAlt: 'Альона Марценюк під час лазерної процедури в студії AestheticA',
+    imgAlt: 'Кабінет процедур студії AestheticA в Руссафі, Валенсія',
     stats: statsFor('uk', ['Років досвіду', 'Задоволених клієнтів', 'Доступних процедур']),
     valuesTitle: 'Наша філософія',
     values: [
@@ -162,7 +162,7 @@ export const AboutSection = () => {
               src="/img/alena_laser-900.webp"
               alt={c.imgAlt}
               width={900}
-              height={1200}
+              height={675}
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover object-top"

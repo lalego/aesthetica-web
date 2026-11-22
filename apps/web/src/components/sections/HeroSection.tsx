@@ -16,7 +16,7 @@ const HERO = {
     book: 'Agendar cita',
     see: 'Ver tratamientos',
     stats: statsFor('es', ['Años de experiencia', 'Clientes satisfechos', 'Tratamientos']),
-    imgAlt: 'Estudio AestheticA en la calle Centelles, Ruzafa, València',
+    imgAlt: 'Mujer relajada con los ojos cerrados bajo una luz cálida dorada',
     badge: ['Próxima disponibilidad', 'Esta semana · Ruzafa'],
   },
   en: {
@@ -26,7 +26,7 @@ const HERO = {
     book: 'Book now',
     see: 'See treatments',
     stats: statsFor('en', ['Years of experience', 'Happy clients', 'Treatments']),
-    imgAlt: 'AestheticA studio on Carrer de Centelles, Ruzafa, Valencia',
+    imgAlt: 'Relaxed woman with closed eyes in warm golden light',
     badge: ['Next availability', 'This week · Ruzafa'],
   },
   uk: {
@@ -36,7 +36,7 @@ const HERO = {
     book: 'Записатися',
     see: 'Усі процедури',
     stats: statsFor('uk', ['Років досвіду', 'Задоволених клієнтів', 'Процедур']),
-    imgAlt: 'Студія AestheticA на вулиці Сентельєс, Руссафа, Валенсія',
+    imgAlt: 'Розслаблена жінка із заплющеними очима в теплому золотистому світлі',
     badge: ['Найближчий вільний час', 'Цього тижня · Руссафа'],
   },
 }
@@ -104,7 +104,7 @@ export const HeroSection = ({ onBookingClick }: HeroSectionProps) => {
               srcSet="/img/hero-clinic-700.webp 700w, /img/hero-clinic-1200.webp 1200w"
               sizes="(min-width: 1024px) 540px, 100vw"
               width={1200}
-              height={881}
+              height={1500}
               alt={t.imgAlt}
               {...{ fetchpriority: 'high' }}
               className="w-full h-full object-cover"
